@@ -1,0 +1,10 @@
+name: Megizen
+authors: ['The DenizenScript Team', '0TickPulse']
+version: ${project.version} (build ${BUILD_NUMBER})
+main: net.tickmc.megizen.bukkit.Megizen
+depend: [Denizen]
+
+api-version: '1.13'
+
+softdepend:
+    - ModelEngine
