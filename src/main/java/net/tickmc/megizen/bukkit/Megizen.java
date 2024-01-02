@@ -7,6 +7,7 @@ import com.denizenscript.denizencore.objects.ObjectFetcher;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
 import net.tickmc.megizen.bukkit.commands.MegModelCommand;
+import net.tickmc.megizen.bukkit.commands.MegStateCommand;
 import net.tickmc.megizen.bukkit.objects.MegModeledEntityTag;
 import net.tickmc.megizen.bukkit.properties.MegEntityProperties;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,6 +26,7 @@ public class Megizen extends JavaPlugin {
         ObjectFetcher.registerWithObjectFetcher(MegModeledEntityTag.class, MegModeledEntityTag.tagProcessor);
         PropertyParser.registerProperty(MegEntityProperties.class, EntityTag.class);
         DenizenCore.commandRegistry.registerCommand(MegModelCommand.class);
+        DenizenCore.commandRegistry.registerCommand(MegStateCommand.class);
 
         Debug.log("Megizen loaded!");
     }

@@ -43,8 +43,7 @@ public class MegModelCommand extends AbstractCommand {
                 return;
             }
             modeledEntity.removeModel(model.asString());
-        }
-        else {
+        } else {
             ModeledEntity modeledEntity = ModelEngineAPI.createModeledEntity(bukkitEntity);
             ActiveModel activeModel = ModelEngineAPI.createActiveModel(blueprint);
             modeledEntity.addModel(activeModel, true);
