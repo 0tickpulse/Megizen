@@ -16,6 +16,7 @@ import com.denizenscript.denizencore.utilities.debugging.Debug;
 import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
+import com.ticxo.modelengine.api.model.bone.ModelBone;
 import org.bukkit.Color;
 
 import javax.annotation.Nullable;
@@ -61,8 +62,8 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
     //   Constructors
     //////////////////
 
-    public MegActiveModelTag(ActiveModel me) {
-        this.activeModel = me;
+    public MegActiveModelTag(ActiveModel am) {
+        this.activeModel = am;
     }
 
     /////////////////////
@@ -124,7 +125,54 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
     public static ObjectTagProcessor<MegActiveModelTag> tagProcessor = new ObjectTagProcessor<>();
 
     public static void registerTags() {
+        // <--[tag]
+        // @attribute <MegActiveModelTag.modeled_entity>
+        // @returns MegModeledEntityTag
+        // @description
+        // Returns the modeled entity of the active model.
+        // -->
+        tagProcessor.registerTag(MegModeledEntityTag.class, "modeled_entity", (attribute, object) -> {
+            return new MegModeledEntityTag(object.getActiveModel().getModeledEntity());
+        });
 
+        // <--[tag]
+        // @attribute <MegActiveModelTag.bone[<id>]>
+        // @returns MegBoneTag
+        // @description
+        // Returns the bone with the specified id of the model.
+        // -->
+        tagProcessor.registerTag(MegBoneTag.class, "bone", (attribute, object) -> {
+            String id = attribute.getParam();
+            ModelBone bone = object.getActiveModel().getBone(id).orElse(null);
+            if (bone == null) {
+                return null;
+            }
+            return new MegBoneTag(bone);
+        });
+
+        // <--[tag]
+        // @attribute <MegActiveModelTag.damage_tint>
+        // @returns ColorTag
+        // @description
+        // Returns the damage tint of the active model.
+        // -->
+        tagProcessor.registerTag(ColorTag.class, "damage_tint", (attribute, object) -> {
+            Color tint = object.getActiveModel().getDamageTint();
+            return new ColorTag(tint.getRed(), tint.getGreen(), tint.getBlue());
+        });
+
+        // <--[mechanism]
+        // @object MegActiveModelTag
+        // @name damage_tint
+        // @input ColorTag
+        // @description
+        // Sets the damage tint of the active model.
+        // @tags
+        // <MegActiveModelTag.damage_tint>
+        // -->
+        tagProcessor.registerMechanism("damage_tint", false, ColorTag.class, (object, mechanism, value) -> {
+            object.getActiveModel().setDamageTint(Color.fromRGB(value.red, value.green, value.blue));
+        });
     }
 
     @Override
@@ -139,6 +187,6 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
 
     @Override
     public void applyProperty(Mechanism mechanism) {
-        Debug.echoError("Cannot apply properties to a MegModeledEntityTag!");
+        Debug.echoError("Cannot apply properties to a MegActiveModelTag!");
     }
 }
