@@ -46,7 +46,7 @@ public class MegStateCommand extends AbstractCommand {
                                    @ArgName("lerp_in") @ArgPrefixed @ArgDefaultText("0") DurationTag lerpIn,
                                    @ArgName("lerp_out") @ArgPrefixed @ArgDefaultText("0") DurationTag lerpOut,
                                    @ArgName("loop") @ArgPrefixed @ArgDefaultText("once") BlueprintAnimation.LoopMode loop,
-                                   @ArgName("override") @ArgDefaultNull ElementTag override,
+                                   @ArgName("override") @ArgPrefixed @ArgDefaultNull ElementTag override,
                                    @ArgName("force") @ArgDefaultText("true") boolean force,
 
                                    @ArgName("remove") @ArgDefaultText("false") boolean remove,
