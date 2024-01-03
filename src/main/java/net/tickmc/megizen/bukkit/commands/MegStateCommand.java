@@ -21,7 +21,7 @@ import com.ticxo.modelengine.api.model.ModeledEntity;
 public class MegStateCommand extends AbstractCommand {
     public MegStateCommand() {
         setName("megstate");
-        setSyntax("megstate [entity:<entity>] [model:<model>] [state:<state>] ((speed:<#.#>/{1}) (lerp_in:<duration>/{0}) (lerp_out:<duration>/{0}) (loop:once/loop/hold) (override:true/false) (force)/remove (ignore_lerp) (priority:<#>/{1})/removeall)");
+        setSyntax("megstate [entity:<entity>] [model:<model>] [state:<state>] ((speed:<#.#>/{1}) (lerp_in:<duration>/{0}) (lerp_out:<duration>/{0}) (loop:once/loop/hold) (override:true/false) (force)/remove (ignore_lerp) (priority:<#>/{1}))");
         autoCompile();
     }
 
@@ -36,12 +36,15 @@ public class MegStateCommand extends AbstractCommand {
     // Plays a state on a modeled entity.
     // This command is similar to the "state" Mythic Mechanic.
     // The documentation can be found at <@link url https://git.lumine.io/mythiccraft/model-engine-4/-/wikis/MythicMobs/mechanics/model/State>.
+    //
+    // If the 'remove' argument is specified, the state will be removed. If the 'state' argument is not specified, all states will be removed.
     // -->
 
     public static void autoExecute(ScriptEntry scriptEntry,
                                    @ArgName("entity") @ArgPrefixed EntityTag entity,
                                    @ArgName("model") @ArgPrefixed String model,
-                                   @ArgName("state") @ArgPrefixed String state,
+
+                                   @ArgName("state") @ArgPrefixed @ArgDefaultNull String state,
                                    @ArgName("speed") @ArgPrefixed @ArgDefaultText("1") float speed,
                                    @ArgName("lerp_in") @ArgPrefixed @ArgDefaultText("0") DurationTag lerpIn,
                                    @ArgName("lerp_out") @ArgPrefixed @ArgDefaultText("0") DurationTag lerpOut,
@@ -51,9 +54,7 @@ public class MegStateCommand extends AbstractCommand {
 
                                    @ArgName("remove") @ArgDefaultText("false") boolean remove,
                                    @ArgName("ignore_lerp") @ArgDefaultText("false") boolean ignoreLerp,
-                                   @ArgName("priority") @ArgPrefixed @ArgDefaultText("1") int priority,
-
-                                   @ArgName("removeall") @ArgDefaultText("false") boolean removeAll) {
+                                   @ArgName("priority") @ArgPrefixed @ArgDefaultText("1") int priority,) {
         ModeledEntity modeledEntity = ModelEngineAPI.getModeledEntity(entity.getBukkitEntity());
         if (modeledEntity == null) {
             Debug.echoError("Entity is not modeled: " + entity.identify());
@@ -65,11 +66,11 @@ public class MegStateCommand extends AbstractCommand {
             return;
         }
         AnimationHandler handler = activeModel.getAnimationHandler();
-        if (removeAll) {
-            handler.forceStopAllAnimations();
-            return;
-        }
         if (remove) {
+            if (state == null) {
+                handler.forceStopAllAnimations();
+                return;
+            }
             if (handler instanceof IStateMachineHandler smh) {
                 if (ignoreLerp) {
                     smh.forceStopAnimation(priority, state);
@@ -81,6 +82,10 @@ public class MegStateCommand extends AbstractCommand {
             } else {
                 handler.stopAnimation(state);
             }
+            return;
+        }
+        if (state == null) {
+            Debug.echoError("The 'state' argument is required to play an animation.");
             return;
         }
         IAnimationProperty property = handler instanceof IStateMachineHandler smh
