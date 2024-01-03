@@ -26,19 +26,19 @@ public class MegStateCommand extends AbstractCommand {
     }
 
     public static void autoExecute(ScriptEntry scriptEntry,
-                                   @ArgPrefixed @ArgName("entity") EntityTag entity,
-                                   @ArgPrefixed @ArgName("model") String model,
-                                   @ArgPrefixed @ArgName("state") String state,
-                                   @ArgPrefixed @ArgName("speed") @ArgDefaultText("1") float speed,
-                                   @ArgPrefixed @ArgName("lerp_in") @ArgDefaultText("0") DurationTag lerpIn,
-                                   @ArgPrefixed @ArgName("lerp_out") @ArgDefaultText("0") DurationTag lerpOut,
-                                   @ArgPrefixed @ArgName("loop") @ArgDefaultText("once") BlueprintAnimation.LoopMode loop,
-                                   @ArgPrefixed @ArgName("override") @ArgDefaultNull ElementTag override,
-                                   @ArgPrefixed @ArgName("force") @ArgDefaultText("true") boolean force,
+                                   @ArgName("entity") @ArgPrefixed EntityTag entity,
+                                   @ArgName("model") @ArgPrefixed String model,
+                                   @ArgName("state") @ArgPrefixed String state,
+                                   @ArgName("speed") @ArgPrefixed @ArgDefaultText("1") float speed,
+                                   @ArgName("lerp_in") @ArgPrefixed @ArgDefaultText("0") DurationTag lerpIn,
+                                   @ArgName("lerp_out") @ArgPrefixed @ArgDefaultText("0") DurationTag lerpOut,
+                                   @ArgName("loop") @ArgPrefixed @ArgDefaultText("once") BlueprintAnimation.LoopMode loop,
+                                   @ArgName("override") @ArgDefaultNull ElementTag override,
+                                   @ArgName("force") @ArgDefaultText("true") boolean force,
 
-                                   @ArgPrefixed @ArgName("remove") @ArgDefaultText("false") boolean remove,
-                                   @ArgPrefixed @ArgName("ignore_lerp") @ArgDefaultText("false") boolean ignoreLerp,
-                                   @ArgPrefixed @ArgName("priority") @ArgDefaultText("1") int priority) {
+                                   @ArgName("remove") @ArgDefaultText("false") boolean remove,
+                                   @ArgName("ignore_lerp") @ArgDefaultText("false") boolean ignoreLerp,
+                                   @ArgName("priority") @ArgPrefixed @ArgDefaultText("1") int priority) {
         ModeledEntity modeledEntity = ModelEngineAPI.getModeledEntity(entity.getBukkitEntity());
         if (modeledEntity == null) {
             Debug.echoError("Entity is not modeled: " + entity.identify());

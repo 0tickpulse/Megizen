@@ -22,5 +22,4 @@ public class MegizenEntityTagExtensions {
             return getModeledEntity(entity);
         });
     }
-
 }

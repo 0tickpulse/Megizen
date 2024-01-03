@@ -23,9 +23,9 @@ public class MegModelCommand extends AbstractCommand {
     }
 
     public static void autoExecute(ScriptEntry scriptEntry,
-                                   @ArgPrefixed @ArgName("entity") EntityTag entity,
-                                   @ArgPrefixed @ArgName("model") ElementTag model,
-                                   @ArgPrefixed @ArgName("remove") @ArgDefaultText("false") boolean remove) {
+                                   @ArgName("entity") @ArgPrefixed EntityTag entity,
+                                   @ArgName("model") @ArgPrefixed ElementTag model,
+                                   @ArgName("remove") @ArgPrefixed @ArgDefaultText("false") boolean remove) {
         ModelBlueprint blueprint = ModelEngineAPI.getBlueprint(model.asString());
         if (blueprint == null) {
             Debug.echoError("Invalid model: " + model.asString());
