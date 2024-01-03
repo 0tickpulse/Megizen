@@ -17,17 +17,18 @@ import com.ticxo.modelengine.api.animation.handler.IStateMachineHandler;
 import com.ticxo.modelengine.api.animation.property.IAnimationProperty;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
+import net.tickmc.megizen.bukkit.objects.MegActiveModelTag;
 
 public class MegStateCommand extends AbstractCommand {
     public MegStateCommand() {
         setName("megstate");
-        setSyntax("megstate [entity:<entity>] [model:<model>] [state:<state>] ((speed:<#.#>/{1}) (lerp_in:<duration>/{0}) (lerp_out:<duration>/{0}) (loop:once/loop/hold) (override:true/false) (force)/remove (ignore_lerp) (priority:<#>/{1}))");
+        setSyntax("megstate [model:<active_model>] [state:<state>] ((speed:<#.#>/{1}) (lerp_in:<duration>/{0}) (lerp_out:<duration>/{0}) (loop:once/loop/hold) (override:true/false) (force)/remove (ignore_lerp) (priority:<#>/{1}))");
         autoCompile();
     }
 
     // <--[command]
     // @Name MegState
-    // @Syntax megstate [entity:<entity>] [model:<model>] [state:<state>] ((speed:<#.#>/{1}) (lerp_in:<duration>/{0}) (lerp_out:<duration>/{0}) (loop:once/loop/hold) (override:true/false) (force)/remove (ignore_lerp) (priority:<#>/{1}))
+    // @Syntax megstate [model:<active_model>] [state:<state>] ((speed:<#.#>/{1}) (lerp_in:<duration>/{0}) (lerp_out:<duration>/{0}) (loop:once/loop/hold) (override:true/false) (force)/remove (ignore_lerp) (priority:<#>/{1}))
     // @Required 3
     // @Short Plays a state on a modeled entity.
     // @Group Megizen
@@ -41,8 +42,7 @@ public class MegStateCommand extends AbstractCommand {
     // -->
 
     public static void autoExecute(ScriptEntry scriptEntry,
-                                   @ArgName("entity") @ArgPrefixed EntityTag entity,
-                                   @ArgName("model") @ArgPrefixed String model,
+                                   @ArgName("model") @ArgPrefixed MegActiveModelTag model,
 
                                    @ArgName("state") @ArgPrefixed @ArgDefaultNull String state,
                                    @ArgName("speed") @ArgPrefixed @ArgDefaultText("1") float speed,
@@ -55,16 +55,7 @@ public class MegStateCommand extends AbstractCommand {
                                    @ArgName("remove") @ArgDefaultText("false") boolean remove,
                                    @ArgName("ignore_lerp") @ArgDefaultText("false") boolean ignoreLerp,
                                    @ArgName("priority") @ArgPrefixed @ArgDefaultText("1") int priority) {
-        ModeledEntity modeledEntity = ModelEngineAPI.getModeledEntity(entity.getBukkitEntity());
-        if (modeledEntity == null) {
-            Debug.echoError("Entity is not modeled: " + entity.identify());
-            return;
-        }
-        ActiveModel activeModel = modeledEntity.getModel(model).orElse(null);
-        if (activeModel == null) {
-            Debug.echoError("Entity does not have model: " + model);
-            return;
-        }
+        ActiveModel activeModel = model.getActiveModel();
         AnimationHandler handler = activeModel.getAnimationHandler();
         if (remove) {
             if (state == null) {

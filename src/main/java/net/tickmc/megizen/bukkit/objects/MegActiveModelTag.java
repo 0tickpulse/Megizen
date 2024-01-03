@@ -40,14 +40,14 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         try {
             string = string.replace("megactivemodel@", "");
             String[] split = string.split(",");
-            ModeledEntity me = ModelEngineAPI.getModeledEntity(UUID.fromString(split[0]));
+            ModeledEntity me = ModelEngineAPI.getModeledEntity(EntityTag.valueOf(split[0], context).getUUID());
             if (me == null) {
                 return null;
             }
-            ActiveModel am = me.getModel(split[1]).orElse(null);
-            if (am == null) {
-                return null;
+            if (split.length == 1) {
+                return new MegActiveModelTag(me.getModels().values().iterator().next());
             }
+            ActiveModel am = me.getModel(split[1]).orElse(me.getModels().values().iterator().next());
             return new MegActiveModelTag(am);
         } catch (Exception ignored) {
         }
