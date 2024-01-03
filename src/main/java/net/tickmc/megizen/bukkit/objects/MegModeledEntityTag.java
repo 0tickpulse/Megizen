@@ -8,13 +8,16 @@ import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.core.ListTag;
+import com.denizenscript.denizencore.tags.Attribute;
 import com.denizenscript.denizencore.tags.ObjectTagProcessor;
 import com.denizenscript.denizencore.tags.TagContext;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
 import com.ticxo.modelengine.api.ModelEngineAPI;
+import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
 
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 public class MegModeledEntityTag implements ObjectTag, Adjustable {
@@ -65,6 +68,10 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
 
     public ModeledEntity getModeledEntity() {
         return modeledEntity;
+    }
+
+    public @Nullable ActiveModel getActiveModel(String name) {
+        return modeledEntity.getModel(name).orElse(null);
     }
 
     /////////////////////
@@ -152,6 +159,16 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
             return new ElementTag(object.modeledEntity.isBaseEntityVisible());
         });
 
+        // <--[tag]
+        // @attribute <MegModeledEntityTag.models>
+        // @returns ListTag
+        // @description
+        // Returns a list of all models on the modeled entity.
+        // -->
+        tagProcessor.registerTag(ListTag.class, "models", (attribute, object) -> {
+            return new ListTag(object.modeledEntity.getModels().keySet());
+        });
+
         // <--[mechanism]
         // @object MegModeledEntityTag
         // @name should_save
@@ -179,6 +196,11 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
             boolean visible = value.asBoolean();
             object.modeledEntity.setBaseEntityVisible(visible);
         });
+    }
+
+    @Override
+    public ObjectTag getObjectAttribute(Attribute attribute) {
+        return tagProcessor.getObjectAttribute(this, attribute);
     }
 
     @Override

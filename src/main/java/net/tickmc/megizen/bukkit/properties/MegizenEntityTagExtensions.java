@@ -10,7 +10,6 @@ public class MegizenEntityTagExtensions {
     }
 
     public static void register() {
-
         // <--[tag]
         // @attribute <EntityTag.modeled_entity>
         // @returns MegModeledEntityTag
