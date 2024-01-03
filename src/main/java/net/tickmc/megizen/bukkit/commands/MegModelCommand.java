@@ -22,6 +22,29 @@ public class MegModelCommand extends AbstractCommand {
         autoCompile();
     }
 
+    // <--[command]
+    // @Name MegModel
+    // @Syntax megmodel [entity:<entity>] [model:<model>] (remove)
+    // @Required 2
+    // @Short Adds or removes a model from an entity.
+    // @Group Megizen
+    //
+    // @Description
+    // Adds or removes a model from an entity.
+    //
+    // The model must be a name of a loaded model in ModelEngine.
+    //
+    // If you have come over from Mythic, this is equivalent to the `model` mechanic.
+    // To configure other options such as hitbox/invisible/damagetint/etc, adjust the MegModeledEntityTag object instead.
+    //
+    // @Tags
+    // <EntityTag.modeled_entity>
+    //
+    // @Usage
+    // Use to add a model to an entity.
+    // - megmodel entity:<context.entity> model:my_model
+    // -->
+
     public static void autoExecute(ScriptEntry scriptEntry,
                                    @ArgName("entity") @ArgPrefixed EntityTag entity,
                                    @ArgName("model") @ArgPrefixed ElementTag model,

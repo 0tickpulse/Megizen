@@ -25,6 +25,19 @@ public class MegStateCommand extends AbstractCommand {
         autoCompile();
     }
 
+    // <--[command]
+    // @Name MegState
+    // @Syntax megstate [entity:<entity>] [model:<model>] [state:<state>] ((speed:<#.#>/{1}) (lerp_in:<duration>/{0}) (lerp_out:<duration>/{0}) (loop:once/loop/hold) (override:true/false) (force)/remove (ignore_lerp) (priority:<#>/{1}))
+    // @Required 3
+    // @Short Plays a state on a modeled entity.
+    // @Group Megizen
+    //
+    // @Description
+    // Plays a state on a modeled entity.
+    // This command is similar to the "state" Mythic Mechanic.
+    // The documentation can be found at <@link url https://git.lumine.io/mythiccraft/model-engine-4/-/wikis/MythicMobs/mechanics/model/State>.
+    // -->
+
     public static void autoExecute(ScriptEntry scriptEntry,
                                    @ArgName("entity") @ArgPrefixed EntityTag entity,
                                    @ArgName("model") @ArgPrefixed String model,
