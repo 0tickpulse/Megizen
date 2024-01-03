@@ -6,9 +6,9 @@ import com.denizenscript.denizencore.objects.Adjustable;
 import com.denizenscript.denizencore.objects.Fetchable;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
-import com.denizenscript.denizencore.objects.core.ColorTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.core.ListTag;
+import com.denizenscript.denizencore.objects.core.MapTag;
 import com.denizenscript.denizencore.tags.Attribute;
 import com.denizenscript.denizencore.tags.ObjectTagProcessor;
 import com.denizenscript.denizencore.tags.TagContext;
@@ -17,9 +17,7 @@ import com.denizenscript.denizencore.utilities.debugging.Debug;
 import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
-import org.bukkit.Color;
 
-import javax.annotation.Nullable;
 import java.util.UUID;
 
 public class MegModeledEntityTag implements ObjectTag, Adjustable {
@@ -174,12 +172,21 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
 
         // <--[tag]
         // @attribute <MegModeledEntityTag.models>
-        // @returns ListTag
+        // @returns MapTag(MegActiveModelTag)
         // @description
-        // Returns a list of all models on the modeled entity.
+        // Returns a map of all models on the modeled entity.
+        // The keys are the names of the models, and the values are the active models.
         // -->
-        tagProcessor.registerTag(ListTag.class, "models", (attribute, object) -> {
-            return new ListTag(object.modeledEntity.getModels().keySet());
+        tagProcessor.registerTag(MapTag.class, "models", (attribute, object) -> {
+            MapTag map = new MapTag();
+            for (String model : object.modeledEntity.getModels().keySet()) {
+                ActiveModel activeModel = object.modeledEntity.getModel(model).orElse(null);
+                if (activeModel == null) {
+                    continue;
+                }
+                map.putObject(model, new MegActiveModelTag(activeModel));
+            }
+            return map;
         });
 
         // <--[mechanism]

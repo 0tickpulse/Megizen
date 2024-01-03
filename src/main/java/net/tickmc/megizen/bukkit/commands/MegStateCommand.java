@@ -21,7 +21,7 @@ import com.ticxo.modelengine.api.model.ModeledEntity;
 public class MegStateCommand extends AbstractCommand {
     public MegStateCommand() {
         setName("megstate");
-        setSyntax("megstate [entity:<entity>] [model:<model>] [state:<state>] ((speed:<#.#>/{1}) (lerp_in:<duration>/{0}) (lerp_out:<duration>/{0}) (loop:once/loop/hold) (override:true/false) (force)/remove (ignore_lerp) (priority:<#>/{1}))");
+        setSyntax("megstate [entity:<entity>] [model:<model>] [state:<state>] ((speed:<#.#>/{1}) (lerp_in:<duration>/{0}) (lerp_out:<duration>/{0}) (loop:once/loop/hold) (override:true/false) (force)/remove (ignore_lerp) (priority:<#>/{1})/removeall)");
         autoCompile();
     }
 
@@ -51,7 +51,9 @@ public class MegStateCommand extends AbstractCommand {
 
                                    @ArgName("remove") @ArgDefaultText("false") boolean remove,
                                    @ArgName("ignore_lerp") @ArgDefaultText("false") boolean ignoreLerp,
-                                   @ArgName("priority") @ArgPrefixed @ArgDefaultText("1") int priority) {
+                                   @ArgName("priority") @ArgPrefixed @ArgDefaultText("1") int priority,
+
+                                   @ArgName("removeall") @ArgDefaultText("false") boolean removeAll) {
         ModeledEntity modeledEntity = ModelEngineAPI.getModeledEntity(entity.getBukkitEntity());
         if (modeledEntity == null) {
             Debug.echoError("Entity is not modeled: " + entity.identify());
@@ -63,6 +65,10 @@ public class MegStateCommand extends AbstractCommand {
             return;
         }
         AnimationHandler handler = activeModel.getAnimationHandler();
+        if (removeAll) {
+            handler.forceStopAllAnimations();
+            return;
+        }
         if (remove) {
             if (handler instanceof IStateMachineHandler smh) {
                 if (ignoreLerp) {
