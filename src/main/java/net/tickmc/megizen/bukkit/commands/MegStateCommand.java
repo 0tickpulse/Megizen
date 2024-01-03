@@ -54,7 +54,7 @@ public class MegStateCommand extends AbstractCommand {
 
                                    @ArgName("remove") @ArgDefaultText("false") boolean remove,
                                    @ArgName("ignore_lerp") @ArgDefaultText("false") boolean ignoreLerp,
-                                   @ArgName("priority") @ArgPrefixed @ArgDefaultText("1") int priority,) {
+                                   @ArgName("priority") @ArgPrefixed @ArgDefaultText("1") int priority) {
         ModeledEntity modeledEntity = ModelEngineAPI.getModeledEntity(entity.getBukkitEntity());
         if (modeledEntity == null) {
             Debug.echoError("Entity is not modeled: " + entity.identify());
