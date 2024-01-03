@@ -6,6 +6,7 @@ import com.denizenscript.denizencore.objects.Adjustable;
 import com.denizenscript.denizencore.objects.Fetchable;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
+import com.denizenscript.denizencore.objects.core.ColorTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.core.ListTag;
 import com.denizenscript.denizencore.tags.Attribute;
@@ -16,6 +17,7 @@ import com.denizenscript.denizencore.utilities.debugging.Debug;
 import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
+import org.bukkit.Color;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -35,7 +37,6 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         if (string == null) {
             return null;
         }
-        // String should be/is megmodeledentity@<some uuid>
         try {
             string = CoreUtilities.toLowerCase(string).replace("megmodeledentity@", "");
             ModeledEntity me = ModelEngineAPI.getModeledEntity(UUID.fromString(string));
@@ -68,10 +69,6 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
 
     public ModeledEntity getModeledEntity() {
         return modeledEntity;
-    }
-
-    public @Nullable ActiveModel getActiveModel(String name) {
-        return modeledEntity.getModel(name).orElse(null);
     }
 
     /////////////////////
@@ -146,6 +143,22 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         // -->
         tagProcessor.registerTag(ListTag.class, "models", (attribute, object) -> {
             return new ListTag(object.modeledEntity.getModels().keySet());
+        });
+
+        // <--[tag]
+        // @attribute <MegModeledEntityTag.model[(model)]>
+        // @returns MegActiveModelTag
+        // @description
+        // Returns the active model with the specified name on the modeled entity.
+        // If no name is specified, returns the first model on the modeled entity.
+        // -->
+        tagProcessor.registerTag(MegActiveModelTag.class, "model", (attribute, object) -> {
+            String model = attribute.hasParam() ? attribute.getParam() : object.modeledEntity.getModels().keySet().iterator().next();
+            ActiveModel activeModel = object.modeledEntity.getModel(model).orElse(null);
+            if (activeModel == null) {
+                return null;
+            }
+            return new MegActiveModelTag(activeModel);
         });
 
         // <--[tag]
