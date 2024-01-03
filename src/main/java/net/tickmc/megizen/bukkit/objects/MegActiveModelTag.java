@@ -1,14 +1,13 @@
 package net.tickmc.megizen.bukkit.objects;
 
-import com.denizenscript.denizen.objects.EntityFormObject;
 import com.denizenscript.denizen.objects.EntityTag;
+import com.denizenscript.denizen.objects.LocationTag;
 import com.denizenscript.denizencore.objects.Adjustable;
 import com.denizenscript.denizencore.objects.Fetchable;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ColorTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
-import com.denizenscript.denizencore.objects.core.ListTag;
 import com.denizenscript.denizencore.tags.Attribute;
 import com.denizenscript.denizencore.tags.ObjectTagProcessor;
 import com.denizenscript.denizencore.tags.TagContext;
@@ -18,9 +17,7 @@ import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
 import com.ticxo.modelengine.api.model.bone.ModelBone;
 import org.bukkit.Color;
-
-import javax.annotation.Nullable;
-import java.util.UUID;
+import org.joml.Vector3f;
 
 public class MegActiveModelTag implements ObjectTag, Adjustable {
 
@@ -32,7 +29,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         return valueOf(string, null);
     }
 
-    @Fetchable("megaactivemodel")
+    @Fetchable("megactivemodel")
     public static MegActiveModelTag valueOf(String string, TagContext context) {
         if (string == null) {
             return null;
@@ -125,15 +122,6 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
     public static ObjectTagProcessor<MegActiveModelTag> tagProcessor = new ObjectTagProcessor<>();
 
     public static void registerTags() {
-        // <--[tag]
-        // @attribute <MegActiveModelTag.modeled_entity>
-        // @returns MegModeledEntityTag
-        // @description
-        // Returns the modeled entity of the active model.
-        // -->
-        tagProcessor.registerTag(MegModeledEntityTag.class, "modeled_entity", (attribute, object) -> {
-            return new MegModeledEntityTag(object.getActiveModel().getModeledEntity());
-        });
 
         // <--[tag]
         // @attribute <MegActiveModelTag.bone[<id>]>
@@ -159,6 +147,16 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         tagProcessor.registerTag(ColorTag.class, "damage_tint", (attribute, object) -> {
             Color tint = object.getActiveModel().getDamageTint();
             return new ColorTag(tint.getRed(), tint.getGreen(), tint.getBlue());
+        });
+
+        // <--[tag]
+        // @attribute <MegActiveModelTag.modeled_entity>
+        // @returns MegModeledEntityTag
+        // @description
+        // Returns the modeled entity of the active model.
+        // -->
+        tagProcessor.registerTag(MegModeledEntityTag.class, "modeled_entity", (attribute, object) -> {
+            return new MegModeledEntityTag(object.getActiveModel().getModeledEntity());
         });
 
         // <--[mechanism]

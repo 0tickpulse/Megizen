@@ -2,3 +2,7 @@ target/
 *.iml
 .idea/
 dependency-reduced-pom.xml
+.gradle/
+gradle
+run
+build
