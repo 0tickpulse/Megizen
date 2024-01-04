@@ -1,11 +1,13 @@
 package net.tickmc.megizen.bukkit.objects;
 
 import com.denizenscript.denizen.objects.EntityTag;
+import com.denizenscript.denizen.objects.LocationTag;
 import com.denizenscript.denizencore.objects.Adjustable;
 import com.denizenscript.denizencore.objects.Fetchable;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ColorTag;
+import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.tags.Attribute;
 import com.denizenscript.denizencore.tags.ObjectTagProcessor;
 import com.denizenscript.denizencore.tags.TagContext;
@@ -15,6 +17,7 @@ import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
 import com.ticxo.modelengine.api.model.bone.ModelBone;
 import org.bukkit.Color;
+import org.joml.Vector3f;
 
 public class MegActiveModelTag implements ObjectTag, Adjustable {
 
@@ -136,6 +139,17 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         });
 
         // <--[tag]
+        // @attribute <MegActiveModelTag.hitbox_scale>
+        // @returns LocationTag
+        // @description
+        // Returns the scale of the active model hitbox.
+        // -->
+        tagProcessor.registerTag(LocationTag.class, "hitbox_scale", (attribute, object) -> {
+            Vector3f scale = object.getActiveModel().getHitboxScale();
+            return new LocationTag(null, scale.x(), scale.y(), scale.z());
+        });
+
+        // <--[tag]
         // @attribute <MegActiveModelTag.damage_tint>
         // @returns ColorTag
         // @description
@@ -156,6 +170,17 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
             return new MegModeledEntityTag(object.getActiveModel().getModeledEntity());
         });
 
+        // <--[tag]
+        // @attribute <MegActiveModelTag.scale>
+        // @returns LocationTag
+        // @description
+        // Returns the scale of the active model.
+        // -->
+        tagProcessor.registerTag(LocationTag.class, "scale", (attribute, object) -> {
+            Vector3f scale = object.getActiveModel().getScale();
+            return new LocationTag(null, scale.x(), scale.y(), scale.z());
+        });
+
         // <--[mechanism]
         // @object MegActiveModelTag
         // @name damage_tint
@@ -167,6 +192,32 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // -->
         tagProcessor.registerMechanism("damage_tint", false, ColorTag.class, (object, mechanism, value) -> {
             object.getActiveModel().setDamageTint(Color.fromRGB(value.red, value.green, value.blue));
+        });
+
+        // <--[mechanism]
+        // @object MegActiveModelTag
+        // @name hitbox_scale
+        // @input ElementTag(Number)
+        // @description
+        // Sets the scale of the active model hitbox.
+        // @tags
+        // <MegActiveModelTag.hitbox_scale>
+        // -->
+        tagProcessor.registerMechanism("hitbox_scale", false, ElementTag.class, (object, mechanism, value) -> {
+            object.getActiveModel().setHitboxScale(value.asDouble());
+        });
+
+        // <--[mechanism]
+        // @object MegActiveModelTag
+        // @name scale
+        // @input ElementTag(Number)
+        // @description
+        // Sets the scale of the active model.
+        // @tags
+        // <MegActiveModelTag.scale>
+        // -->
+        tagProcessor.registerMechanism("scale", false, ElementTag.class, (object, mechanism, value) -> {
+            object.getActiveModel().setScale(value.asDouble());
         });
     }
 
