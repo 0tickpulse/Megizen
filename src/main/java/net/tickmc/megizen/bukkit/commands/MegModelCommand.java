@@ -56,7 +56,7 @@ public class MegModelCommand extends AbstractCommand {
         }
         Entity bukkitEntity = entity.getBukkitEntity();
         if (remove) {
-            ModeledEntity modeledEntity = ModelEngineAPI.getModeledEntity(bukkitEntity);
+            ModeledEntity modeledEntity = ModelEngineAPI.getOrCreateModeledEntity(bukkitEntity);
             if (modeledEntity == null) {
                 Debug.echoError("Entity is not modeled: " + entity.identify());
                 return;
