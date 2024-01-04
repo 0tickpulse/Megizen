@@ -126,16 +126,6 @@ public class MegBoneTag implements ObjectTag, Adjustable {
 
     public static void registerTags() {
         // <--[tag]
-        // @attribute <MegBoneTag.id>
-        // @returns ElementTag
-        // @description
-        // Returns the id of the bone.
-        // -->
-        tagProcessor.registerTag(ElementTag.class, "id", (attribute, object) -> {
-            return new ElementTag(object.getBone().getBoneId());
-        });
-
-        // <--[tag]
         // @attribute <MegBoneTag.children>
         // @returns MapTag(MegBoneTag)
         // @description
@@ -174,13 +164,13 @@ public class MegBoneTag implements ObjectTag, Adjustable {
         });
 
         // <--[tag]
-        // @attribute <MegBoneTag.location>
-        // @returns LocationTag
+        // @attribute <MegBoneTag.id>
+        // @returns ElementTag
         // @description
-        // Returns the location of the bone.
+        // Returns the id of the bone.
         // -->
-        tagProcessor.registerTag(LocationTag.class, "location", (attribute, object) -> {
-            return new LocationTag(object.getBone().getLocation());
+        tagProcessor.registerTag(ElementTag.class, "id", (attribute, object) -> {
+            return new ElementTag(object.getBone().getBoneId());
         });
 
         // <--[tag]
@@ -192,6 +182,16 @@ public class MegBoneTag implements ObjectTag, Adjustable {
         // -->
         tagProcessor.registerTag(ItemTag.class, "item", (attribute, object) -> {
             return new ItemTag(object.getBone().getModel());
+        });
+
+        // <--[tag]
+        // @attribute <MegBoneTag.location>
+        // @returns LocationTag
+        // @description
+        // Returns the location of the bone.
+        // -->
+        tagProcessor.registerTag(LocationTag.class, "location", (attribute, object) -> {
+            return new LocationTag(object.getBone().getLocation());
         });
 
         // <--[mechanism]
