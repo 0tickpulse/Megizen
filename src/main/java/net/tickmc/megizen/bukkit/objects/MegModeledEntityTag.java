@@ -7,7 +7,6 @@ import com.denizenscript.denizencore.objects.Fetchable;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
-import com.denizenscript.denizencore.objects.core.ListTag;
 import com.denizenscript.denizencore.objects.core.MapTag;
 import com.denizenscript.denizencore.tags.Attribute;
 import com.denizenscript.denizencore.tags.ObjectTagProcessor;
@@ -121,24 +120,14 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         });
 
         // <--[tag]
-        // @attribute <MedModeledEntityTag.should_save>
+        // @attribute <MegModeledEntityTag.entity_visible>
         // @returns ElementTag(Boolean)
         // @description
-        // Returns whether the modeled entity should be saved on unload.
-        // @mechanism MegModeledEntityTag.should_save
+        // Returns whether the base entity of the modeled entity is visible.
+        // @mechanism MegModeledEntityTag.entity_visible
         // -->
-        tagProcessor.registerTag(ElementTag.class, "should_save", (attribute, object) -> {
-            return new ElementTag(object.modeledEntity.shouldBeSaved());
-        });
-
-        // <--[tag]
-        // @attribute <MegModeledEntityTag.models>
-        // @returns ListTag
-        // @description
-        // Returns a list of all models on the modeled entity.
-        // -->
-        tagProcessor.registerTag(ListTag.class, "models", (attribute, object) -> {
-            return new ListTag(object.modeledEntity.getModels().keySet());
+        tagProcessor.registerTag(ElementTag.class, "entity_visible", (attribute, object) -> {
+            return new ElementTag(object.modeledEntity.isBaseEntityVisible());
         });
 
         // <--[tag]
@@ -155,17 +144,6 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
                 return null;
             }
             return new MegActiveModelTag(activeModel);
-        });
-
-        // <--[tag]
-        // @attribute <MegModeledEntityTag.entity_visible>
-        // @returns ElementTag(Boolean)
-        // @description
-        // Returns whether the base entity of the modeled entity is visible.
-        // @mechanism MegModeledEntityTag.entity_visible
-        // -->
-        tagProcessor.registerTag(ElementTag.class, "entity_visible", (attribute, object) -> {
-            return new ElementTag(object.modeledEntity.isBaseEntityVisible());
         });
 
         // <--[tag]
@@ -187,18 +165,15 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
             return map;
         });
 
-        // <--[mechanism]
-        // @object MegModeledEntityTag
-        // @name should_save
-        // @input ElementTag(Boolean)
+        // <--[tag]
+        // @attribute <MedModeledEntityTag.should_save>
+        // @returns ElementTag(Boolean)
         // @description
-        // Sets whether the modeled entity should be saved on unload.
-        // @tags
-        // <MegModeledEntityTag.should_save>
+        // Returns whether the modeled entity should be saved on unload.
+        // @mechanism MegModeledEntityTag.should_save
         // -->
-        tagProcessor.registerMechanism("should_save", false, ElementTag.class, (object, mechanism, value) -> {
-            boolean shouldSave = value.asBoolean();
-            object.modeledEntity.setSaved(shouldSave);
+        tagProcessor.registerTag(ElementTag.class, "should_save", (attribute, object) -> {
+            return new ElementTag(object.modeledEntity.shouldBeSaved());
         });
 
         // <--[mechanism]
@@ -213,6 +188,20 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         tagProcessor.registerMechanism("entity_visible", false, ElementTag.class, (object, mechanism, value) -> {
             boolean visible = value.asBoolean();
             object.modeledEntity.setBaseEntityVisible(visible);
+        });
+
+        // <--[mechanism]
+        // @object MegModeledEntityTag
+        // @name should_save
+        // @input ElementTag(Boolean)
+        // @description
+        // Sets whether the modeled entity should be saved on unload.
+        // @tags
+        // <MegModeledEntityTag.should_save>
+        // -->
+        tagProcessor.registerMechanism("should_save", false, ElementTag.class, (object, mechanism, value) -> {
+            boolean shouldSave = value.asBoolean();
+            object.modeledEntity.setSaved(shouldSave);
         });
     }
 

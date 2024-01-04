@@ -20,8 +20,6 @@ import com.ticxo.modelengine.api.model.ModeledEntity;
 import com.ticxo.modelengine.api.model.bone.ModelBone;
 import org.bukkit.Color;
 import org.bukkit.util.Vector;
-import org.joml.Vector3d;
-import org.joml.Vector3f;
 
 import java.util.Map;
 
@@ -129,20 +127,6 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
 
     public static void registerTags() {
         // <--[tag]
-        // @attribute <MegActiveModelTag.bones>
-        // @returns MapTag(MegBoneTag)
-        // @description
-        // Returns a map of all the bones of the model, with the bone id as the key and the bone as the value.
-        // -->
-        tagProcessor.registerTag(MapTag.class, "bones", (attribute, object) -> {
-            MapTag map = new MapTag();
-            for (Map.Entry<String, ModelBone> entry : object.getActiveModel().getBones().entrySet()) {
-                map.putObject(entry.getKey(), new MegBoneTag(entry.getValue()));
-            }
-            return map;
-        });
-
-        // <--[tag]
         // @attribute <MegActiveModelTag.bone[<id>]>
         // @returns MegBoneTag
         // @description
@@ -155,6 +139,20 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
                 return null;
             }
             return new MegBoneTag(bone);
+        });
+
+        // <--[tag]
+        // @attribute <MegActiveModelTag.bones>
+        // @returns MapTag(MegBoneTag)
+        // @description
+        // Returns a map of all the bones of the model, with the bone id as the key and the bone as the value.
+        // -->
+        tagProcessor.registerTag(MapTag.class, "bones", (attribute, object) -> {
+            MapTag map = new MapTag();
+            for (Map.Entry<String, ModelBone> entry : object.getActiveModel().getBones().entrySet()) {
+                map.putObject(entry.getKey(), new MegBoneTag(entry.getValue()));
+            }
+            return map;
         });
 
         // <--[tag]
@@ -182,17 +180,6 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         });
 
         // <--[tag]
-        // @attribute <MegActiveModelTag.scale>
-        // @returns VectorObject
-        // @mechanism MegActiveModelTag.scale
-        // @description
-        // Returns the scale of the active model as a vector.
-        // -->
-        tagProcessor.registerTag(VectorObject.class, "scale", (attribute, object) -> {
-            return new LocationTag(Vector.fromJOML(object.getActiveModel().getScale()));
-        });
-
-        // <--[tag]
         // @attribute <MegActiveModelTag.hitbox_scale>
         // @returns VectorObject
         // @mechanism MegActiveModelTag.hitbox_scale
@@ -201,6 +188,17 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // -->
         tagProcessor.registerTag(VectorObject.class, "hitbox_scale", (attribute, object) -> {
             return new LocationTag(Vector.fromJOML(object.getActiveModel().getHitboxScale()));
+        });
+
+        // <--[tag]
+        // @attribute <MegActiveModelTag.hitbox_visible>
+        // @returns ElementTag(Boolean)
+        // @mechanism MegActiveModelTag.hitbox_visible
+        // @description
+        // Returns whether the hitbox of the active model is visible.
+        // -->
+        tagProcessor.registerTag(ElementTag.class, "hitbox_visible", (attribute, object) -> {
+            return new ElementTag(object.getActiveModel().isHitboxVisible());
         });
 
         // <--[tag]
@@ -235,6 +233,17 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
             return new MegModeledEntityTag(object.getActiveModel().getModeledEntity());
         });
 
+        // <--[tag]
+        // @attribute <MegActiveModelTag.scale>
+        // @returns VectorObject
+        // @mechanism MegActiveModelTag.scale
+        // @description
+        // Returns the scale of the active model as a vector.
+        // -->
+        tagProcessor.registerTag(VectorObject.class, "scale", (attribute, object) -> {
+            return new LocationTag(Vector.fromJOML(object.getActiveModel().getScale()));
+        });
+
         // <--[mechanism]
         // @object MegActiveModelTag
         // @name damage_tint
@@ -263,19 +272,6 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
 
         // <--[mechanism]
         // @object MegActiveModelTag
-        // @name scale
-        // @input ElementTag(decimal)
-        // @description
-        // Sets the scale of the active model.
-        // @tags
-        // <MegActiveModelTag.scale>
-        // -->
-        tagProcessor.registerMechanism("scale", false, ElementTag.class, (object, mechanism, value) -> {
-            object.getActiveModel().setScale(value.asDouble());
-        });
-
-        // <--[mechanism]
-        // @object MegActiveModelTag
         // @name hitbox_scale
         // @input ElementTag(decimal)
         // @description
@@ -285,6 +281,33 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // -->
         tagProcessor.registerMechanism("hitbox_scale", false, ElementTag.class, (object, mechanism, value) -> {
             object.getActiveModel().setHitboxScale(value.asDouble());
+        });
+
+
+        // <--[mechanism]
+        // @object MegActiveModelTag
+        // @name hitbox_visible
+        // @input ElementTag(Boolean)
+        // @description
+        // Sets whether the hitbox of the active model is visible.
+        // @tags
+        // <MegActiveModelTag.hitbox_visible>
+        // -->
+        tagProcessor.registerMechanism("hitbox_visible", false, ElementTag.class, (object, mechanism, value) -> {
+            object.getActiveModel().setHitboxVisible(value.asBoolean());
+        });
+
+        // <--[mechanism]
+        // @object MegActiveModelTag
+        // @name lock_pitch
+        // @input ElementTag(Boolean)
+        // @description
+        // Sets whether the pitch of the active model is locked.
+        // @tags
+        // <MegActiveModelTag.lock_pitch>
+        // -->
+        tagProcessor.registerMechanism("lock_pitch", false, ElementTag.class, (object, mechanism, value) -> {
+            object.getActiveModel().setLockPitch(value.asBoolean());
         });
 
         // <--[mechanism]
@@ -302,15 +325,15 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
 
         // <--[mechanism]
         // @object MegActiveModelTag
-        // @name lock_pitch
-        // @input ElementTag(Boolean)
+        // @name scale
+        // @input ElementTag(decimal)
         // @description
-        // Sets whether the pitch of the active model is locked.
+        // Sets the scale of the active model.
         // @tags
-        // <MegActiveModelTag.lock_pitch>
+        // <MegActiveModelTag.scale>
         // -->
-        tagProcessor.registerMechanism("lock_pitch", false, ElementTag.class, (object, mechanism, value) -> {
-            object.getActiveModel().setLockPitch(value.asBoolean());
+        tagProcessor.registerMechanism("scale", false, ElementTag.class, (object, mechanism, value) -> {
+            object.getActiveModel().setScale(value.asDouble());
         });
     }
 
