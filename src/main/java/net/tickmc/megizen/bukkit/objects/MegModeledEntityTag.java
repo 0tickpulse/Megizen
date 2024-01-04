@@ -35,7 +35,7 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         }
         try {
             string = CoreUtilities.toLowerCase(string).replace("megmodeledentity@", "");
-            ModeledEntity me = ModelEngineAPI.getModeledEntity(EntityTag.valueOf(string, context).getUUID());
+            ModeledEntity me = ModelEngineAPI.getOrCreateModeledEntity(EntityTag.valueOf(string, context).getBukkitEntity());
             if (me == null) {
                 return null;
             }
