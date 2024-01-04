@@ -3,6 +3,5 @@ target/
 .idea/
 dependency-reduced-pom.xml
 .gradle/
-gradle
 run
 build
