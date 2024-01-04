@@ -18,8 +18,6 @@ import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
 
-import java.util.UUID;
-
 public class MegModeledEntityTag implements ObjectTag, Adjustable {
 
     //////////////////

@@ -1,6 +1,5 @@
 package net.tickmc.megizen.bukkit.commands;
 
-import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizencore.objects.core.DurationTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.scripts.ScriptEntry;
@@ -10,13 +9,11 @@ import com.denizenscript.denizencore.scripts.commands.generator.ArgDefaultText;
 import com.denizenscript.denizencore.scripts.commands.generator.ArgName;
 import com.denizenscript.denizencore.scripts.commands.generator.ArgPrefixed;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
-import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.animation.BlueprintAnimation;
 import com.ticxo.modelengine.api.animation.handler.AnimationHandler;
 import com.ticxo.modelengine.api.animation.handler.IStateMachineHandler;
 import com.ticxo.modelengine.api.animation.property.IAnimationProperty;
 import com.ticxo.modelengine.api.model.ActiveModel;
-import com.ticxo.modelengine.api.model.ModeledEntity;
 import net.tickmc.megizen.bukkit.objects.MegActiveModelTag;
 
 public class MegStateCommand extends AbstractCommand {
