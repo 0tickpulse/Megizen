@@ -35,7 +35,7 @@ repositories {
 dependencies {
     implementation("org.spigotmc:spigot-api:${project.properties["craftbukkit.version"]}")
     implementation("com.denizenscript:denizen:${project.properties["denizen.version"]}")
-    implementation("io.netty:netty-all:4.1.48.Final")
+    implementation("io.netty:netty-all:4.1.86.Final")
     implementation("me.clip:placeholderapi:2.10.0")
     implementation("com.ticxo.modelengine:ModelEngine:${project.properties["modelengine.version"]}")
 }
