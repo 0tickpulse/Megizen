@@ -19,13 +19,13 @@ import net.tickmc.megizen.bukkit.objects.MegActiveModelTag;
 public class MegStateCommand extends AbstractCommand {
     public MegStateCommand() {
         setName("megstate");
-        setSyntax("megstate [model:<active_model>] [state:<state>] ((speed:<#.#>/{1}) (lerp_in:<duration>/{0}) (lerp_out:<duration>/{0}) (loop:once/loop/hold) (override:true/false) (force)/remove (ignore_lerp) (priority:<#>/{1}))");
+        setSyntax("megstate [model:<active_model>] [state:<state>] (priority:<#>/{1}) ((speed:<#.#>/{1}) (lerp_in:<duration>/{0}) (lerp_out:<duration>/{0}) (loop:once/loop/hold) (override:true/false) (force)/remove (ignore_lerp))");
         autoCompile();
     }
 
     // <--[command]
     // @Name MegState
-    // @Syntax megstate [model:<active_model>] [state:<state>] ((speed:<#.#>/{1}) (lerp_in:<duration>/{0}) (lerp_out:<duration>/{0}) (loop:once/loop/hold) (override:true/false) (force)/remove (ignore_lerp) (priority:<#>/{1}))
+    // @Syntax megstate [model:<active_model>] [state:<state>] (priority:<#>/{1}) ((speed:<#.#>/{1}) (lerp_in:<duration>/{0}) (lerp_out:<duration>/{0}) (loop:once/loop/hold) (override:true/false) (force)/remove (ignore_lerp))
     // @Required 3
     // @Short Plays a state on a modeled entity.
     // @Group Megizen
