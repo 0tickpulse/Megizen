@@ -16,6 +16,7 @@ import com.denizenscript.denizencore.utilities.debugging.Debug;
 import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
+import org.bukkit.entity.Entity;
 
 public class MegModeledEntityTag implements ObjectTag, Adjustable {
 
@@ -54,6 +55,10 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
 
     public MegModeledEntityTag(ModeledEntity me) {
         this.modeledEntity = me;
+    }
+
+    public MegModeledEntityTag(Entity entity) {
+        this.modeledEntity = ModelEngineAPI.getOrCreateModeledEntity(entity);
     }
 
     /////////////////////

@@ -6,7 +6,7 @@ import net.tickmc.megizen.bukkit.objects.MegModeledEntityTag;
 public class MegizenEntityTagExtensions {
 
     public static MegModeledEntityTag getModeledEntity(EntityTag entity) {
-        return MegModeledEntityTag.valueOf(entity.getUUID().toString(), null);
+        return new MegModeledEntityTag(entity.getBukkitEntity());
     }
 
     public static void register() {
