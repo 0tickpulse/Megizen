@@ -12,19 +12,20 @@ import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.generator.blueprint.ModelBlueprint;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
+import net.tickmc.megizen.bukkit.objects.MegModeledEntityTag;
 import org.bukkit.entity.Entity;
 
 public class MegModelCommand extends AbstractCommand {
 
     public MegModelCommand() {
         setName("megmodel");
-        setSyntax("megmodel [entity:<entity>] [model:<model>] (remove)");
+        setSyntax("megmodel [entity:<modeled_entity>] [model:<model>] (remove)");
         autoCompile();
     }
 
     // <--[command]
     // @Name MegModel
-    // @Syntax megmodel [entity:<entity>] [model:<model>] (remove)
+    // @Syntax megmodel [entity:<modeled_entity>] [model:<model>] (remove)
     // @Required 2
     // @Short Adds or removes a model from an entity.
     // @Group Megizen
@@ -46,7 +47,7 @@ public class MegModelCommand extends AbstractCommand {
     // -->
 
     public static void autoExecute(ScriptEntry scriptEntry,
-                                   @ArgName("entity") @ArgPrefixed EntityTag entity,
+                                   @ArgName("entity") @ArgPrefixed MegModeledEntityTag modeledEntityTag,
                                    @ArgName("model") @ArgPrefixed ElementTag model,
                                    @ArgName("remove") @ArgPrefixed @ArgDefaultText("false") boolean remove) {
         ModelBlueprint blueprint = ModelEngineAPI.getBlueprint(model.asString());
@@ -54,11 +55,10 @@ public class MegModelCommand extends AbstractCommand {
             Debug.echoError("Invalid model: " + model.asString());
             return;
         }
-        Entity bukkitEntity = entity.getBukkitEntity();
+        ModeledEntity modeledEntity = modeledEntityTag.getModeledEntity();
         if (remove) {
-            ModeledEntity modeledEntity = ModelEngineAPI.getOrCreateModeledEntity(bukkitEntity);
             if (modeledEntity == null) {
-                Debug.echoError("Entity is not modeled: " + entity.identify());
+                Debug.echoError("Entity is not modeled: " + modeledEntityTag.identify());
                 return;
             }
             if (!modeledEntity.getModels().containsKey(model.asString())) {
@@ -67,7 +67,6 @@ public class MegModelCommand extends AbstractCommand {
             }
             modeledEntity.removeModel(model.asString());
         } else {
-            ModeledEntity modeledEntity = ModelEngineAPI.createModeledEntity(bukkitEntity);
             ActiveModel activeModel = ModelEngineAPI.createActiveModel(blueprint);
             modeledEntity.addModel(activeModel, true);
         }
