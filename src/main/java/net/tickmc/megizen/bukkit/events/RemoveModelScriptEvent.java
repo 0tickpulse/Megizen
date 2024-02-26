@@ -12,7 +12,7 @@ public class RemoveModelScriptEvent extends BukkitScriptEvent implements Listene
 
     // <--[event]
     // @Events
-    // meg removes <'model'> (from <'entity'>)
+    // meg removes <'model'>
     //
     // @Group Megizen
     //
@@ -27,7 +27,7 @@ public class RemoveModelScriptEvent extends BukkitScriptEvent implements Listene
     // -->
 
     public RemoveModelScriptEvent() {
-        registerCouldMatcher("meg removes <'model'> (from <'entity'>)");
+        registerCouldMatcher("meg removes <'model'>");
     }
 
     RemoveModelEvent event;
@@ -37,9 +37,6 @@ public class RemoveModelScriptEvent extends BukkitScriptEvent implements Listene
     @Override
     public boolean matches(ScriptPath path) {
         if (!path.eventArgLowerAt(2).equals("model") && !runGenericCheck(path.eventArgLowerAt(2), event.getModel().toString())) {
-            return false;
-        }
-        if (path.eventArgLowerAt(3).equals("from") && !runGenericCheck(path.eventArgLowerAt(4), event.getTarget().toString())) {
             return false;
         }
         return super.matches(path);

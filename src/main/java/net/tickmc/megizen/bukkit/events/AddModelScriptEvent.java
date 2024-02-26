@@ -12,7 +12,7 @@ public class AddModelScriptEvent extends BukkitScriptEvent implements Listener {
 
     // <--[event]
     // @Events
-    // meg adds <'model'> (to <'entity'>)
+    // meg adds <'model'>
     //
     // @Group Megizen
     //
@@ -27,7 +27,7 @@ public class AddModelScriptEvent extends BukkitScriptEvent implements Listener {
     // -->
 
     public AddModelScriptEvent() {
-        registerCouldMatcher("meg adds <'model'> (to <'entity'>)");
+        registerCouldMatcher("meg adds <'model'>");
     }
 
     AddModelEvent event;
@@ -36,10 +36,7 @@ public class AddModelScriptEvent extends BukkitScriptEvent implements Listener {
 
     @Override
     public boolean matches(ScriptPath path) {
-        if (!path.eventArgLowerAt(2).equals("model") && !runGenericCheck(path.eventArgLowerAt(2), event.getModel().toString())) {
-            return false;
-        }
-        if (path.eventArgLowerAt(3).equals("to") && !runGenericCheck(path.eventArgLowerAt(4), event.getTarget().toString())) {
+        if (!path.eventArgLowerAt(2).equals("model") && !runGenericCheck(path.eventArgLowerAt(2), activeModel.getActiveModel().getBlueprint().getName())) {
             return false;
         }
         return super.matches(path);
