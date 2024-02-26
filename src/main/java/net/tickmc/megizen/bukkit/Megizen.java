@@ -22,20 +22,33 @@ public class Megizen extends JavaPlugin {
         saveDefaultConfig();
         instance = this;
 
-        // register stuff
-        ObjectFetcher.registerWithObjectFetcher(MegModeledEntityTag.class, MegModeledEntityTag.tagProcessor);
+        // Register objects
+
         ObjectFetcher.registerWithObjectFetcher(MegActiveModelTag.class, MegActiveModelTag.tagProcessor);
+        ObjectFetcher.registerWithObjectFetcher(MegModeledEntityTag.class, MegModeledEntityTag.tagProcessor);
         ObjectFetcher.registerWithObjectFetcher(MegBoneTag.class, MegBoneTag.tagProcessor);
+
+        // Register properties
         MegizenEntityTagExtensions.register();
+
+        //Register commands
         DenizenCore.commandRegistry.registerCommand(MegModelCommand.class);
         DenizenCore.commandRegistry.registerCommand(MegStateCommand.class);
+
+        // Register events
+        try {
+            ScriptEventRegistry.registerEvents();
+        }
+        catch (Exception e) {
+            Debug.echoError(e);
+        }
 
         Debug.log("Megizen loaded!");
     }
 
     @Override
     public void onDisable() {
-        // To prevent issue with onDisable order, tell Denizen to shutdown NOW (it won't repeat itself).
+        // To prevent issue with onDisable order, tell Denizen to shut down NOW (it won't repeat itself).
         Denizen.getInstance().onDisable();
     }
 }
