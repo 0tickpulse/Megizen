@@ -3,7 +3,7 @@ Megizen
 
 **Megizen: Adds interop between ModelEngine and Denizen!**
 
-## Dev Builds
+## Download
 
 Dev builds can be found [here](https://ci.heypr.dev/job/Megizen/).
 
