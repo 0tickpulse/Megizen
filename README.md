@@ -16,4 +16,3 @@ Additionally, this project was contributed to by the following people:
 [![](https://github.com/heypr.png?size=50)](https://github.com/heypr)
 [![](https://github.com/davight.png?size=50)](https://github.com/davight)
 [![](https://github.com/0tickpulse.png?size=50)](https://github.com/0tickpulse)
-
