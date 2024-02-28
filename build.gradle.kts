@@ -30,6 +30,10 @@ repositories {
     maven {
         url = uri("https://repo.maven.apache.org/maven2/")
     }
+
+    maven {
+        url = uri("https://maven.citizensnpcs.co/repo")
+    }
 }
 
 dependencies {
