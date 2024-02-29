@@ -21,8 +21,8 @@ public class RemoveModelScriptEvent extends BukkitScriptEvent implements Listene
     // @Triggers when a model is about to be removed from a <@link objecttype MegModeledEntityTag>.
     //
     // @Context
-    // <context.active_model> returns a MegActiveModelTag of the model that is about to be removed.
-    // <context.modeled_entity> returns a MegModeledEntityTag of the entity that the model is about to be removed from.
+    // <context.active_model> returns the MegActiveModelTag of the model that is about to be removed.
+    // <context.modeled_entity> returns the MegModeledEntityTag of the entity that the model is about to be removed from.
     //
     // -->
 

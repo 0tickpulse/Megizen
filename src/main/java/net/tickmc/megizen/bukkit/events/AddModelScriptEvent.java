@@ -21,8 +21,8 @@ public class AddModelScriptEvent extends BukkitScriptEvent implements Listener {
     // @Triggers when a model is about to be added to a <@link objecttype MegModeledEntityTag>.
     //
     // @Context
-    // <context.active_model> returns a MegActiveModelTag of the model that is about to be added.
-    // <context.modeled_entity> returns a MegModeledEntityTag of the entity that the model is about to be added to.
+    // <context.active_model> returns the MegActiveModelTag of the model that is about to be added.
+    // <context.modeled_entity> returns the MegModeledEntityTag of the entity that the model is about to be added to.
     //
     // -->
 
