@@ -1,0 +1,61 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'xyz.jpenilla.run-paper' version "2.2.2"
+}
+
+group = "net.tickmc"
+version = "0.1.0-b" + System.getenv("BUILD_NUMBER").toString()
+description = "Megizen"
+
+
+java.sourceCompatibility = JavaVersion.VERSION_17
+
+repositories {
+    mavenLocal()
+
+    maven {
+        url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/")
+    }
+
+    maven {
+        url = uri("https://repo.md-5.net/content/groups/public/")
+    }
+
+    maven {
+        url = uri("https://oss.sonatype.org/content/repositories/snapshots/")
+    }
+
+    maven {
+        url = uri("https://mvn.lumine.io/repository/maven-public/")
+    }
+
+    maven {
+        url = uri("https://repo.maven.apache.org/maven2/")
+    }
+
+    maven {
+        url = uri("https://maven.citizensnpcs.co/repo")
+    }
+}
+
+dependencies {
+    implementation "org.spigotmc:spigot-api:${project.properties["craftbukkit.version"]}"
+    implementation "com.denizenscript:denizen:${project.properties["denizen.version"]}"
+    implementation "io.netty:netty-all:4.1.86.Final"
+    implementation "me.clip:placeholderapi:2.10.0"
+    implementation "com.ticxo.modelengine:ModelEngine:${project.properties["modelengine.version"]}"
+}
+
+
+processResources {
+    filesMatching("plugin.yml") {
+        expand "BUILD_NUMBER": System.getenv("BUILD_NUMBER")
+    }
+}
+
+tasks {
+    runServer {
+        minecraftVersion("1.20.4")
+    }
+}
