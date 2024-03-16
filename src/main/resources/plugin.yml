@@ -1,6 +1,6 @@
 name: Megizen
-authors: ['The DenizenScript Team', '0TickPulse']
-version: ${project.version} (build ${BUILD_NUMBER})
+authors: ['The DenizenScript Team', '0TickPulse', 'heypr']
+version: 0.1.0-DEV (build ${BUILD_NUMBER})
 main: net.tickmc.megizen.bukkit.Megizen
 depend: [Denizen, ModelEngine]
 
