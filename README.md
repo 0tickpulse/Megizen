@@ -7,7 +7,7 @@ Megizen
 
 Dev builds can be found [here](https://ci.heypr.dev/job/Megizen/).
 
-## How to Use
+## Usage
 
 The documentation for Megizen can be found [here](https://0tickpulse.github.io/megizen-docs/).
 
