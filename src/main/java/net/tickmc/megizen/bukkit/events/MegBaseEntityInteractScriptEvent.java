@@ -12,11 +12,11 @@ import net.tickmc.megizen.bukkit.objects.MegModeledEntityTag;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-public class ModelengineInteractEntityScriptEvent extends BukkitScriptEvent implements Listener {
+public class MegBaseEntityInteractScriptEvent extends BukkitScriptEvent implements Listener {
 
     // <--[event]
     // @Events
-    // modelengine player interact with model
+    // meg player interact with model
     //
     // @Group Player
     //
@@ -24,7 +24,7 @@ public class ModelengineInteractEntityScriptEvent extends BukkitScriptEvent impl
     //
     // @Warning this event may in some cases double-fire, requiring usage of the 'ratelimit' command (like 'ratelimit <player> 1t') to prevent doubling actions.
     //
-    // @Triggers when a player interacts with modelengine entity.
+    // @Triggers when a player interacts with Modelengine active model.
     //
     // @Context
     // <context.active_model> returns the MegActiveModelTag of interacted entity.
@@ -36,8 +36,8 @@ public class ModelengineInteractEntityScriptEvent extends BukkitScriptEvent impl
     //
     // -->
 
-    public ModelengineInteractEntityScriptEvent() {
-        registerCouldMatcher("modelengine player interact with model");
+    public MegBaseEntityInteractScriptEvent() {
+        registerCouldMatcher("meg player interact with model");
     }
 
     public BaseEntityInteractEvent event;
@@ -61,7 +61,7 @@ public class ModelengineInteractEntityScriptEvent extends BukkitScriptEvent impl
             case "active_model" -> new MegActiveModelTag(event.getModel());
             case "modeled_entity" -> new MegModeledEntityTag(event.getModel().getModeledEntity());
             case "click_position" -> event.getClickedPosition() != null ? new LocationTag(event.getClickedPosition()) : null;
-            case "action" -> new ElementTag(event.getAction());
+            case "action" -> new ElementTag(event.getAction().name(), true);
             default -> super.getContext(name);
         };
     }
