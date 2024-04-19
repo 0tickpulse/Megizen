@@ -9,7 +9,7 @@ public class MegizenPlayerTagExtensions {
 
         // <--[tag]
         // @object PlayerTag
-        // @attribute <PlayerTag.meg_make_visible>
+        // @attribute <PlayerTag.meg_forced_invisible>
         // @returns ElementTag(Boolean)
         // @description
         // Returns whether the player has been forcefully turned invisible by either the megmodel command or by ModelEngine.
