@@ -10,6 +10,7 @@ import net.tickmc.megizen.bukkit.objects.MegActiveModelTag;
 import net.tickmc.megizen.bukkit.objects.MegBoneTag;
 import net.tickmc.megizen.bukkit.objects.MegModeledEntityTag;
 import net.tickmc.megizen.bukkit.properties.MegizenEntityTagExtensions;
+import net.tickmc.megizen.bukkit.properties.MegizenPlayerTagExtensions;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Megizen extends JavaPlugin {
@@ -27,6 +28,7 @@ public class Megizen extends JavaPlugin {
         ObjectFetcher.registerWithObjectFetcher(MegActiveModelTag.class, MegActiveModelTag.tagProcessor);
         ObjectFetcher.registerWithObjectFetcher(MegBoneTag.class, MegBoneTag.tagProcessor);
         MegizenEntityTagExtensions.register();
+        MegizenPlayerTagExtensions.register();
         DenizenCore.commandRegistry.registerCommand(MegModelCommand.class);
         DenizenCore.commandRegistry.registerCommand(MegStateCommand.class);
 
