@@ -40,7 +40,6 @@ public class MegStateCommand extends AbstractCommand {
 
     public static void autoExecute(ScriptEntry scriptEntry,
                                    @ArgName("model") @ArgPrefixed MegActiveModelTag model,
-
                                    @ArgName("state") @ArgPrefixed @ArgDefaultNull String state,
                                    @ArgName("speed") @ArgPrefixed @ArgDefaultText("1") float speed,
                                    @ArgName("lerp_in") @ArgPrefixed @ArgDefaultText("0") DurationTag lerpIn,
@@ -48,7 +47,6 @@ public class MegStateCommand extends AbstractCommand {
                                    @ArgName("loop") @ArgPrefixed @ArgDefaultText("once") BlueprintAnimation.LoopMode loop,
                                    @ArgName("override") @ArgPrefixed @ArgDefaultNull ElementTag override,
                                    @ArgName("force") @ArgDefaultText("true") boolean force,
-
                                    @ArgName("remove") @ArgDefaultText("false") boolean remove,
                                    @ArgName("ignore_lerp") @ArgDefaultText("false") boolean ignoreLerp,
                                    @ArgName("priority") @ArgPrefixed @ArgDefaultText("1") int priority) {

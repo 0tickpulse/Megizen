@@ -49,6 +49,11 @@ public class MegModelCommand extends AbstractCommand {
     // - megmodel entity:<context.entity> model:my_model
     // -->
 
+    @Override
+    public void addCustomTabCompletions(TabCompletionsBuilder tab) {
+        tab.addWithPrefix("model:", ModelEngineAPI.getAPI().getModelRegistry().getKeys());
+    }
+
     public static void autoExecute(ScriptEntry scriptEntry,
                                    @ArgName("entity") @ArgPrefixed MegModeledEntityTag modeledEntityTag,
                                    @ArgName("model") @ArgPrefixed ElementTag model,
