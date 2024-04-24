@@ -36,7 +36,7 @@ public class AddModelScriptEvent extends BukkitScriptEvent implements Listener {
 
     @Override
     public boolean matches(ScriptPath path) {
-        if (!path.eventArgLowerAt(2).equals("model") && !runGenericCheck(path.eventArgLowerAt(2), activeModel.getActiveModel().getBlueprint().getName())) {
+        if (!path.eventArgLowerAt(2).equals("model") && !runGenericCheck(path.eventArgLowerAt(2), event.getModel().getBlueprint().getName())) {
             return false;
         }
         return super.matches(path);
