@@ -24,9 +24,18 @@ public class ModelRegistrationScriptEvent extends BukkitScriptEvent implements L
 
     public ModelRegistrationScriptEvent() {
         registerCouldMatcher("meg model registration begins");
+        registerSwitches("phase");
     }
 
     ModelRegistrationEvent event;
+
+    @Override
+    public boolean matches(ScriptPath path) {
+        if (!runGenericSwitchCheck(path, "phase", event.getPhase().toString())) {
+            return false;
+        }
+        return super.matches(path);
+    }
 
     @Override
     public ObjectTag getContext(String name) {

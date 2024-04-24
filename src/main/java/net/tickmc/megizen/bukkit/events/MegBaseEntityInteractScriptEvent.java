@@ -1,6 +1,8 @@
 package net.tickmc.megizen.bukkit.events;
 
 import com.denizenscript.denizen.events.BukkitScriptEvent;
+import com.denizenscript.denizen.objects.EntityTag;
+import com.denizenscript.denizen.objects.ItemTag;
 import com.denizenscript.denizen.objects.LocationTag;
 import com.denizenscript.denizen.utilities.implementation.BukkitScriptEntryData;
 import com.denizenscript.denizencore.objects.ObjectTag;
@@ -58,6 +60,9 @@ public class MegBaseEntityInteractScriptEvent extends BukkitScriptEvent implemen
     public ObjectTag getContext(String name) {
         return switch (name) {
             case "active_model" -> new MegActiveModelTag(event.getModel());
+            case "slot" -> new ElementTag(event.getSlot().name());
+            case "item" -> new ItemTag(event.getItem());
+            case "is_secondary" -> new ElementTag(event.isSecondary());
             case "click_position" -> event.getClickedPosition() != null ? new LocationTag(event.getClickedPosition()) : null;
             case "action" -> new ElementTag(event.getAction().name(), true);
             default -> super.getContext(name);

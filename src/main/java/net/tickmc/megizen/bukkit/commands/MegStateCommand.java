@@ -60,12 +60,15 @@ public class MegStateCommand extends AbstractCommand {
             if (handler instanceof IStateMachineHandler smh) {
                 if (ignoreLerp) {
                     smh.forceStopAnimation(priority, state);
-                } else {
+                }
+                else {
                     smh.stopAnimation(priority, state);
                 }
-            } else if (ignoreLerp) {
+            }
+            else if (ignoreLerp) {
                 handler.forceStopAnimation(state);
-            } else {
+            }
+            else {
                 handler.stopAnimation(state);
             }
             return;
