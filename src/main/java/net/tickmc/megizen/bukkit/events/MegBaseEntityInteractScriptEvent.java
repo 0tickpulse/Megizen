@@ -1,7 +1,6 @@
 package net.tickmc.megizen.bukkit.events;
 
 import com.denizenscript.denizen.events.BukkitScriptEvent;
-import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizen.objects.ItemTag;
 import com.denizenscript.denizen.objects.LocationTag;
 import com.denizenscript.denizen.utilities.implementation.BukkitScriptEntryData;
@@ -10,7 +9,6 @@ import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.scripts.ScriptEntryData;
 import com.ticxo.modelengine.api.events.BaseEntityInteractEvent;
 import net.tickmc.megizen.bukkit.objects.MegActiveModelTag;
-import net.tickmc.megizen.bukkit.objects.MegModeledEntityTag;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
