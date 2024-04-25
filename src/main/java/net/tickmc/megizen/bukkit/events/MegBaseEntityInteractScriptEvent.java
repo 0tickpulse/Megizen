@@ -28,10 +28,12 @@ public class MegBaseEntityInteractScriptEvent extends BukkitScriptEvent implemen
     //
     // @Triggers when a player interacts with ModelEngine model.
     //
-    // @Context
-    // <context.active_model> returns the MegActiveModelTag of the entity.
-    // <context.click_position> returns a LocationTag of the click position (as a world-less vector, relative to the entity's center), if any.
-    // <context.action> returns interaction cause. Can be: ATTACK, INTERACT or INTERACT_ON.
+    // @
+    // <context.action> returns a ElementTag of the interaction cause. Can be: ATTACK, INTERACT or INTERACT_ON.
+    // <context.active_model> returns a MegActiveModelTag of the model.
+    // <context.click_position> returns a LocationTag of the click position (as a world-less vector, relative to the model's center), if any.
+    // <context.item> returns the ItemTag of the item used to interact with the model.
+    // <context.is_secondary> returns a ElementTag(Boolean) of whether the player was crouching when interacting with the model.
     //
     // @Player Always.
     //
@@ -41,7 +43,10 @@ public class MegBaseEntityInteractScriptEvent extends BukkitScriptEvent implemen
         registerCouldMatcher("meg player interacts with model");
     }
 
-    public BaseEntityInteractEvent event;
+    BaseEntityInteractEvent event;
+    MegActiveModelTag activeModel;
+    LocationTag clickedPosition;
+    ItemTag item;
 
     @Override
     public boolean matches(ScriptPath path) {
@@ -59,12 +64,12 @@ public class MegBaseEntityInteractScriptEvent extends BukkitScriptEvent implemen
     @Override
     public ObjectTag getContext(String name) {
         return switch (name) {
-            case "active_model" -> new MegActiveModelTag(event.getModel());
-            case "slot" -> new ElementTag(event.getSlot().name());
-            case "item" -> new ItemTag(event.getItem());
-            case "is_secondary" -> new ElementTag(event.isSecondary());
-            case "click_position" -> event.getClickedPosition() != null ? new LocationTag(event.getClickedPosition()) : null;
             case "action" -> new ElementTag(event.getAction().name(), true);
+            case "active_model" -> activeModel;
+            case "click_position" -> clickedPosition;
+            case "item" -> item;
+            case "is_secondary" -> new ElementTag(event.isSecondary());
+            case "slot" -> new ElementTag(event.getSlot().name());
             default -> super.getContext(name);
         };
     }
@@ -72,6 +77,9 @@ public class MegBaseEntityInteractScriptEvent extends BukkitScriptEvent implemen
     @EventHandler
     public void onBaseEntityInteractEvent(BaseEntityInteractEvent event) {
         this.event = event;
+        activeModel = new MegActiveModelTag(event.getModel());
+        clickedPosition = event.getClickedPosition() != null ? new LocationTag(event.getClickedPosition()) : null;
+        item = new ItemTag(event.getItem());
         fire(event);
     }
 }
