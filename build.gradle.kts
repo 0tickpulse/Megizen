@@ -1,7 +1,6 @@
 plugins {
     `java-library`
     `maven-publish`
-    id("xyz.jpenilla.run-paper") version "2.2.2"
 }
 
 repositories {
@@ -64,11 +63,5 @@ tasks.withType<Javadoc>() {
 tasks.processResources {
     filesMatching("plugin.yml") {
         expand(mapOf("BUILD_NUMBER" to System.getenv("BUILD_NUMBER")))
-    }
-}
-
-tasks {
-    runServer {
-        minecraftVersion("1.20.4")
     }
 }

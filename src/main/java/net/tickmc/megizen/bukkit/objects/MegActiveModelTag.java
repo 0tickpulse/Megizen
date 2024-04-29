@@ -6,10 +6,7 @@ import com.denizenscript.denizencore.objects.Adjustable;
 import com.denizenscript.denizencore.objects.Fetchable;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
-import com.denizenscript.denizencore.objects.core.ColorTag;
-import com.denizenscript.denizencore.objects.core.ElementTag;
-import com.denizenscript.denizencore.objects.core.MapTag;
-import com.denizenscript.denizencore.objects.core.VectorObject;
+import com.denizenscript.denizencore.objects.core.*;
 import com.denizenscript.denizencore.tags.Attribute;
 import com.denizenscript.denizencore.tags.ObjectTagProcessor;
 import com.denizenscript.denizencore.tags.TagContext;
@@ -127,6 +124,32 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
 
     public static void registerTags() {
         // <--[tag]
+        // @attribute <MegActiveModelTag.can_drive>
+        // @returns ElementTag(Boolean)
+        // @description
+        // Returns whether the active model can be driven.
+        // -->
+        tagProcessor.registerTag(ElementTag.class, "can_drive", (attribute, object) -> {
+            if (object.getActiveModel().getMountManager().isEmpty()) {
+                return null;
+            }
+            return new ElementTag(object.getActiveModel().getMountManager().get().canDrive());
+        });
+
+        // <--[tag]
+        // @attribute <MegActiveModelTag.can_ride>
+        // @returns ElementTag(Boolean)
+        // @description
+        // Returns whether the active model can be ridden.
+        // -->
+        tagProcessor.registerTag(ElementTag.class, "can_ride", (attribute, object) -> {
+            if (object.getActiveModel().getMountManager().isEmpty()) {
+                return null;
+            }
+            return new ElementTag(object.getActiveModel().getMountManager().get().canRide());
+        });
+
+        // <--[tag]
         // @attribute <MegActiveModelTag.bone[<id>]>
         // @returns MegBoneTag
         // @description
@@ -177,6 +200,58 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         tagProcessor.registerTag(ColorTag.class, "default_tint", (attribute, object) -> {
             Color tint = object.getActiveModel().getDefaultTint();
             return new ColorTag(tint.getRed(), tint.getGreen(), tint.getBlue());
+        });
+
+        // <--[tag]
+        // @attribute <MegActiveModelTag.driver>
+        // @returns EntityTag
+        // @description
+        // Returns a EntityTag of the driver of the active model.
+        // -->
+        tagProcessor.registerTag(EntityTag.class, "driver", (attribute, object) -> {
+            if (object.getActiveModel().getMountManager().isEmpty()) {
+                return null;
+            }
+            return new EntityTag(object.getActiveModel().getMountManager().get().getDriver());
+        });
+
+        // <--[tag]
+        // @attribute <MegActiveModelTag.driver_bone>
+        // @returns MegBoneTag
+        // @description
+        // Returns a MegBoneTag of the driver bone of the active model.
+        // -->
+        tagProcessor.registerTag(MegBoneTag.class, "driver_bone", (attribute, object) -> {
+            if (object.getActiveModel().getMountManager().isEmpty()) {
+                return null;
+            }
+            return new MegBoneTag(object.getActiveModel().getMountManager().get().getDriverBone());
+        });
+
+        // <--[tag]
+        // @attribute <MegActiveModelTag.has_passengers>
+        // @returns ElementTag(Boolean)
+        // @description
+        // Returns whether the active model has passengers.
+        // -->
+        tagProcessor.registerTag(ElementTag.class, "has_passengers", (attribute, object) -> {
+            if (object.getActiveModel().getMountManager().isEmpty()) {
+                return null;
+            }
+            return new ElementTag(object.getActiveModel().getMountManager().get().hasPassengers());
+        });
+
+        // <--[tag]
+        // @attribute <MegActiveModelTag.has_riders>
+        // @returns ElementTag(Boolean)
+        // @description
+        // Returns a ElementTag(Boolean) of whether the active model has riders.
+        // -->
+        tagProcessor.registerTag(ElementTag.class, "has_riders", (attribute, object) -> {
+            if (object.getActiveModel().getMountManager().isEmpty()) {
+                return null;
+            }
+            return new ElementTag(object.getActiveModel().getMountManager().get().hasRiders());
         });
 
         // <--[tag]
@@ -234,6 +309,19 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         });
 
         // <--[tag]
+        // @attribute <MegActiveModelTag.passengers>
+        // @returns ListTag(EntityTag)
+        // @description
+        // Returns a ListTag of EntityTags of the passengers currently on the active model.
+        // -->
+        tagProcessor.registerTag(ListTag.class, "passengers", (attribute, object) -> {
+            if (object.getActiveModel().getMountManager().isEmpty()) {
+                return null;
+            }
+            return new ListTag(object.getActiveModel().getMountManager().get().getPassengerSeatMap().keySet());
+        });
+
+        // <--[tag]
         // @attribute <MegActiveModelTag.scale>
         // @returns VectorObject
         // @mechanism MegActiveModelTag.scale
@@ -242,6 +330,47 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // -->
         tagProcessor.registerTag(VectorObject.class, "scale", (attribute, object) -> {
             return new LocationTag(Vector.fromJOML(object.getActiveModel().getScale()));
+        });
+
+        // <--[tag]
+        // @attribute <MegActiveModelTag.seats>
+        // @returns ListTag(ElementTag)
+        // @description
+        // Returns a ListTag of seats on the active model.
+        // -->
+        tagProcessor.registerTag(ListTag.class, "seats", (attribute, object) -> {
+            if (object.getActiveModel().getMountManager().isEmpty()) {
+                return null;
+            }
+            return new ListTag(object.getActiveModel().getMountManager().get().getSeats().keySet());
+        });
+        
+        // <--[mechanism]
+        // @object MegActiveModelTag
+        // @name can_drive
+        // @input ElementTag(Boolean)
+        // @description
+        // Sets whether the active model can be driven.
+        // @tags
+        // <MegActiveModelTag.can_drive>
+        // -->
+        tagProcessor.registerMechanism("can_drive", false, ElementTag.class, (object, mechanism, value) -> {
+            if (object.getActiveModel().getMountManager().isEmpty()) return;
+            object.getActiveModel().getMountManager().get().setCanDrive(value.asBoolean());
+        });
+
+        // <--[mechanism]
+        // @object MegActiveModelTag
+        // @name can_ride
+        // @input ElementTag(Boolean)
+        // @description
+        // Sets whether the active model can be ridden.
+        // @tags
+        // <MegActiveModelTag.can_ride>
+        // -->
+        tagProcessor.registerMechanism("can_ride", false, ElementTag.class, (object, mechanism, value) -> {
+            if (object.getActiveModel().getMountManager().isEmpty()) return;
+            object.getActiveModel().getMountManager().get().setCanRide(value.asBoolean());
         });
 
         // <--[mechanism]
@@ -255,6 +384,27 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // -->
         tagProcessor.registerMechanism("damage_tint", false, ColorTag.class, (object, mechanism, value) -> {
             object.getActiveModel().setDamageTint(Color.fromRGB(value.red, value.green, value.blue));
+        });
+        // <--[mechanism]
+        // @object MegActiveModelTag
+        // @name dismount_all
+        // @description
+        // Dismounts everyone mounted on the active model.
+        // -->
+        tagProcessor.registerMechanism("dismount_all", false, (object, mechanism) -> {
+            if (object.getActiveModel().getMountManager().isEmpty()) return;
+            object.getActiveModel().getMountManager().get().dismountAll();
+        });
+
+        // <--[mechanism]
+        // @object MegActiveModelTag
+        // @name dismount_driver
+        // @description
+        // Dismounts the driver of the active model.
+        // -->
+        tagProcessor.registerMechanism("dismount_driver", false, (object, mechanism) -> {
+            if (object.getActiveModel().getMountManager().isEmpty()) return;
+            object.getActiveModel().getMountManager().get().dismountDriver();
         });
 
         // <--[mechanism]

@@ -12,15 +12,16 @@ import com.ticxo.modelengine.api.mount.controller.MountControllerTypes;
 import net.tickmc.megizen.bukkit.objects.MegActiveModelTag;
 
 public class MegMountCommand extends AbstractCommand {
+
     public MegMountCommand() {
         setName("megmount");
-        setSyntax("megmount [entity:<entity>] [model:<active_model>] (bone_name:<bone_name>) (driver) (passenger) (dismount)");
+        setSyntax("megmount [entity:<entity>] [model:<active_model>] [bone:<bone>] (driver) (passenger) (dismount) (interactable) (damageable)");
         autoCompile();
     }
 
     // <--[command]
     // @Name MegState
-    // @Syntax megmount [entity:<entity>] [model:<active_model>] (bone_name:<bone_name>) (driver) (passenger) (dismount) (interactable) (damageable)
+    // @Syntax megmount [entity:<entity>] [model:<active_model>] [bone:<bone>] (driver) (passenger) (dismount) (interactable) (damageable)
     // @Required 3
     // @Short Mounts the given entity on the given modeled entity, either as a passenger or the driver.
     // @Group Megizen
@@ -36,12 +37,12 @@ public class MegMountCommand extends AbstractCommand {
     public static void autoExecute(ScriptEntry scriptEntry,
                                    @ArgName("entity") @ArgPrefixed EntityTag entity,
                                    @ArgName("model") @ArgPrefixed MegActiveModelTag model,
+                                   @ArgName("driver") @ArgDefaultNull boolean driver,
+                                   @ArgName("passenger") @ArgDefaultNull boolean passenger,
+                                   @ArgName("bone") @ArgDefaultNull String boneName,
                                    @ArgName("dismount") boolean dismount,
                                    @ArgName("damageable") boolean damageable,
-                                   @ArgName("interactable") boolean interactable,
-                                   @ArgName("bone") String boneName,
-                                   @ArgName("driver") @ArgDefaultNull boolean driver,
-                                   @ArgName("passenger") @ArgDefaultNull boolean passenger) {
+                                   @ArgName("interactable") boolean interactable) {
         if (entity == null) {
             Debug.echoError("The 'entity' argument is required to mount an entity.");
             return;
