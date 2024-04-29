@@ -39,7 +39,7 @@ public class MegMountCommand extends AbstractCommand {
                                    @ArgName("model") @ArgPrefixed MegActiveModelTag model,
                                    @ArgName("driver") @ArgDefaultNull boolean driver,
                                    @ArgName("passenger") @ArgDefaultNull boolean passenger,
-                                   @ArgName("bone") @ArgDefaultNull String boneName,
+                                   @ArgName("bone") @ArgPrefixed @ArgDefaultNull String boneName,
                                    @ArgName("dismount") boolean dismount,
                                    @ArgName("damageable") boolean damageable,
                                    @ArgName("interactable") boolean interactable) {
@@ -60,7 +60,7 @@ public class MegMountCommand extends AbstractCommand {
             return;
         }
         ActiveModel activeModel = model.getActiveModel();
-        if (driver) {
+        if (driver && !dismount) {
             activeModel.getMountManager().ifPresent(mountManager -> {
                 if (mountManager.getDriver() != null) {
                     mountManager.dismountDriver();
@@ -73,7 +73,7 @@ public class MegMountCommand extends AbstractCommand {
                 });
             });
         }
-        if (passenger && boneName.isEmpty()) {
+        if (passenger && boneName.isEmpty() && !dismount) {
             Debug.echoError("The 'bone' argument is required to mount an entity as a passenger.");
             return;
         }
