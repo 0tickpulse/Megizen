@@ -6,11 +6,9 @@ import com.denizenscript.denizencore.events.ScriptEvent;
 import com.denizenscript.denizencore.objects.ObjectFetcher;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
 import net.tickmc.megizen.bukkit.commands.MegModelCommand;
+import net.tickmc.megizen.bukkit.commands.MegMountCommand;
 import net.tickmc.megizen.bukkit.commands.MegStateCommand;
-import net.tickmc.megizen.bukkit.events.AddModelScriptEvent;
-import net.tickmc.megizen.bukkit.events.MegBaseEntityInteractScriptEvent;
-import net.tickmc.megizen.bukkit.events.ModelRegistrationScriptEvent;
-import net.tickmc.megizen.bukkit.events.RemoveModelScriptEvent;
+import net.tickmc.megizen.bukkit.events.*;
 import net.tickmc.megizen.bukkit.objects.MegActiveModelTag;
 import net.tickmc.megizen.bukkit.objects.MegBoneTag;
 import net.tickmc.megizen.bukkit.objects.MegModeledEntityTag;
@@ -30,6 +28,7 @@ public class Megizen extends JavaPlugin {
 
         // register stuff
         DenizenCore.commandRegistry.registerCommand(MegModelCommand.class);
+        DenizenCore.commandRegistry.registerCommand(MegMountCommand.class);
         DenizenCore.commandRegistry.registerCommand(MegStateCommand.class);
         MegizenEntityTagExtensions.register();
         MegizenPlayerTagExtensions.register();
@@ -37,7 +36,9 @@ public class Megizen extends JavaPlugin {
         ObjectFetcher.registerWithObjectFetcher(MegActiveModelTag.class, MegActiveModelTag.tagProcessor);
         ObjectFetcher.registerWithObjectFetcher(MegBoneTag.class, MegBoneTag.tagProcessor);
         ScriptEvent.registerScriptEvent(AddModelScriptEvent.class);
-        ScriptEvent.registerScriptEvent(MegBaseEntityInteractScriptEvent.class);
+        ScriptEvent.registerScriptEvent(BaseEntityInteractScriptEvent.class);
+        ScriptEvent.registerScriptEvent(ModelDismountScriptEvent.class);
+        ScriptEvent.registerScriptEvent(ModelMountScriptEvent.class);
         ScriptEvent.registerScriptEvent(ModelRegistrationScriptEvent.class);
         ScriptEvent.registerScriptEvent(RemoveModelScriptEvent.class);
 

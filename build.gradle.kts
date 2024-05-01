@@ -1,7 +1,6 @@
 plugins {
     `java-library`
     `maven-publish`
-    id("xyz.jpenilla.run-paper") version "2.2.2"
 }
 
 repositories {
@@ -41,7 +40,7 @@ dependencies {
 }
 
 group = "net.tickmc"
-version = "0.1.0-b" + buildNumber()
+version = "0.25.0-b" + buildNumber() + "-DEV"
 description = "Megizen"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
@@ -64,11 +63,5 @@ tasks.withType<Javadoc>() {
 tasks.processResources {
     filesMatching("plugin.yml") {
         expand(mapOf("BUILD_NUMBER" to System.getenv("BUILD_NUMBER")))
-    }
-}
-
-tasks {
-    runServer {
-        minecraftVersion("1.20.4")
     }
 }

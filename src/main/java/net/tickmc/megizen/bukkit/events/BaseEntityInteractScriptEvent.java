@@ -12,7 +12,7 @@ import net.tickmc.megizen.bukkit.objects.MegActiveModelTag;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-public class MegBaseEntityInteractScriptEvent extends BukkitScriptEvent implements Listener {
+public class BaseEntityInteractScriptEvent extends BukkitScriptEvent implements Listener {
 
     // <--[event]
     // @Events
@@ -37,7 +37,7 @@ public class MegBaseEntityInteractScriptEvent extends BukkitScriptEvent implemen
     //
     // -->
 
-    public MegBaseEntityInteractScriptEvent() {
+    public BaseEntityInteractScriptEvent() {
         registerCouldMatcher("meg player interacts with model");
     }
 
