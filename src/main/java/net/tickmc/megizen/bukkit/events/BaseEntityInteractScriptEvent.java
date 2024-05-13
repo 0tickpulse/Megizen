@@ -16,7 +16,7 @@ public class BaseEntityInteractScriptEvent extends BukkitScriptEvent implements 
 
     // <--[event]
     // @Events
-    // meg player interacts with model
+    // meg player interacts with <'model'>
     //
     // @Group Player
     //
@@ -26,7 +26,7 @@ public class BaseEntityInteractScriptEvent extends BukkitScriptEvent implements 
     //
     // @Triggers when a player interacts with ModelEngine model.
     //
-    // @
+    // @Context
     // <context.action> returns a ElementTag of the interaction cause. Can be: ATTACK, INTERACT or INTERACT_ON.
     // <context.active_model> returns a MegActiveModelTag of the model.
     // <context.click_position> returns a LocationTag of the click position (as a world-less vector, relative to the model's center), if any.
@@ -38,7 +38,7 @@ public class BaseEntityInteractScriptEvent extends BukkitScriptEvent implements 
     // -->
 
     public BaseEntityInteractScriptEvent() {
-        registerCouldMatcher("meg player interacts with model");
+        registerCouldMatcher("meg player interacts with <'model'>");
     }
 
     BaseEntityInteractEvent event;
@@ -49,6 +49,9 @@ public class BaseEntityInteractScriptEvent extends BukkitScriptEvent implements 
     @Override
     public boolean matches(ScriptPath path) {
         if (!runInCheck(path, event.getPlayer().getLocation())) {
+            return false;
+        }
+        if (!path.eventArgLowerAt(4).equals("model") && !runGenericCheck(path.eventArgLowerAt(4), event.getModel().getBlueprint().getName())) {
             return false;
         }
         return super.matches(path);
@@ -62,7 +65,7 @@ public class BaseEntityInteractScriptEvent extends BukkitScriptEvent implements 
     @Override
     public ObjectTag getContext(String name) {
         return switch (name) {
-            case "action" -> new ElementTag(event.getAction().name(), true);
+            case "action" -> new ElementTag(event.getAction().name());
             case "active_model" -> activeModel;
             case "click_position" -> clickedPosition;
             case "item" -> item;
