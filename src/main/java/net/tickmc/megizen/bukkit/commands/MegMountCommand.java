@@ -20,7 +20,7 @@ public class MegMountCommand extends AbstractCommand {
     }
 
     // <--[command]
-    // @Name MegState
+    // @Name MegMount
     // @Syntax megmount [entity:<entity>] [model:<active_model>] [bone:<bone>] (driver) (passenger) (dismount) (interactable) (damageable)
     // @Required 3
     // @Short Mounts the given entity on the given modeled entity, either as a passenger or the driver.

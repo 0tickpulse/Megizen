@@ -40,7 +40,7 @@ dependencies {
 }
 
 group = "net.tickmc"
-version = "0.25.1-b" + buildNumber() + "-DEV"
+version = "0.25.2-b" + buildNumber() + "-DEV"
 description = "Megizen"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
