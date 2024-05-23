@@ -32,6 +32,9 @@ public class MegizenEntityTagExtensions {
         // Returns the MegBoneTag that the entity is mounted on, if any.
         // -->
         EntityTag.tagProcessor.registerTag(MegBoneTag.class, "mounted_bone", (attribute, entity) -> {
+            if (ModelEngineAPI.getMountPairManager().getController(entity.getUUID()).getMount() == null) {
+                return null;
+            }
             return new MegBoneTag(((BoneBehavior) ModelEngineAPI.getMountPairManager().getController(entity.getUUID()).getMount()).getBone());
         });
     }

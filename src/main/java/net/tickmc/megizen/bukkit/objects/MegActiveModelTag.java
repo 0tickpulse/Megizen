@@ -312,6 +312,16 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         });
 
         // <--[tag]
+        // @attribute <MegActiveModelTag.name>
+        // @returns ElementTag
+        // @description
+        // Returns the name of the active model.
+        // -->
+        tagProcessor.registerTag(ElementTag.class, "name", (attribute, object) -> {
+            return new ElementTag(object.getActiveModel().getBlueprint().getName());
+        });
+
+        // <--[tag]
         // @attribute <MegActiveModelTag.passengers>
         // @returns ListTag(EntityTag)
         // @description
