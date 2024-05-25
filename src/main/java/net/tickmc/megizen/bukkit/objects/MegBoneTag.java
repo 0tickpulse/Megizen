@@ -153,6 +153,7 @@ public class MegBoneTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegBoneTag.children>
         // @returns MapTag(MegBoneTag)
+        // @plugin Megizen
         // @description
         // Returns a map of all the children of the bone, with the bone id as the key and the bone as the value.
         // -->
@@ -167,6 +168,7 @@ public class MegBoneTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegBoneTag.damage_tint>
         // @returns ColorTag
+        // @plugin Megizen
         // @mechanism MegBoneTag.damage_tint
         // @description
         // Returns the damage tint of the bone.
@@ -179,6 +181,7 @@ public class MegBoneTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegBoneTag.default_tint>
         // @returns ColorTag
+        // @plugin Megizen
         // @mechanism MegBoneTag.default_tint
         // @description
         // Returns the default tint of the bone.
@@ -191,6 +194,7 @@ public class MegBoneTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegBoneTag.id>
         // @returns ElementTag
+        // @plugin Megizen
         // @description
         // Returns the id of the bone.
         // -->
@@ -201,6 +205,7 @@ public class MegBoneTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegBoneTag.item>
         // @returns ItemTag
+        // @plugin Megizen
         // @mechanism MegBoneTag.item
         // @description
         // Returns the underlying item that the bone uses.
@@ -212,6 +217,7 @@ public class MegBoneTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegBoneTag.location>
         // @returns LocationTag
+        // @plugin Megizen
         // @description
         // Returns the location of the bone.
         // -->
@@ -222,6 +228,7 @@ public class MegBoneTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegBoneTag.skin_texture>
         // @returns ElementTag
+        // @plugin Megizen
         // @mechanism MegBoneTag.skin_texture
         // @description
         // Returns the skin texture of the bone.
@@ -258,6 +265,7 @@ public class MegBoneTag implements ObjectTag, Adjustable {
         // @object MegBoneTag
         // @name damage_tint
         // @input ColorTag
+        // @plugin Megizen
         // @description
         // Sets the damage tint of the bone.
         // @tags
@@ -272,6 +280,7 @@ public class MegBoneTag implements ObjectTag, Adjustable {
         // @object MegBoneTag
         // @name default_tint
         // @input ColorTag
+        // @plugin Megizen
         // @description
         // Sets the default tint of the bone.
         // @tags
@@ -286,6 +295,7 @@ public class MegBoneTag implements ObjectTag, Adjustable {
         // @object MegBoneTag
         // @name item
         // @input ItemTag
+        // @plugin Megizen
         // @description
         // Sets the underlying item that the bone uses.
         // Shouldn't be used unless you know what you're doing.
@@ -301,6 +311,7 @@ public class MegBoneTag implements ObjectTag, Adjustable {
         // @object MegBoneTag
         // @name skin_texture
         // @input ElementTag
+        // @plugin Megizen
         // @description
         // Sets the skin texture of the bone.
         // This should only be used on bones that have the PLAYER_LIMB behavior.

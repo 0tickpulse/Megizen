@@ -144,6 +144,7 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegModeledEntityTag.body_clamp_uneven>
         // @returns ElementTag(Boolean)
+        // @plugin Megizen
         // @description
         // Returns whether the body clamp is uneven on the modeled entity.
         // Body clamp is used to clamp the body when the entity is standing still.
@@ -158,6 +159,7 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegModeledEntityTag.entity_visible>
         // @returns ElementTag(Boolean)
+        // @plugin Megizen
         // @description
         // Returns whether the base entity of the modeled entity is visible.
         // @mechanism MegModeledEntityTag.entity_visible
@@ -169,6 +171,7 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegModeledEntityTag.head_clamp_uneven>
         // @returns ElementTag(Boolean)
+        // @plugin Megizen
         // @description
         // Returns whether the head clamp is uneven on the modeled entity.
         // Head clamp is used to clamp the head when the entity is moving.
@@ -183,6 +186,7 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegModeledEntityTag.max_body_angle>
         // @returns ElementTag(Number)
+        // @plugin Megizen
         // @description
         // Returns a ElementTag(Number) of the current maximum body angle of this entity.
         // See also: <@link tag MegModeledEntityTag.min_body_angle>
@@ -195,6 +199,7 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegModeledEntityTag.max_head_angle>
         // @returns ElementTag(Number)
+        // @plugin Megizen
         // @description
         // Returns a ElementTag(Number) of the current maximum head angle of this entity.
         // See also: <@link tag MegModeledEntityTag.min_head_angle>
@@ -207,6 +212,7 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegModeledEntityTag.min_body_angle>
         // @returns ElementTag(Number)
+        // @plugin Megizen
         // @description
         // Returns whether the base entity of the modeled entity is visible.
         // See also: <@link tag MegModeledEntityTag.max_body_angle>
@@ -219,6 +225,7 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegModeledEntityTag.min_head_angle>
         // @returns ElementTag(Number)
+        // @plugin Megizen
         // @description
         // Returns the minimum head angle of the modeled entity.
         // See also: <@link tag MegModeledEntityTag.max_head_angle>
@@ -231,6 +238,7 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegModeledEntityTag.model[(model)]>
         // @returns MegActiveModelTag
+        // @plugin Megizen
         // @description
         // Returns the active model with the specified name on the modeled entity.
         // If no name is specified, returns the first model on the modeled entity.
@@ -247,6 +255,7 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegModeledEntityTag.models>
         // @returns MapTag(MegActiveModelTag)
+        // @plugin Megizen
         // @description
         // Returns a map of all models on the modeled entity.
         // The keys are the names of the models, and the values are the active models.
@@ -266,6 +275,7 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegModeledEntityTag.player_mode>
         // @returns ElementTag(Boolean)
+        // @plugin Megizen
         // @description
         // Returns a ElementTag(Boolean) of whether the body will rotate like a player (i.e. will not try to match the head angle).
         // @mechanism MegModeledEntityTag.player_mode
@@ -277,6 +287,7 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegModeledEntityTag.rotation_delay>
         // @returns DurationTag
+        // @plugin Megizen
         // @description
         // Returns a DurationTag of the delay before the body auto rotates to match the head's rotation.
         // See also: <@link tag MegModeledEntityTag.rotation_duration>
@@ -289,6 +300,7 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegModeledEntityTag.rotation_duration>
         // @returns DurationTag
+        // @plugin Megizen
         // @description
         // Returns a DurationTag the body takes to auto rotate back to the head's rotation.
         // See also: <@link tag MegModeledEntityTag.rotation_delay>
@@ -301,6 +313,7 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MedModeledEntityTag.should_save>
         // @returns ElementTag(Boolean)
+        // @plugin Megizen
         // @description
         // Returns whether the modeled entity should be saved on unload.
         // @mechanism MegModeledEntityTag.should_save
@@ -312,6 +325,7 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegModeledEntityTag.stable_angle>
         // @returns ElementTag(Number)
+        // @plugin Megizen
         // @description
         // Returns the angle in degrees where the body rotation can exceed the clamp before snapping towards the clamped values
         // @mechanism MegModeledEntityTag.stable_angle
@@ -324,6 +338,7 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         // @object MegModeledEntityTag
         // @name body_clamp_uneven
         // @input ElementTag(Boolean)
+        // @plugin Megizen
         // @description
         // Sets whether the body clamp is uneven on the modeled entity.
         // Body clamp is used to clamp the body when the entity is standing still.
@@ -339,6 +354,7 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         // @object MegModeledEntityTag
         // @name entity_visible
         // @input ElementTag(Boolean)
+        // @plugin Megizen
         // @description
         // Sets whether the base entity of the modeled entity is visible.
         // @tags
@@ -353,6 +369,7 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         // @object MegModeledEntityTag
         // @name head_clamp_uneven
         // @input ElementTag(Boolean)
+        // @plugin Megizen
         // @description
         // Sets whether the head clamp is uneven on the modeled entity.
         // Head clamp is used to clamp the head when the entity is moving.
@@ -368,6 +385,7 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         // @object MegModeledEntityTag
         // @name max_body_angle
         // @input ElementTag(Number)
+        // @plugin Megizen
         // @description
         // Sets the maximum body angle of the modeled entity.
         // If <@link tag MegModeledEntityTag.body_clamp_uneven> is false, the minimum body angle will be set as the negative of this value.
@@ -383,6 +401,7 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         // @object MegModeledEntityTag
         // @name max_head_angle
         // @input ElementTag(Number)
+        // @plugin Megizen
         // @description
         // Sets the maximum head angle of the modeled entity.
         // If <@link tag MegModeledEntityTag.head_clamp_uneven> is false, the minimum head angle will be set as the negative of this value.
@@ -398,6 +417,7 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         // @object MegModeledEntityTag
         // @name min_body_angle
         // @input ElementTag(Number)
+        // @plugin Megizen
         // @description
         // Sets the minimum body angle of the modeled entity.
         // Will have no effect if <@link tag MegModeledEntityTag.body_clamp_uneven> is false.
@@ -413,6 +433,7 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         // @object MegModeledEntityTag
         // @name min_head_angle
         // @input ElementTag(Number)
+        // @plugin Megizen
         // @description
         // Sets the minimum head angle of the modeled entity.
         // Will have no effect if <@link tag MegModeledEntityTag.head_clamp_uneven> is false.
@@ -428,6 +449,7 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         // @object MegModeledEntityTag
         // @name rotation_delay
         // @input DurationTag
+        // @plugin Megizen
         // @description
         // Sets the delay before the body auto rotates to match the head's rotation.
         // See also: <@link tag MegModeledEntityTag.rotation_duration>
@@ -443,6 +465,7 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         // @object MegModeledEntityTag
         // @name rotation_duration
         // @input DurationTag
+        // @plugin Megizen
         // @description
         // Sets the time it takes for the body to auto rotate to match the head's rotation.
         // See also: <@link tag MegModeledEntityTag.rotation_delay>
@@ -458,6 +481,7 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         // @object MegModeledEntityTag
         // @name player_mode
         // @input ElementTag(Boolean)
+        // @plugin Megizen
         // @description
         // Sets whether the body will rotate like a player (i.e. will not try to match the head angle).
         // @tags
@@ -472,6 +496,7 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         // @object MegModeledEntityTag
         // @name should_save
         // @input ElementTag(Boolean)
+        // @plugin Megizen
         // @description
         // Sets whether the modeled entity should be saved on unload.
         // @tags
@@ -486,6 +511,7 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         // @object MegModeledEntityTag
         // @name stable_angle
         // @input ElementTag(Number)
+        // @plugin Megizen
         // @description
         // Sets the stable angle before correcting back to the clamped angle.
         // For example, if the clamp is 50, and the stable angle is 15, the body can be 65 degrees away from the head before snapping back to 50 degrees away.

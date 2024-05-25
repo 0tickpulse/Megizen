@@ -159,6 +159,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegActiveModelTag.can_ride>
         // @returns ElementTag(Boolean)
+        // @plugin Megizen
         // @description
         // Returns whether the active model can be ridden.
         // -->
@@ -172,6 +173,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegActiveModelTag.bone[<id>]>
         // @returns MegBoneTag
+        // @plugin Megizen
         // @description
         // Returns the bone with the specified id of the model.
         // -->
@@ -187,6 +189,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegActiveModelTag.bones>
         // @returns MapTag(MegBoneTag)
+        // @plugin Megizen
         // @description
         // Returns a map of all the bones of the model, with the bone id as the key and the bone as the value.
         // -->
@@ -201,6 +204,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegActiveModelTag.damage_tint>
         // @returns ColorTag
+        // @plugin Megizen
         // @mechanism MegActiveModelTag.damage_tint
         // @description
         // Returns the damage tint of the active model.
@@ -213,6 +217,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegActiveModelTag.default_tint>
         // @returns ColorTag
+        // @plugin Megizen
         // @mechanism MegActiveModelTag.default_tint
         // @description
         // Returns the default tint of the active model.
@@ -225,6 +230,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegActiveModelTag.driver>
         // @returns EntityTag
+        // @plugin Megizen
         // @description
         // Returns a EntityTag of the driver of the active model.
         // -->
@@ -238,6 +244,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegActiveModelTag.driver_bone>
         // @returns MegBoneTag
+        // @plugin Megizen
         // @description
         // Returns a MegBoneTag of the driver bone of the active model.
         // -->
@@ -251,6 +258,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegActiveModelTag.has_passengers>
         // @returns ElementTag(Boolean)
+        // @plugin Megizen
         // @description
         // Returns whether the active model has passengers.
         // -->
@@ -264,6 +272,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegActiveModelTag.has_riders>
         // @returns ElementTag(Boolean)
+        // @plugin Megizen
         // @description
         // Returns a ElementTag(Boolean) of whether the active model has riders.
         // -->
@@ -277,6 +286,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegActiveModelTag.hitbox_scale>
         // @returns VectorObject
+        // @plugin Megizen
         // @mechanism MegActiveModelTag.hitbox_scale
         // @description
         // Returns the scale of the active model's hitbox as a vector.
@@ -288,6 +298,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegActiveModelTag.hitbox_visible>
         // @returns ElementTag(Boolean)
+        // @plugin Megizen
         // @mechanism MegActiveModelTag.hitbox_visible
         // @description
         // Returns whether the hitbox of the active model is visible.
@@ -299,6 +310,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegActiveModelTag.lock_yaw>
         // @returns ElementTag(Boolean)
+        // @plugin Megizen
         // @mechanism MegActiveModelTag.lock_yaw
         // @description
         // Returns whether the yaw of the active model is locked.
@@ -310,6 +322,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegActiveModelTag.lock_pitch>
         // @returns ElementTag(Boolean)
+        // @plugin Megizen
         // @mechanism MegActiveModelTag.lock_pitch
         // @description
         // Returns whether the pitch of the active model is locked.
@@ -321,6 +334,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegActiveModelTag.modeled_entity>
         // @returns MegModeledEntityTag
+        // @plugin Megizen
         // @description
         // Returns the modeled entity of the active model.
         // -->
@@ -331,6 +345,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegActiveModelTag.name>
         // @returns ElementTag
+        // @plugin Megizen
         // @description
         // Returns the name of the active model.
         // -->
@@ -341,6 +356,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegActiveModelTag.passengers>
         // @returns ListTag(EntityTag)
+        // @plugin Megizen
         // @description
         // Returns a ListTag of EntityTags of the passengers currently on the active model.
         // -->
@@ -354,6 +370,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegActiveModelTag.scale>
         // @returns VectorObject
+        // @plugin Megizen
         // @mechanism MegActiveModelTag.scale
         // @description
         // Returns the scale of the active model as a vector.
@@ -365,6 +382,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegActiveModelTag.seats>
         // @returns ListTag(ElementTag)
+        // @plugin Megizen
         // @description
         // Returns a ListTag of seats on the active model.
         // -->
@@ -378,6 +396,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // <--[tag]
         // @attribute <MegActiveModelTag.seat_map>
         // @returns MapTag
+        // @plugin Megizen
         // @description
         // Returns a MapTag of entities on the active model, if any.
         // Keys will be the bones entities are mounted on, while the values of those keys will be the entities themselves.
@@ -399,6 +418,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // @object MegActiveModelTag
         // @name can_drive
         // @input ElementTag(Boolean)
+        // @plugin Megizen
         // @description
         // Sets whether the active model can be driven.
         // @tags
@@ -413,6 +433,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // @object MegActiveModelTag
         // @name can_ride
         // @input ElementTag(Boolean)
+        // @plugin Megizen
         // @description
         // Sets whether the active model can be ridden.
         // @tags
@@ -427,6 +448,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // @object MegActiveModelTag
         // @name damage_tint
         // @input ColorTag
+        // @plugin Megizen
         // @description
         // Sets the damage tint of the active model.
         // @tags
@@ -438,6 +460,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // <--[mechanism]
         // @object MegActiveModelTag
         // @name dismount_all
+        // @plugin Megizen
         // @description
         // Dismounts everyone mounted on the active model.
         // -->
@@ -449,6 +472,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // <--[mechanism]
         // @object MegActiveModelTag
         // @name dismount_driver
+        // @plugin Megizen
         // @description
         // Dismounts the driver of the active model.
         // -->
@@ -461,6 +485,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // @object MegActiveModelTag
         // @name default_tint
         // @input ColorTag
+        // @plugin Megizen
         // @description
         // Sets the default tint of the active model.
         // @tags
@@ -474,6 +499,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // @object MegActiveModelTag
         // @name hitbox_scale
         // @input ElementTag(decimal)
+        // @plugin Megizen
         // @description
         // Sets the scale of the active model's hitbox.
         // @tags
@@ -488,6 +514,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // @object MegActiveModelTag
         // @name hitbox_visible
         // @input ElementTag(Boolean)
+        // @plugin Megizen
         // @description
         // Sets whether the hitbox of the active model is visible.
         // @tags
@@ -501,6 +528,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // @object MegActiveModelTag
         // @name lock_pitch
         // @input ElementTag(Boolean)
+        // @plugin Megizen
         // @description
         // Sets whether the pitch of the active model is locked.
         // @tags
@@ -514,6 +542,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // @object MegActiveModelTag
         // @name lock_yaw
         // @input ElementTag(Boolean)
+        // @plugin Megizen
         // @description
         // Sets whether the yaw of the active model is locked.
         // @tags
@@ -527,6 +556,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // @object MegActiveModelTag
         // @name scale
         // @input ElementTag(decimal)
+        // @plugin Megizen
         // @description
         // Sets the scale of the active model.
         // @tags

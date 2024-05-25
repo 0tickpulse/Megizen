@@ -11,6 +11,7 @@ public class MegizenPlayerTagExtensions {
         // @object PlayerTag
         // @attribute <PlayerTag.meg_forced_invisible>
         // @returns ElementTag(Boolean)
+        // @plugin Megizen
         // @description
         // Returns whether the player has been forcefully turned invisible by either the megmodel command or by ModelEngine.
         // -->
@@ -22,6 +23,7 @@ public class MegizenPlayerTagExtensions {
         // @object PlayerTag
         // @name meg_make_visible
         // @input ElementTag(Boolean)
+        // @plugin Megizen
         // @description
         // Forces the player to be visible or invisible. This is a workaround for the invisible player bug when using the megmodel command.
         // See also: <@link tag MegModeledEntityTag.meg_make_visible>
