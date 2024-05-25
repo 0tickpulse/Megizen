@@ -32,6 +32,20 @@ import java.util.UUID;
 
 public class MegBoneTag implements ObjectTag, Adjustable {
 
+    // <--[ObjectType]
+    // @name MegBoneTag
+    // @prefix megbone
+    // @base ElementTag
+    // @format
+    // The identity format for a MegBoneTag is <uuid> + <blueprint_name> + <bone_id>
+    // Where the <uuid> is the UUID of the base entity, <blueprint_name> is the name of the model, and <bone_id> is the internal name/id of the bone.
+    // For example: 'megbone@dfc67056-b15d-45dd-b239-482d92e482e5,capybara,left_leg'.
+    //
+    // @description
+    // Represents a bone in an ActiveModel.
+    //
+    // -->
+
     //////////////////
     //    Object Fetcher
     ////////////////

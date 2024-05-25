@@ -25,6 +25,21 @@ import java.util.Map;
 
 public class MegActiveModelTag implements ObjectTag, Adjustable {
 
+    // <--[ObjectType]
+    // @name MegActiveModelTag
+    // @prefix megactivemodel
+    // @base ElementTag
+    // @format
+    // The identity format for active models is <uuid> + <blueprint_name>
+    // Where <uuid> is the UUID of the base entity, and <blueprint_name> is the name of the model.
+    // For example: 'megactivemodel@7902f97a-07dd-406e-8a07-b6bee072a303,capybara'.
+    //
+    // @plugin Megizen
+    // @description
+    // Represents a model that is attached to an entity.
+    //
+    // -->
+
     //////////////////
     //    Object Fetcher
     ////////////////
@@ -95,7 +110,9 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
 
     @Override
     public String identify() {
-        return "megactivemodel@" + activeModel.getModeledEntity().getBase().getUUID().toString() + "," + activeModel.getBlueprint().getName();
+        return "megactivemodel@"
+                + activeModel.getModeledEntity().getBase().getUUID().toString()
+                + "," + activeModel.getBlueprint().getName();
     }
 
     @Override

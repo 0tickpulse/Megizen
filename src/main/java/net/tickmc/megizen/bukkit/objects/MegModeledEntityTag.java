@@ -21,6 +21,21 @@ import org.bukkit.entity.Entity;
 
 public class MegModeledEntityTag implements ObjectTag, Adjustable {
 
+    // <--[ObjectType]
+    // @name MegModeledEntity
+    // @prefix megmodeledentity
+    // @base ElementTag
+    // @format
+    // The identity format for modeled entities is <uuid>
+    // Where <uuid> is the UUID of the base entity.
+    // For example: 'megmodeledentity@dfc67056-b15d-45dd-b239-482d92e482e5'.
+    //
+    // @plugin Megizen
+    // @description
+    // Represents an entity that has a model on it.
+    //
+    // -->
+
     //////////////////
     //    Object Fetcher
     ////////////////
@@ -90,7 +105,8 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
 
     @Override
     public String identify() {
-        return "megmodeledentity@" + modeledEntity.getBase().getUUID().toString();
+        return "megmodeledentity@"
+                + modeledEntity.getBase().getUUID().toString();
     }
 
     @Override
