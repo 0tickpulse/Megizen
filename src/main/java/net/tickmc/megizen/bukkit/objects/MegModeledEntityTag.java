@@ -22,7 +22,7 @@ import org.bukkit.entity.Entity;
 public class MegModeledEntityTag implements ObjectTag, Adjustable {
 
     // <--[ObjectType]
-    // @name MegModeledEntity
+    // @name MegModeledEntityTag
     // @prefix megmodeledentity
     // @base ElementTag
     // @format
