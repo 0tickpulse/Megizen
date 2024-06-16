@@ -19,6 +19,8 @@ import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
 import org.bukkit.entity.Entity;
 
+import java.util.Iterator;
+
 public class MegModeledEntityTag implements ObjectTag, Adjustable {
 
     // <--[ObjectType]
@@ -244,7 +246,16 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         // If no name is specified, returns the first model on the modeled entity.
         // -->
         tagProcessor.registerTag(MegActiveModelTag.class, "model", (attribute, object) -> {
-            String model = attribute.hasParam() ? attribute.getParam() : object.modeledEntity.getModels().keySet().iterator().next();
+            String model;
+            if (attribute.hasParam()) {
+                model = attribute.getParam();
+            } else {
+                Iterator<String> iterator = object.modeledEntity.getModels().keySet().iterator();
+                if (!iterator.hasNext()) {
+                    return null;
+                }
+                model = iterator.next();
+            }
             ActiveModel activeModel = object.modeledEntity.getModel(model).orElse(null);
             if (activeModel == null) {
                 return null;
