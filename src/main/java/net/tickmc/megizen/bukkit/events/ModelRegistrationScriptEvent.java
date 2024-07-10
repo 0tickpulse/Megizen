@@ -13,12 +13,14 @@ public class ModelRegistrationScriptEvent extends BukkitScriptEvent implements L
     // @Events
     // meg model registration begins
     //
+    // @Switch phase:<phase> to only process the event if a specific phase is active.
+    //
     // @Group Megizen
     //
     // @Triggers when the model generator enters and exits a phase, and when the generator has finished everything.
     //
     // @Context
-    // <context.phase> returns an ElementTag of the current model registration phase.
+    // <context.phase> returns an ElementTag of the current model registration phase. Can be PRE_IMPORT, POST_IMPORT, PRE_ASSETS, POST_ASSETS, PRE_ZIPPING, POST_ZIPPING, or FINISHED.
     //
     // -->
 
