@@ -143,32 +143,6 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
     public static ObjectTagProcessor<MegActiveModelTag> tagProcessor = new ObjectTagProcessor<>();
 
     public static void registerTags() {
-        // <--[tag]
-        // @attribute <MegActiveModelTag.can_drive>
-        // @returns ElementTag(Boolean)
-        // @description
-        // Returns whether the active model can be driven.
-        // -->
-        tagProcessor.registerTag(ElementTag.class, "can_drive", (attribute, object) -> {
-            if (object.getActiveModel().getMountManager().isEmpty()) {
-                return null;
-            }
-            return new ElementTag(object.getActiveModel().getMountManager().get().canDrive());
-        });
-
-        // <--[tag]
-        // @attribute <MegActiveModelTag.can_ride>
-        // @returns ElementTag(Boolean)
-        // @plugin Megizen
-        // @description
-        // Returns whether the active model can be ridden.
-        // -->
-        tagProcessor.registerTag(ElementTag.class, "can_ride", (attribute, object) -> {
-            if (object.getActiveModel().getMountManager().isEmpty()) {
-                return null;
-            }
-            return new ElementTag(object.getActiveModel().getMountManager().get().canRide());
-        });
 
         // <--[tag]
         // @attribute <MegActiveModelTag.bone[<id>]>
@@ -199,6 +173,33 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
                 map.putObject(entry.getKey(), new MegBoneTag(entry.getValue()));
             }
             return map;
+        });
+
+        // <--[tag]
+        // @attribute <MegActiveModelTag.can_drive>
+        // @returns ElementTag(Boolean)
+        // @description
+        // Returns whether the active model can be driven.
+        // -->
+        tagProcessor.registerTag(ElementTag.class, "can_drive", (attribute, object) -> {
+            if (object.getActiveModel().getMountManager().isEmpty()) {
+                return null;
+            }
+            return new ElementTag(object.getActiveModel().getMountManager().get().canDrive());
+        });
+
+        // <--[tag]
+        // @attribute <MegActiveModelTag.can_ride>
+        // @returns ElementTag(Boolean)
+        // @plugin Megizen
+        // @description
+        // Returns whether the active model can be ridden.
+        // -->
+        tagProcessor.registerTag(ElementTag.class, "can_ride", (attribute, object) -> {
+            if (object.getActiveModel().getMountManager().isEmpty()) {
+                return null;
+            }
+            return new ElementTag(object.getActiveModel().getMountManager().get().canRide());
         });
 
         // <--[tag]
@@ -260,7 +261,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // @returns ElementTag(Boolean)
         // @plugin Megizen
         // @description
-        // Returns whether the active model has passengers.
+        // Returns a ElementTag(Boolean) of whether the active model has passengers.
         // -->
         tagProcessor.registerTag(ElementTag.class, "has_passengers", (attribute, object) -> {
             if (object.getActiveModel().getMountManager().isEmpty()) {
@@ -358,7 +359,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // @returns ListTag(EntityTag)
         // @plugin Megizen
         // @description
-        // Returns a ListTag of EntityTags of the passengers currently on the active model.
+        // Returns a ListTag(EntityTag) of the passengers currently on the active model.
         // -->
         tagProcessor.registerTag(ListTag.class, "passengers", (attribute, object) -> {
             if (object.getActiveModel().getMountManager().isEmpty()) {

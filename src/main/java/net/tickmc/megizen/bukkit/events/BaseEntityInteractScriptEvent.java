@@ -18,6 +18,8 @@ public class BaseEntityInteractScriptEvent extends BukkitScriptEvent implements 
     // @Events
     // meg player interacts with <'model'>
     //
+    // @Switch action:<action> to only process the event if a specific action is performed.
+    //
     // @Group Player
     //
     // @Location true
