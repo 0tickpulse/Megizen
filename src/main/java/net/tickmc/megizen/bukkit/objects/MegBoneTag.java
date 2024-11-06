@@ -6,10 +6,7 @@ import com.denizenscript.denizencore.objects.Adjustable;
 import com.denizenscript.denizencore.objects.Fetchable;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
-import com.denizenscript.denizencore.objects.core.ColorTag;
-import com.denizenscript.denizencore.objects.core.ElementTag;
-import com.denizenscript.denizencore.objects.core.ListTag;
-import com.denizenscript.denizencore.objects.core.MapTag;
+import com.denizenscript.denizencore.objects.core.*;
 import com.denizenscript.denizencore.tags.Attribute;
 import com.denizenscript.denizencore.tags.ObjectTagProcessor;
 import com.denizenscript.denizencore.tags.TagContext;
@@ -24,6 +21,7 @@ import net.tickmc.megizen.bukkit.Megizen;
 import org.bukkit.Color;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -192,6 +190,19 @@ public class MegBoneTag implements ObjectTag, Adjustable {
         });
 
         // <--[tag]
+        // @attribute <MegBoneTag.glow_color>
+        // @returns ColorTag
+        // @plugin Megizen
+        // @mechanism MegBoneTag.glow_color
+        // @description
+        // Returns the glow color of the bone.
+        // -->
+        tagProcessor.registerTag(ColorTag.class, "glow_color", (attribute, object) -> {
+            Color color = Color.fromRGB(object.getBone().getGlowColor());
+            return new ColorTag(color.getRed(), color.getGreen(), color.getBlue());
+        });
+
+        // <--[tag]
         // @attribute <MegBoneTag.id>
         // @returns ElementTag
         // @plugin Megizen
@@ -215,6 +226,18 @@ public class MegBoneTag implements ObjectTag, Adjustable {
         });
 
         // <--[tag]
+        // @attribute <MegBoneTag.is_glowing>
+        // @returns ElementTag(Boolean)
+        // @plugin Megizen
+        // @mechanism MegBoneTag.is_glowing
+        // @description
+        // Returns whether the bone is glowing.
+        // -->
+        tagProcessor.registerTag(ElementTag.class, "is_glowing", (attribute, object) -> {
+            return new ElementTag(object.getBone().isGlowing());
+        });
+
+        // <--[tag]
         // @attribute <MegBoneTag.location>
         // @returns LocationTag
         // @plugin Megizen
@@ -223,6 +246,18 @@ public class MegBoneTag implements ObjectTag, Adjustable {
         // -->
         tagProcessor.registerTag(LocationTag.class, "location", (attribute, object) -> {
             return new LocationTag(object.getBone().getLocation());
+        });
+
+        // <--[tag]
+        // @attribute <MegBoneTag.scale>
+        // @returns VectorObject
+        // @plugin Megizen
+        // @mechanism MegBoneTag.scale
+        // @description
+        // Returns the scale of the bone.
+        // -->
+        tagProcessor.registerTag(VectorObject.class, "scale", (attribute, object) -> {
+            return new LocationTag(Vector.fromJOML(object.getBone().getGlobalScale()));
         });
 
         // <--[tag]
@@ -293,6 +328,21 @@ public class MegBoneTag implements ObjectTag, Adjustable {
 
         // <--[mechanism]
         // @object MegBoneTag
+        // @name glow_color
+        // @input ColorTag
+        // @plugin Megizen
+        // @description
+        // Sets the glow color of the bone.
+        // @tags
+        // <MegBoneTag.glow_color>
+        // -->
+        tagProcessor.registerMechanism("glow_color", false, ColorTag.class, (object, mechanism, value) -> {
+            ColorTag color = mechanism.valueAsType(ColorTag.class);
+            object.getBone().setGlowColor(color.asRGB());
+        });
+
+        // <--[mechanism]
+        // @object MegBoneTag
         // @name item
         // @input ItemTag
         // @plugin Megizen
@@ -305,6 +355,34 @@ public class MegBoneTag implements ObjectTag, Adjustable {
         tagProcessor.registerMechanism("item", false, ItemTag.class, (object, mechanism, value) -> {
             ItemTag item = mechanism.valueAsType(ItemTag.class);
             object.getBone().setModel(item.getItemStack());
+        });
+
+        // <--[mechanism]
+        // @object MegBoneTag
+        // @name is_glowing
+        // @input ElementTag(Boolean)
+        // @plugin Megizen
+        // @description
+        // Sets whether the bone is glowing.
+        // @tags
+        // <MegBoneTag.is_glowing>
+        // -->
+        tagProcessor.registerMechanism("is_glowing", false, ElementTag.class, (object, mechanism, value) -> {
+            object.getBone().setGlowing(value.asBoolean());
+        });
+
+        // <--[mechanism]
+        // @object MegBoneTag
+        // @name scale
+        // @input ElementTag(Number)
+        // @plugin Megizen
+        // @description
+        // Sets the scale of the bone.
+        // @tags
+        // <MegBoneTag.scale>
+        // -->
+        tagProcessor.registerMechanism("scale", false, ElementTag.class, (object, mechanism, value) -> {
+            object.getBone().setModelScale(value.asInt());
         });
 
         // <--[mechanism]
