@@ -11,7 +11,7 @@ repositories {
     }
 
     maven {
-        url = uri("https://repo.md-5.net/content/groups/public/")
+        url = uri("https://repo.papermc.io/repository/maven-public/")
     }
 
     maven {
