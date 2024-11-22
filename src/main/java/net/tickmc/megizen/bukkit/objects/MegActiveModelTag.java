@@ -286,7 +286,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
 
         // <--[tag]
         // @attribute <MegActiveModelTag.hitbox_scale>
-        // @returns VectorObject
+        // @returns LocationTag
         // @plugin Megizen
         // @mechanism MegActiveModelTag.hitbox_scale
         // @description
@@ -370,7 +370,7 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
 
         // <--[tag]
         // @attribute <MegActiveModelTag.scale>
-        // @returns VectorObject
+        // @returns LocationTag
         // @plugin Megizen
         // @mechanism MegActiveModelTag.scale
         // @description
