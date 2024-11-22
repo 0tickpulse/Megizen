@@ -249,12 +249,24 @@ public class MegBoneTag implements ObjectTag, Adjustable {
         });
 
         // <--[tag]
+        // @attribute <MegBoneTag.global_position>
+        // @returns LocationTag
+        // @plugin Megizen
+        // @mechanism MegBoneTag.global_position
+        // @description
+        // Returns the position of the bone as a vector.
+        // -->
+        tagProcessor.registerTag(VectorObject.class, "global_position", (attribute, object) -> {
+            return new LocationTag(Vector.fromJOML(object.getBone().getGlobalPosition()));
+        });
+
+        // <--[tag]
         // @attribute <MegBoneTag.scale>
-        // @returns VectorObject
+        // @returns LocationTag
         // @plugin Megizen
         // @mechanism MegBoneTag.scale
         // @description
-        // Returns the scale of the bone.
+        // Returns the scale of the bone as a vector.
         // -->
         tagProcessor.registerTag(VectorObject.class, "scale", (attribute, object) -> {
             return new LocationTag(Vector.fromJOML(object.getBone().getGlobalScale()));
