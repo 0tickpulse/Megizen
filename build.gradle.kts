@@ -7,10 +7,6 @@ repositories {
     mavenLocal()
 
     maven {
-        url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/")
-    }
-
-    maven {
         url = uri("https://repo.papermc.io/repository/maven-public/")
     }
 
@@ -34,7 +30,6 @@ repositories {
 dependencies {
     implementation("io.papermc.paper:paper-api:${project.properties["craftbukkit.version"]}")
     implementation("com.denizenscript:denizen:${project.properties["denizen.version"]}")
-    implementation("me.clip:placeholderapi:2.10.0")
     implementation("com.ticxo.modelengine:ModelEngine:${project.properties["modelengine.version"]}")
 }
 
