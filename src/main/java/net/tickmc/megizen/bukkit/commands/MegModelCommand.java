@@ -7,6 +7,7 @@ import com.denizenscript.denizencore.scripts.commands.generator.ArgName;
 import com.denizenscript.denizencore.scripts.commands.generator.ArgPrefixed;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
 import com.ticxo.modelengine.api.ModelEngineAPI;
+import com.ticxo.modelengine.api.entity.Dummy;
 import com.ticxo.modelengine.api.entity.data.BukkitEntityData;
 import com.ticxo.modelengine.api.entity.data.IEntityData;
 import com.ticxo.modelengine.api.generator.blueprint.ModelBlueprint;
@@ -20,21 +21,22 @@ public class MegModelCommand extends AbstractCommand {
 
     public MegModelCommand() {
         setName("megmodel");
-        setSyntax("megmodel [entity:<modeled_entity>] [model:<model>] (remove)");
+        setSyntax("megmodel [model:<model>] (entity:<modeled_entity>) (dummy) (remove)");
         autoCompile();
     }
 
     // <--[command]
     // @Name MegModel
-    // @Syntax megmodel [entity:<modeled_entity>] [model:<model>] (remove)
+    // @Syntax megmodel [model:<model>] (entity:<modeled_entity>) (dummy) (remove)
     // @Required 2
-    // @Short Adds or removes a model from an entity.
+    // @Short Adds or removes a model from an entity, or creates a dummy entity with a model.
     // @Group Megizen
     //
     // @Description
-    // Adds or removes a model from an entity.
+    // Adds or removes a model from an entity, or creates a dummy entity with a model.
     // If the player disconnects, the model does not persist and the player becomes invisible. Use the 'meg_make_visible' mechanism to fix this.
     // Models do not persist across worlds. They should be removed first, then added back.
+    // Dummy entities require a modeled entity to not be specified, as it creates a new modeled entity.
     //
     // The model must be a name of a loaded model in ModelEngine.
     //
@@ -56,6 +58,7 @@ public class MegModelCommand extends AbstractCommand {
 
     public static void autoExecute(ScriptEntry scriptEntry,
                                    @ArgName("entity") @ArgPrefixed MegModeledEntityTag modeledEntityTag,
+                                   @ArgName("dummy") boolean dummy,
                                    @ArgName("model") @ArgPrefixed ElementTag model,
                                    @ArgName("remove") boolean remove) {
         ModelBlueprint blueprint = ModelEngineAPI.getBlueprint(model.asString());
@@ -65,9 +68,20 @@ public class MegModelCommand extends AbstractCommand {
         }
 
         ModeledEntity modeledEntity = modeledEntityTag.getModeledEntity();
-        if (modeledEntity == null) {
+        if (modeledEntity == null && !dummy) {
             Debug.echoError("Invalid entity provided: " + modeledEntityTag.identify());
             return;
+        }
+
+        if (modeledEntity != null && dummy) {
+            Debug.echoError("Cannot specify a modeled entity and add the dummy flag at the same time.");
+            return;
+        }
+
+        if (modeledEntity == null && dummy) {
+            Dummy<?> dummyEntity = new Dummy<>();
+            dummyEntity.setDetectingPlayers(false);
+            modeledEntity = ModelEngineAPI.createModeledEntity(dummyEntity);
         }
 
         Player player = Bukkit.getPlayer(modeledEntity.getBase().getUUID()) != null ? Bukkit.getPlayer(modeledEntity.getBase().getUUID()) : null;
@@ -84,6 +98,7 @@ public class MegModelCommand extends AbstractCommand {
                 modeledEntity.addModel(activeModel, true);
             }
         }
+
         if (player != null) {
             if (remove) {
                 modeledEntity.removeModel(model.asString()).ifPresent(ActiveModel::destroy);
