@@ -2,24 +2,33 @@ package net.tickmc.megizen.bukkit.objects;
 
 import com.denizenscript.denizen.objects.EntityFormObject;
 import com.denizenscript.denizen.objects.EntityTag;
+import com.denizenscript.denizen.objects.PlayerTag;
 import com.denizenscript.denizencore.objects.Adjustable;
 import com.denizenscript.denizencore.objects.Fetchable;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.DurationTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
+import com.denizenscript.denizencore.objects.core.ListTag;
 import com.denizenscript.denizencore.objects.core.MapTag;
 import com.denizenscript.denizencore.tags.Attribute;
 import com.denizenscript.denizencore.tags.ObjectTagProcessor;
 import com.denizenscript.denizencore.tags.TagContext;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
+import com.denizenscript.denizencore.utilities.text.StringHolder;
 import com.ticxo.modelengine.api.ModelEngineAPI;
+import com.ticxo.modelengine.api.entity.BaseEntity;
+import com.ticxo.modelengine.api.entity.Dummy;
+import com.ticxo.modelengine.api.entity.data.BukkitEntityData;
+import com.ticxo.modelengine.api.entity.data.IEntityData;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 
 import java.util.Iterator;
+import java.util.Map;
 
 public class MegModeledEntityTag implements ObjectTag, Adjustable {
 
@@ -186,6 +195,24 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         });
 
         // <--[tag]
+        // @attribute <MegModeledEntityTag.hidden_from>
+        // @returns ListTag(PlayerTag)
+        // @plugin Megizen
+        // @description
+        // Returns a list of players that the modeled entity is hidden from.
+        // See also: <@link mechanism MegModeledEntityTag.hide>
+        // See also: <@link mechanism MegModeledEntityTag.unhide>
+        // @mechanism MegModeledEntityTag.hidden_from
+        // -->
+        tagProcessor.registerTag(ListTag.class, "hidden_from", (attribute, object) -> {
+            IEntityData entityData = object.modeledEntity.getBase().getData();
+            if (entityData instanceof BukkitEntityData bukkitData) {
+                return new ListTag(bukkitData.getTracked().getTrackedPlayer());
+            }
+            return null;
+        });
+
+        // <--[tag]
         // @attribute <MegModeledEntityTag.max_body_angle>
         // @returns ElementTag(Number)
         // @plugin Megizen
@@ -347,6 +374,27 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
 
         // <--[mechanism]
         // @object MegModeledEntityTag
+        // @name add_force_view
+        // @input PlayerTag
+        // @plugin Megizen
+        // @description
+        // Forces the modeled entity to only viewable by the input player.
+        // If the model was created without the 'dummy' flag, this will do nothing.
+        // Note: A forced viewer will be able to see the model forever, even when out of render radius.
+        // See also: <MegModeledEntityTag.hidden_from>
+        // -->
+        tagProcessor.registerMechanism("force_view", false, PlayerTag.class, (object, mechanism, value) -> {
+            BaseEntity<?> baseEntity = object.modeledEntity.getBase();
+            if (baseEntity instanceof Dummy<?> dummy) {
+                dummy.setForceViewing(value.getPlayerEntity(), true);
+            }
+            else {
+                Debug.echoError("Cannot force view with a non-dummy.");
+            }
+        });
+
+        // <--[mechanism]
+        // @object MegModeledEntityTag
         // @name body_clamp_uneven
         // @input ElementTag(Boolean)
         // @plugin Megizen
@@ -378,6 +426,35 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
 
         // <--[mechanism]
         // @object MegModeledEntityTag
+        // @name force_view
+        // @input MapTag
+        // @plugin Megizen
+        // @description
+        // Forces the modeled entity to either be viewable or not by the input player.
+        // If the model was created without the 'dummy' flag, this will do nothing.
+        // Note: A forced viewer will be able to see the model forever, even when out of render radius.
+        // See also: <MegModeledEntityTag.hidden_from>
+        // -->
+        tagProcessor.registerMechanism("force_view", false, MapTag.class, (object, mechanism, input) -> {
+            BaseEntity<?> baseEntity = object.modeledEntity.getBase();
+            if (baseEntity instanceof Dummy<?> dummy) {
+                for (Map.Entry<StringHolder, ObjectTag> entry : input.entrySet()) {
+                    PlayerTag player = PlayerTag.valueOf(entry.getKey().str, mechanism.context);
+                    if (player == null) {
+                        Debug.echoError("Invalid player provided: " + entry.getKey().str);
+                        continue;
+                    }
+                    boolean view = new ElementTag(entry.getValue().toString()).asBoolean();
+                    dummy.setForceViewing(player.getPlayerEntity(), view);
+                }
+            }
+            else {
+                Debug.echoError("Cannot force view with a non-dummy.");
+            }
+        });
+
+        // <--[mechanism]
+        // @object MegModeledEntityTag
         // @name head_clamp_uneven
         // @input ElementTag(Boolean)
         // @plugin Megizen
@@ -390,6 +467,44 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         tagProcessor.registerMechanism("head_clamp_uneven", false, ElementTag.class, (object, mechanism, value) -> {
             boolean uneven = value.asBoolean();
             object.modeledEntity.getBase().getBodyRotationController().setHeadClampUneven(uneven);
+        });
+
+        // <--[mechanism]
+        // @object MegModeledEntityTag
+        // @name hide
+        // @input PlayerTag
+        // @plugin Megizen
+        // @description
+        // Forces the modeled entity to be hidden from the input player.
+        // @tags
+        // <MegModeledEntityTag.hidden_from>
+        // -->
+        tagProcessor.registerMechanism("hide", false, PlayerTag.class, (object, mechanism, value) -> {
+            IEntityData entityData = object.modeledEntity.getBase().getData();
+            if (entityData instanceof BukkitEntityData bukkitData) {
+                bukkitData.getTracked().addForcedHidden(value.getPlayerEntity());
+                bukkitData.getTracked().addForcedPairing(value.getPlayerEntity());
+            }
+        });
+
+        // <--[mechanism]
+        // @object MegModeledEntityTag
+        // @name hidden_from
+        // @input ListTag(PlayerTag)
+        // @plugin Megizen
+        // @description
+        // Forces the modeled entity to be hidden from the input list of players.
+        // @tags
+        // <MegModeledEntityTag.hidden_from>
+        // -->
+        tagProcessor.registerMechanism("hidden_from", false, ListTag.class, (object, mechanism, value) -> {
+            IEntityData entityData = object.modeledEntity.getBase().getData();
+            if (entityData instanceof BukkitEntityData bukkitData) {
+                for (PlayerTag player : value.filter(PlayerTag.class, mechanism.context)) {
+                    bukkitData.getTracked().addForcedHidden(player.getPlayerEntity());
+                    bukkitData.getTracked().addForcedPairing(player.getPlayerEntity());
+                }
+            }
         });
 
         // <--[mechanism]
@@ -454,6 +569,27 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         tagProcessor.registerMechanism("min_head_angle", false, ElementTag.class, (object, mechanism, value) -> {
             float min = value.asFloat();
             object.modeledEntity.getBase().getBodyRotationController().setMinHeadAngle(min);
+        });
+
+        // <--[mechanism]
+        // @object MegModeledEntityTag
+        // @name remove_force_view
+        // @input PlayerTag
+        // @plugin Megizen
+        // @description
+        // Removes the input player from the forced viewable list of the modeled entity.
+        // If the model was created without the 'dummy' flag, this will do nothing.
+        // Note: A forced viewer will be able to see the model forever, even when out of render radius.
+        // See also: <MegModeledEntityTag.hidden_from>
+        // -->
+        tagProcessor.registerMechanism("remove_force_view", false, PlayerTag.class, (object, mechanism, value) -> {
+            BaseEntity<?> baseEntity = object.modeledEntity.getBase();
+            if (baseEntity instanceof Dummy<?> dummy) {
+                dummy.setForceViewing(value.getPlayerEntity(), false);
+            }
+            else {
+                Debug.echoError("Cannot force view a non-dummy entity.");
+            }
         });
 
         // <--[mechanism]
@@ -533,6 +669,24 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         tagProcessor.registerMechanism("stable_angle", false, ElementTag.class, (object, mechanism, value) -> {
             float angle = value.asFloat();
             object.modeledEntity.getBase().getBodyRotationController().setStableAngle(angle);
+        });
+
+        // <--[mechanism]
+        // @object MegModeledEntityTag
+        // @name unhide
+        // @input PlayerTag
+        // @plugin Megizen
+        // @description
+        // Forces the modeled entity to be unhidden from the input player.
+        // @tags
+        // <MegModeledEntityTag.hidden_from>
+        // -->
+        tagProcessor.registerMechanism("unhide", false, PlayerTag.class, (object, mechanism, value) -> {
+            IEntityData entityData = object.modeledEntity.getBase().getData();
+            if (entityData instanceof BukkitEntityData bukkitData) {
+                bukkitData.getTracked().removeForcedHidden(value.getPlayerEntity());
+                bukkitData.getTracked().removeForcedPairing(value.getPlayerEntity());
+            }
         });
     }
 
