@@ -57,7 +57,7 @@ public class MegModelCommand extends AbstractCommand {
     }
 
     public static void autoExecute(ScriptEntry scriptEntry,
-                                   @ArgName("entity") @ArgPrefixed MegModeledEntityTag modeledEntityTag,
+                                   @ArgName("entity") @ArgPrefixed @ArgDefaultNull MegModeledEntityTag modeledEntityTag,
                                    @ArgName("dummy") boolean dummy,
                                    @ArgName("model") @ArgPrefixed ElementTag model,
                                    @ArgName("remove") boolean remove) {
