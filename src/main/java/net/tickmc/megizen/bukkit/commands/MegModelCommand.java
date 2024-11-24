@@ -68,14 +68,14 @@ public class MegModelCommand extends AbstractCommand {
             return;
         }
 
-        ModeledEntity modeledEntity = modeledEntityTag.getModeledEntity();
-        if (modeledEntity == null && !dummy) {
-            Debug.echoError("Invalid entity provided: " + modeledEntityTag.identify());
+        if (modeledEntityTag != null && dummy) {
+            Debug.echoError("Cannot specify a modeled entity and add the dummy flag at the same time.");
             return;
         }
 
-        if (modeledEntity != null && dummy) {
-            Debug.echoError("Cannot specify a modeled entity and add the dummy flag at the same time.");
+        ModeledEntity modeledEntity = modeledEntityTag.getModeledEntity();
+        if (modeledEntity == null && !dummy) {
+            Debug.echoError("Invalid entity provided: " + modeledEntityTag.identify());
             return;
         }
 
