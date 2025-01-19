@@ -22,17 +22,14 @@ public class MegLookCommand extends AbstractCommand {
 
     // <--[command]
     // @Name MegLook
-    // @Syntax meglook [entity:<entity>] [model:<active_model>] [bone:<bone>] (driver) (passenger) (dismount) (interactable) (damageable)
-    // @Required 3
-    // @Short Mounts the given entity on the given modeled entity, either as a passenger or the driver.
+    // @Syntax meglook [model:<active_model>] [<location>/pitch:<pitch>/headYaw:<yaw>/bodyYaw:<yaw>]
+    // @Required 2
+    // @Short Causes the model look at a location.
     // @Group Megizen
     //
     // @Description
-    // Mounts the given entity on the given modeled entity, either as a passenger or the driver.
-    // The "bone_name" argument is required if the entity is being mounted as a passenger. It specifies which bone the entity will be mounted on.
-    // You can find out mountable bone names by opening the model in Blockbench.
-    // The "dismount" argument is optional, but will dismount the entity if specified.
-    // The "interactable" and "damageable" arguments are optional, but make the mount interactable and damageable, respectively.
+    // Makes the model look towards the location.
+    // Similar to the Denizen look command: <@link url https://meta.denizenscript.com/Docs/Commands/look>
     // -->
 
     public static void autoExecute(ScriptEntry scriptEntry,
