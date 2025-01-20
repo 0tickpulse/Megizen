@@ -15,6 +15,7 @@ import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
 import com.ticxo.modelengine.api.nms.entity.wrapper.LookController;
 import net.tickmc.megizen.bukkit.objects.MegActiveModelTag;
+import net.tickmc.megizen.bukkit.objects.MegModeledEntityTag;
 
 public class MegLookCommand extends AbstractCommand {
 
@@ -37,8 +38,8 @@ public class MegLookCommand extends AbstractCommand {
     // -->
 
     public static void autoExecute(ScriptEntry scriptEntry,
-                                   @ArgName("entity") @ArgPrefixed EntityTag entity,
-                                   @ArgName("location") @ArgDefaultNull @ArgLinear ObjectTag locationObj,
+                                   @ArgName("entity") @ArgPrefixed MegModeledEntityTag entity,
+                                   @ArgName("location") @ArgDefaultNull @ArgLinear LocationTag locationObj,
                                    @ArgName("pitch") @ArgDefaultNull @ArgPrefixed ElementTag pitch,
                                    @ArgName("headYaw") @ArgDefaultNull @ArgPrefixed ElementTag headYaw,
                                    @ArgName("bodyYaw") @ArgDefaultNull @ArgPrefixed ElementTag bodyYaw) {
@@ -47,12 +48,8 @@ public class MegLookCommand extends AbstractCommand {
             Debug.echoError("The 'entity' argument is required.");
             return;
         }
-//        ActiveModel activeModel = model.getActiveModel();
 
-        ModeledEntity modeledEntity = modeledEntityTag.getModeledEntity();
-        if (locationObj != null && !(locationObj instanceof LocationTag) && locationObj.asElement().asLowerString().equals("cancel")) {
-            return;
-        }
+        ModeledEntity modeledEntity = entity.getModeledEntity();
 
         LocationTag loc = locationObj == null ? null : locationObj.asType(LocationTag.class, scriptEntry.context);
 
@@ -63,18 +60,27 @@ public class MegLookCommand extends AbstractCommand {
         final float pitchRaw = pitch == null ? 0 : pitch.asFloat();
         final float headYawRaw = headYaw == null ? 0 : headYaw.asFloat();
         final float bodyYawRaw = bodyYaw == null ? 0 : bodyYaw.asFloat();
-        LookController lookController = activeModel.getBase().getLookController();
+        LookController lookController = modeledEntity.getBase().getLookController();
 
-        if (loc != null){
+        if (loc != null) {
 
             lookController.lookAt(
                     loc.getX(),
                     loc.getY(),
                     loc.getZ()
             );
-
         }
-
+        if (pitch != null) {
+            lookController.setPitch(pitchRaw);
+        }
+        if (headYaw != null){
+            lookController.setHeadYaw(headYawRaw);
+            lookController.setBodyYaw(bodyYawRaw);
+        }
+        if (bodyYaw != null){
+            lookController.setBodyYaw(bodyYawRaw);
+        }
 
     }
 }
+
