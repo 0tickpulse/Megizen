@@ -24,6 +24,7 @@ import com.ticxo.modelengine.api.entity.data.BukkitEntityData;
 import com.ticxo.modelengine.api.entity.data.IEntityData;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
+import com.ticxo.modelengine.api.nms.entity.wrapper.TrackedEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -195,16 +196,15 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         });
 
         // <--[tag]
-        // @attribute <MegModeledEntityTag.hidden_from>
+        // @attribute <MegModeledEntityTag.visible_to>
         // @returns ListTag(PlayerTag)
         // @plugin Megizen
         // @description
-        // Returns a list of players that the modeled entity is hidden from.
-        // See also: <@link mechanism MegModeledEntityTag.hide>
-        // See also: <@link mechanism MegModeledEntityTag.unhide>
-        // @mechanism MegModeledEntityTag.hidden_from
+        // Returns a list of players that can see the modeled entity.
+        // See also: <@link mechanism MegModeledEntityTag.hide_from>
+        // See also: <@link mechanism MegModeledEntityTag.show_to>
         // -->
-        tagProcessor.registerTag(ListTag.class, "hidden_from", (attribute, object) -> {
+        tagProcessor.registerTag(ListTag.class, "visible_to", (attribute, object) -> {
             IEntityData entityData = object.modeledEntity.getBase().getData();
             if (entityData instanceof BukkitEntityData bukkitData) {
                 return new ListTag(bukkitData.getTracked().getTrackedPlayer());
@@ -471,38 +471,23 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
 
         // <--[mechanism]
         // @object MegModeledEntityTag
-        // @name hide
-        // @input PlayerTag
-        // @plugin Megizen
-        // @description
-        // Forces the modeled entity to be hidden from the input player.
-        // @tags
-        // <MegModeledEntityTag.hidden_from>
-        // -->
-        tagProcessor.registerMechanism("hide", false, PlayerTag.class, (object, mechanism, value) -> {
-            IEntityData entityData = object.modeledEntity.getBase().getData();
-            if (entityData instanceof BukkitEntityData bukkitData) {
-                bukkitData.getTracked().addForcedHidden(value.getPlayerEntity());
-                bukkitData.getTracked().addForcedPairing(value.getPlayerEntity());
-            }
-        });
-
-        // <--[mechanism]
-        // @object MegModeledEntityTag
-        // @name hidden_from
+        // @name hide_from
         // @input ListTag(PlayerTag)
         // @plugin Megizen
         // @description
         // Forces the modeled entity to be hidden from the input list of players.
+        // See also: <MegModeledEntityTag.show_to>
         // @tags
-        // <MegModeledEntityTag.hidden_from>
+        // <MegModeledEntityTag.visible_to>
         // -->
-        tagProcessor.registerMechanism("hidden_from", false, ListTag.class, (object, mechanism, value) -> {
+        tagProcessor.registerMechanism("hide_from", false, ListTag.class, (object, mechanism, value) -> {
             IEntityData entityData = object.modeledEntity.getBase().getData();
             if (entityData instanceof BukkitEntityData bukkitData) {
+                TrackedEntity entity = bukkitData.getTracked();
                 for (PlayerTag player : value.filter(PlayerTag.class, mechanism.context)) {
-                    bukkitData.getTracked().addForcedHidden(player.getPlayerEntity());
-                    bukkitData.getTracked().addForcedPairing(player.getPlayerEntity());
+                    if (entity.getTrackedPlayer().contains(player.getUUID())) {
+                        entity.addForcedHidden(player.getUUID());
+                    }
                 }
             }
         });
@@ -673,19 +658,22 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
 
         // <--[mechanism]
         // @object MegModeledEntityTag
-        // @name unhide
+        // @name show_to
         // @input PlayerTag
         // @plugin Megizen
         // @description
         // Forces the modeled entity to be unhidden from the input player.
+        // See also: <MegModeledEntityTag.hide_from>
         // @tags
-        // <MegModeledEntityTag.hidden_from>
+        // <MegModeledEntityTag.visible_to>
         // -->
-        tagProcessor.registerMechanism("unhide", false, PlayerTag.class, (object, mechanism, value) -> {
+        tagProcessor.registerMechanism("show_to", false, PlayerTag.class, (object, mechanism, value) -> {
             IEntityData entityData = object.modeledEntity.getBase().getData();
             if (entityData instanceof BukkitEntityData bukkitData) {
-                bukkitData.getTracked().removeForcedHidden(value.getPlayerEntity());
-                bukkitData.getTracked().removeForcedPairing(value.getPlayerEntity());
+                TrackedEntity entity = bukkitData.getTracked();
+                if (entity.getTrackedPlayer().contains(value.getPlayerEntity().getUniqueId())) {
+                    entity.removeForcedHidden(value.getPlayerEntity().getUniqueId());
+                }
             }
         });
     }
