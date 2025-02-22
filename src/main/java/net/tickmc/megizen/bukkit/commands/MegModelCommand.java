@@ -26,7 +26,7 @@ public class MegModelCommand extends AbstractCommand {
 
     // <--[command]
     // @Name MegModel
-    // @Syntax megmodel [model:<model>] [entity:<modeled_entity>] (remove)
+    // @Syntax megmodel [entity:<modeled_entity>] [model:<model>] (remove)
     // @Required 2
     // @Short Adds or removes a model from an entity.
     // @Group Megizen
