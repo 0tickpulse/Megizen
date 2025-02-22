@@ -16,20 +16,15 @@ import com.denizenscript.denizencore.tags.ObjectTagProcessor;
 import com.denizenscript.denizencore.tags.TagContext;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
-import com.denizenscript.denizencore.utilities.text.StringHolder;
 import com.ticxo.modelengine.api.ModelEngineAPI;
-import com.ticxo.modelengine.api.entity.BaseEntity;
-import com.ticxo.modelengine.api.entity.Dummy;
 import com.ticxo.modelengine.api.entity.data.BukkitEntityData;
 import com.ticxo.modelengine.api.entity.data.IEntityData;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
 import com.ticxo.modelengine.api.nms.entity.wrapper.TrackedEntity;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 
 import java.util.Iterator;
-import java.util.Map;
 
 public class MegModeledEntityTag implements ObjectTag, Adjustable {
 
@@ -196,23 +191,6 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         });
 
         // <--[tag]
-        // @attribute <MegModeledEntityTag.visible_to>
-        // @returns ListTag(PlayerTag)
-        // @plugin Megizen
-        // @description
-        // Returns a list of players that can see the modeled entity.
-        // See also: <@link mechanism MegModeledEntityTag.hide_from>
-        // See also: <@link mechanism MegModeledEntityTag.show_to>
-        // -->
-        tagProcessor.registerTag(ListTag.class, "visible_to", (attribute, object) -> {
-            IEntityData entityData = object.modeledEntity.getBase().getData();
-            if (entityData instanceof BukkitEntityData bukkitData) {
-                return new ListTag(bukkitData.getTracked().getTrackedPlayer());
-            }
-            return null;
-        });
-
-        // <--[tag]
         // @attribute <MegModeledEntityTag.max_body_angle>
         // @returns ElementTag(Number)
         // @plugin Megizen
@@ -372,25 +350,21 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
             return new ElementTag(object.getModeledEntity().getBase().getBodyRotationController().getStableAngle());
         });
 
-        // <--[mechanism]
-        // @object MegModeledEntityTag
-        // @name add_force_view
-        // @input PlayerTag
+        // <--[tag]
+        // @attribute <MegModeledEntityTag.visible_to>
+        // @returns ListTag(PlayerTag)
         // @plugin Megizen
         // @description
-        // Forces the modeled entity to only viewable by the input player.
-        // If the model was created without the 'dummy' flag, this will do nothing.
-        // Note: A forced viewer will be able to see the model forever, even when out of render radius.
-        // See also: <MegModeledEntityTag.hidden_from>
+        // Returns a list of players that can see the modeled entity.
+        // See also: <@link mechanism MegModeledEntityTag.hide_from>
+        // See also: <@link mechanism MegModeledEntityTag.show_to>
         // -->
-        tagProcessor.registerMechanism("force_view", false, PlayerTag.class, (object, mechanism, value) -> {
-            BaseEntity<?> baseEntity = object.modeledEntity.getBase();
-            if (baseEntity instanceof Dummy<?> dummy) {
-                dummy.setForceViewing(value.getPlayerEntity(), true);
+        tagProcessor.registerTag(ListTag.class, "visible_to", (attribute, object) -> {
+            IEntityData entityData = object.modeledEntity.getBase().getData();
+            if (entityData instanceof BukkitEntityData bukkitData) {
+                return new ListTag(bukkitData.getTracked().getTrackedPlayer());
             }
-            else {
-                Debug.echoError("Cannot force view with a non-dummy.");
-            }
+            return null;
         });
 
         // <--[mechanism]
@@ -422,35 +396,6 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         tagProcessor.registerMechanism("entity_visible", false, ElementTag.class, (object, mechanism, value) -> {
             boolean visible = value.asBoolean();
             object.modeledEntity.setBaseEntityVisible(visible);
-        });
-
-        // <--[mechanism]
-        // @object MegModeledEntityTag
-        // @name force_view
-        // @input MapTag
-        // @plugin Megizen
-        // @description
-        // Forces the modeled entity to either be viewable or not by the input player.
-        // If the model was created without the 'dummy' flag, this will do nothing.
-        // Note: A forced viewer will be able to see the model forever, even when out of render radius.
-        // See also: <MegModeledEntityTag.hidden_from>
-        // -->
-        tagProcessor.registerMechanism("force_view", false, MapTag.class, (object, mechanism, input) -> {
-            BaseEntity<?> baseEntity = object.modeledEntity.getBase();
-            if (baseEntity instanceof Dummy<?> dummy) {
-                for (Map.Entry<StringHolder, ObjectTag> entry : input.entrySet()) {
-                    PlayerTag player = PlayerTag.valueOf(entry.getKey().str, mechanism.context);
-                    if (player == null) {
-                        Debug.echoError("Invalid player provided: " + entry.getKey().str);
-                        continue;
-                    }
-                    boolean view = new ElementTag(entry.getValue().toString()).asBoolean();
-                    dummy.setForceViewing(player.getPlayerEntity(), view);
-                }
-            }
-            else {
-                Debug.echoError("Cannot force view with a non-dummy.");
-            }
         });
 
         // <--[mechanism]
@@ -558,27 +503,6 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
 
         // <--[mechanism]
         // @object MegModeledEntityTag
-        // @name remove_force_view
-        // @input PlayerTag
-        // @plugin Megizen
-        // @description
-        // Removes the input player from the forced viewable list of the modeled entity.
-        // If the model was created without the 'dummy' flag, this will do nothing.
-        // Note: A forced viewer will be able to see the model forever, even when out of render radius.
-        // See also: <MegModeledEntityTag.hidden_from>
-        // -->
-        tagProcessor.registerMechanism("remove_force_view", false, PlayerTag.class, (object, mechanism, value) -> {
-            BaseEntity<?> baseEntity = object.modeledEntity.getBase();
-            if (baseEntity instanceof Dummy<?> dummy) {
-                dummy.setForceViewing(value.getPlayerEntity(), false);
-            }
-            else {
-                Debug.echoError("Cannot force view a non-dummy entity.");
-            }
-        });
-
-        // <--[mechanism]
-        // @object MegModeledEntityTag
         // @name rotation_delay
         // @input DurationTag
         // @plugin Megizen
@@ -641,23 +565,6 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
 
         // <--[mechanism]
         // @object MegModeledEntityTag
-        // @name stable_angle
-        // @input ElementTag(Number)
-        // @plugin Megizen
-        // @description
-        // Sets the stable angle before correcting back to the clamped angle.
-        // For example, if the clamp is 50, and the stable angle is 15, the body can be 65 degrees away from the head before snapping back to 50 degrees away.
-        // This causes the "sudden jerk" effect on all entity body rotation.
-        // @tags
-        // <MegModeledEntityTag.stable_angle>
-        // -->
-        tagProcessor.registerMechanism("stable_angle", false, ElementTag.class, (object, mechanism, value) -> {
-            float angle = value.asFloat();
-            object.modeledEntity.getBase().getBodyRotationController().setStableAngle(angle);
-        });
-
-        // <--[mechanism]
-        // @object MegModeledEntityTag
         // @name show_to
         // @input PlayerTag
         // @plugin Megizen
@@ -675,6 +582,23 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
                     entity.removeForcedHidden(value.getPlayerEntity().getUniqueId());
                 }
             }
+        });
+
+        // <--[mechanism]
+        // @object MegModeledEntityTag
+        // @name stable_angle
+        // @input ElementTag(Number)
+        // @plugin Megizen
+        // @description
+        // Sets the stable angle before correcting back to the clamped angle.
+        // For example, if the clamp is 50, and the stable angle is 15, the body can be 65 degrees away from the head before snapping back to 50 degrees away.
+        // This causes the "sudden jerk" effect on all entity body rotation.
+        // @tags
+        // <MegModeledEntityTag.stable_angle>
+        // -->
+        tagProcessor.registerMechanism("stable_angle", false, ElementTag.class, (object, mechanism, value) -> {
+            float angle = value.asFloat();
+            object.modeledEntity.getBase().getBodyRotationController().setStableAngle(angle);
         });
     }
 

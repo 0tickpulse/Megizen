@@ -3,12 +3,10 @@ package net.tickmc.megizen.bukkit.commands;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.scripts.ScriptEntry;
 import com.denizenscript.denizencore.scripts.commands.AbstractCommand;
-import com.denizenscript.denizencore.scripts.commands.generator.ArgDefaultNull;
 import com.denizenscript.denizencore.scripts.commands.generator.ArgName;
 import com.denizenscript.denizencore.scripts.commands.generator.ArgPrefixed;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
 import com.ticxo.modelengine.api.ModelEngineAPI;
-import com.ticxo.modelengine.api.entity.Dummy;
 import com.ticxo.modelengine.api.entity.data.BukkitEntityData;
 import com.ticxo.modelengine.api.entity.data.IEntityData;
 import com.ticxo.modelengine.api.generator.blueprint.ModelBlueprint;
@@ -22,7 +20,7 @@ public class MegModelCommand extends AbstractCommand {
 
     public MegModelCommand() {
         setName("megmodel");
-        setSyntax("megmodel [model:<model>] (entity:<modeled_entity>) (dummy) (remove)");
+        setSyntax("megmodel [model:<model>] [entity:<modeled_entity>] (remove)");
         autoCompile();
     }
 
