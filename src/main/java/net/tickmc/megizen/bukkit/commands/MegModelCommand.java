@@ -20,7 +20,7 @@ public class MegModelCommand extends AbstractCommand {
 
     public MegModelCommand() {
         setName("megmodel");
-        setSyntax("megmodel [model:<model>] [entity:<modeled_entity>] (remove)");
+        setSyntax("megmodel [entity:<modeled_entity>] [model:<model>] (remove)");
         autoCompile();
     }
 
