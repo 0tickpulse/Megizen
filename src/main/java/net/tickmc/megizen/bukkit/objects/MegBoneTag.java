@@ -1,5 +1,6 @@
 package net.tickmc.megizen.bukkit.objects;
 
+import com.denizenscript.denizen.Denizen;
 import com.denizenscript.denizen.objects.ItemTag;
 import com.denizenscript.denizen.objects.LocationTag;
 import com.denizenscript.denizencore.objects.Adjustable;
@@ -397,68 +398,72 @@ public class MegBoneTag implements ObjectTag, Adjustable {
             object.getBone().setModelScale(value.asInt());
         });
 
-        // <--[mechanism]
-        // @object MegBoneTag
-        // @name skin_texture
-        // @input ElementTag
-        // @plugin Megizen
-        // @description
-        // Sets the skin texture of the bone.
-        // This should only be used on bones that have the PLAYER_LIMB behavior.
-        // This uses the format UUID|Texture|Name.
-        // @tags
-        // <MegBoneTag.skin_texture>
-        // -->
-        tagProcessor.registerMechanism("skin_texture", false, ElementTag.class, (object, mechanism, value) -> {
-            ModelBone bone = object.getBone();
-            ListTag list = mechanism.valueAsType(ListTag.class);
-            String idString = list.get(0);
-            String texture = null;
-            if (list.size() == 1 && idString.length() > 64) {
-                texture = idString;
-                idString = null;
-            }
-            if (list.size() > 1) {
-                texture = list.get(1);
-            }
-            PlayerProfile profile;
-            if (idString == null) {
-                profile = Megizen.instance.getServer().createProfile(new UUID(0, 0), "null");
-            } else if (idString.length() < 3 && list.size() == 2) {
-//                profile = new PlayerProfile(idString, new UUID(0, 0));
-                profile = Megizen.instance.getServer().createProfile(new UUID(0, 0), idString);
-            } else {
-                if (CoreUtilities.contains(idString, '-')) {
-                    UUID uuid = UUID.fromString(idString);
-                    String name = null;
-                    if (list.size() > 2) {
-                        name = list.get(2);
-                    }
-//                    profile = new PlayerProfile(name, uuid, texture);
-                    profile = Megizen.instance.getServer().createProfile(uuid, name);
-                } else {
-//                    profile = new PlayerProfile(idString, Settings.nullifySkullSkinIds ? new UUID(0, 0) : null, texture);
-                    profile = Megizen.instance.getServer().createProfile(new UUID(0, 0), idString);
+        if (Denizen.supportsPaper) {
+
+            // <--[mechanism]
+            // @object MegBoneTag
+            // @name skin_texture
+            // @input ElementTag
+            // @plugin Megizen
+            // @description
+            // Sets the skin texture of the bone.
+            // This should only be used on bones that have the PLAYER_LIMB behavior.
+            // This uses the format UUID|Texture|Name.
+            // Note: This mechanism is only available on Paper servers.
+            // @tags
+            // <MegBoneTag.skin_texture>
+            // -->
+            tagProcessor.registerMechanism("skin_texture", false, ElementTag.class, (object, mechanism, value) -> {
+                ModelBone bone = object.getBone();
+                ListTag list = mechanism.valueAsType(ListTag.class);
+                String idString = list.get(0);
+                String texture = null;
+                if (list.size() == 1 && idString.length() > 64) {
+                    texture = idString;
+                    idString = null;
                 }
-            }
-            if (texture == null || profile.getId() == null) { // Load if needed
-                profile.complete(); // TODO: perhaps async this?
-            }
-            if (texture != null) {
-                // Format is texture;signature
-                List<String> split = CoreUtilities.split(texture, ';');
-                String textureString = split.get(0);
-                String signatureString = split.size() > 1 ? split.get(1) : null;
-                profile.setProperty(new ProfileProperty("textures", textureString, signatureString));
-            }
-            if (profile.getTextures().isEmpty()) {
-                return; // Can't set a skull skin to nothing.
-            }
-            PlayerProfile finalProfile = profile;
-            bone.getBoneBehavior(BoneBehaviorTypes.PLAYER_LIMB).ifPresent(behavior -> {
-                behavior.setTexture(finalProfile);
+                if (list.size() > 1) {
+                    texture = list.get(1);
+                }
+                PlayerProfile profile;
+                if (idString == null) {
+                    profile = Megizen.instance.getServer().createProfile(new UUID(0, 0), "null");
+                } else if (idString.length() < 3 && list.size() == 2) {
+//                profile = new PlayerProfile(idString, new UUID(0, 0));
+                    profile = Megizen.instance.getServer().createProfile(new UUID(0, 0), idString);
+                } else {
+                    if (CoreUtilities.contains(idString, '-')) {
+                        UUID uuid = UUID.fromString(idString);
+                        String name = null;
+                        if (list.size() > 2) {
+                            name = list.get(2);
+                        }
+//                    profile = new PlayerProfile(name, uuid, texture);
+                        profile = Megizen.instance.getServer().createProfile(uuid, name);
+                    } else {
+//                    profile = new PlayerProfile(idString, Settings.nullifySkullSkinIds ? new UUID(0, 0) : null, texture);
+                        profile = Megizen.instance.getServer().createProfile(new UUID(0, 0), idString);
+                    }
+                }
+                if (texture == null || profile.getId() == null) { // Load if needed
+                    profile.complete(); // TODO: perhaps async this?
+                }
+                if (texture != null) {
+                    // Format is texture;signature
+                    List<String> split = CoreUtilities.split(texture, ';');
+                    String textureString = split.get(0);
+                    String signatureString = split.size() > 1 ? split.get(1) : null;
+                    profile.setProperty(new ProfileProperty("textures", textureString, signatureString));
+                }
+                if (profile.getTextures().isEmpty()) {
+                    return; // Can't set a skull skin to nothing.
+                }
+                PlayerProfile finalProfile = profile;
+                bone.getBoneBehavior(BoneBehaviorTypes.PLAYER_LIMB).ifPresent(behavior -> {
+                    behavior.setTexture(finalProfile);
+                });
             });
-        });
+        }
     }
 
     @Override

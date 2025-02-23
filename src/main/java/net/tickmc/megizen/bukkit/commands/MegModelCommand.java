@@ -84,6 +84,7 @@ public class MegModelCommand extends AbstractCommand {
                 modeledEntity.addModel(activeModel, true);
             }
         }
+
         if (player != null) {
             if (remove) {
                 modeledEntity.removeModel(model.asString()).ifPresent(ActiveModel::destroy);
@@ -98,7 +99,7 @@ public class MegModelCommand extends AbstractCommand {
                 modeledEntity.setBaseEntityVisible(false);
                 IEntityData iEntityData = modeledEntity.getBase().getData();
                 if (iEntityData instanceof BukkitEntityData data) {
-                    data.getTracked().addForcedPairing(player);
+                    data.getTracked().addForcedPairing(player.getUniqueId());
                 }
                 ModelEngineAPI.getEntityHandler().setForcedInvisible(player, true);
                 ActiveModel activeModel = ModelEngineAPI.createActiveModel(blueprint);
