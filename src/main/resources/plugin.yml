@@ -1,6 +1,6 @@
 name: Megizen
 authors: ['The DenizenScript Team', '0TickPulse', 'heypr']
-version: 0.27.1-DEV
+version: 0.27.2-DEV
 main: net.tickmc.megizen.bukkit.Megizen
 depend: [Denizen, ModelEngine]
 

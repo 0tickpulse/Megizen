@@ -257,6 +257,19 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         });
 
         // <--[tag]
+        // @attribute <MegActiveModelTag.glow_color>
+        // @returns ColorTag
+        // @plugin Megizen
+        // @mechanism MegActiveModelTag.glow_color
+        // @description
+        // Returns the glow color of the active model.
+        // -->
+        tagProcessor.registerTag(ColorTag.class, "glow_color", (attribute, object) -> {
+            Color color = Color.fromRGB(object.getActiveModel().getGlowColor());
+            return new ColorTag(color.getRed(), color.getGreen(), color.getBlue());
+        });
+
+        // <--[tag]
         // @attribute <MegActiveModelTag.has_passengers>
         // @returns ElementTag(Boolean)
         // @plugin Megizen
@@ -494,6 +507,21 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         // -->
         tagProcessor.registerMechanism("default_tint", false, ColorTag.class, (object, mechanism, value) -> {
             object.getActiveModel().setDefaultTint(Color.fromRGB(value.red, value.green, value.blue));
+        });
+
+        // <--[mechanism]
+        // @object MegActiveModelTag
+        // @name glow_color
+        // @input ColorTag
+        // @plugin Megizen
+        // @description
+        // Sets the glow color of the active model.
+        // @tags
+        // <MegActiveModelTag.glow_color>
+        // -->
+        tagProcessor.registerMechanism("glow_color", false, ColorTag.class, (object, mechanism, value) -> {
+            ColorTag color = mechanism.valueAsType(ColorTag.class);
+            object.getActiveModel().setGlowColor(color.asRGB());
         });
 
         // <--[mechanism]
