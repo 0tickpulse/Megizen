@@ -10,11 +10,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInputEvent;
 
+import java.util.Arrays;
+
 public class PlayerInputScriptEvent extends BukkitScriptEvent implements Listener {
 
     // <--[event]
     // @Events
-    // player input
+    // player inputs
     //
     // @Group Block
     //
@@ -23,18 +25,19 @@ public class PlayerInputScriptEvent extends BukkitScriptEvent implements Listene
     // @Triggers when a player sends an updated input to the server.
     //
     // @Context
-    // <context.jump> returns an ElementTag if the player jumps.
-    // <context.forward> returns an ElementTag if the player moves forward.
-    // <context.backward> returns an ElementTag if the player moves backward.
-    // <context.sprint> returns the ElementTag if the player sprints.
-    // <context.sneak> returns the ElementTag if the player sneaks.
-    // <context.left> returns the ElementTag if the player moves left.
-    // <context.right> returns the ElementTag if the player moves right.
+    // <context.jump> returns an ElementTag(Boolean) of whether the player is jumping.
+    // <context.forward> returns an ElementTag(Boolean) of whether the player moves forward.
+    // <context.backward> returns an ElementTag(Boolean) of whether the player moves backward.
+    // <context.sprint> returns an ElementTag(Boolean) of whether the player sprints.
+    // <context.sneak> returns an ElementTag(Boolean) of whether the player sneaks.
+    // <context.left> returns an ElementTag(Boolean) of whether the player moves left.
+    // <context.right> returns an ElementTag(Boolean) of whether the player moves right.
     //
     // -->
 
     public PlayerInputScriptEvent() {
-        registerCouldMatcher("player <'input'>");
+        registerCouldMatcher("player inputs");
+        registerSwitches("input");
     }
 
     public PlayerInputEvent event;
@@ -46,11 +49,10 @@ public class PlayerInputScriptEvent extends BukkitScriptEvent implements Listene
 
     @Override
     public boolean matches(ScriptPath path) {
-        String inputType = path.eventArgLowerAt(1);
-        return switch (inputType) {
-            case "input", "jump", "forward", "backward", "sprint", "sneak", "left", "right" -> false;
-            default -> super.matches(path);
-        };
+        if (!runGenericSwitchCheck(path, "input", getInputType())) {
+            return false;
+        }
+        return super.matches(path);
     }
 
     @Override
@@ -66,6 +68,18 @@ public class PlayerInputScriptEvent extends BukkitScriptEvent implements Listene
             case "right": return new ElementTag(input.isRight());
         };
         return super.getContext(name);
+    }
+
+    private String getInputType() {
+        Input input = event.getInput();
+        if (input.isJump()) return "jump";
+        if (input.isForward()) return "forward";
+        if (input.isBackward()) return "backward";
+        if (input.isSprint()) return "sprint";
+        if (input.isSneak()) return "sneak";
+        if (input.isLeft()) return "left";
+        if (input.isRight()) return "right";
+        return null;
     }
 
     @EventHandler
