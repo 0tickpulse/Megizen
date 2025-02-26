@@ -431,7 +431,7 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
                 TrackedEntity entity = bukkitData.getTracked();
                 for (PlayerTag player : value.filter(PlayerTag.class, mechanism.context)) {
                     if (entity.getTrackedPlayer().contains(player.getPlayerEntity())) {
-                        entity.addForcedHidden(player.getPlayerEntity());
+                        entity.addForcedHidden(player.getPlayerEntity().getUniqueId());
                     }
                 }
             }
@@ -579,7 +579,7 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
             if (entityData instanceof BukkitEntityData bukkitData) {
                 TrackedEntity entity = bukkitData.getTracked();
                 if (entity.getTrackedPlayer().contains(value.getPlayerEntity())) {
-                    entity.removeForcedHidden(value.getPlayerEntity());
+                    entity.removeForcedHidden(value.getPlayerEntity().getUniqueId());
                 }
             }
         });
