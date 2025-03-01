@@ -10,8 +10,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInputEvent;
 
-import java.util.Arrays;
-
 public class PlayerInputScriptEvent extends BukkitScriptEvent implements Listener {
 
     // <--[event]
