@@ -191,6 +191,18 @@ public class MegBoneTag implements ObjectTag, Adjustable {
         });
 
         // <--[tag]
+        // @attribute <MegBoneTag.global_position>
+        // @returns LocationTag
+        // @plugin Megizen
+        // @mechanism MegBoneTag.global_position
+        // @description
+        // Returns the position of the bone as a vector.
+        // -->
+        tagProcessor.registerTag(VectorObject.class, "global_position", (attribute, object) -> {
+            return new LocationTag(Vector.fromJOML(object.getBone().getGlobalPosition()));
+        });
+
+        // <--[tag]
         // @attribute <MegBoneTag.glow_color>
         // @returns ColorTag
         // @plugin Megizen
@@ -250,15 +262,14 @@ public class MegBoneTag implements ObjectTag, Adjustable {
         });
 
         // <--[tag]
-        // @attribute <MegBoneTag.global_position>
-        // @returns LocationTag
+        // @attribute <MegBoneTag.model>
+        // @returns MegActiveModelTag
         // @plugin Megizen
-        // @mechanism MegBoneTag.global_position
         // @description
-        // Returns the position of the bone as a vector.
+        // Returns the active model that the bone is a part of.
         // -->
-        tagProcessor.registerTag(VectorObject.class, "global_position", (attribute, object) -> {
-            return new LocationTag(Vector.fromJOML(object.getBone().getGlobalPosition()));
+        tagProcessor.registerTag(MegActiveModelTag.class, "model", (attribute, object) -> {
+            return new MegActiveModelTag(object.getBone().getActiveModel());
         });
 
         // <--[tag]
