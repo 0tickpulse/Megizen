@@ -3,6 +3,7 @@ package net.tickmc.megizen.bukkit.properties;
 import com.denizenscript.denizen.objects.EntityTag;
 import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.model.bone.behavior.BoneBehavior;
+import com.ticxo.modelengine.api.mount.controller.MountController;
 import net.tickmc.megizen.bukkit.objects.MegBoneTag;
 import net.tickmc.megizen.bukkit.objects.MegModeledEntityTag;
 
@@ -32,10 +33,11 @@ public class MegizenEntityTagExtensions {
         // Returns the MegBoneTag that the entity is mounted on, if any.
         // -->
         EntityTag.tagProcessor.registerTag(MegBoneTag.class, "mounted_bone", (attribute, entity) -> {
-            if (ModelEngineAPI.getMountPairManager().getController(entity.getUUID()).getMount() == null) {
+            MountController controller = ModelEngineAPI.getMountPairManager().getController(entity.getUUID());
+            if (controller == null || controller.getMount() == null) {
                 return null;
             }
-            return new MegBoneTag(((BoneBehavior) ModelEngineAPI.getMountPairManager().getController(entity.getUUID()).getMount()).getBone());
+            return new MegBoneTag(((BoneBehavior) controller.getMount()).getBone());
         });
     }
 }
