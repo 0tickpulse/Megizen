@@ -23,6 +23,8 @@ import org.bukkit.Color;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.util.Vector;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -149,6 +151,29 @@ public class MegBoneTag implements ObjectTag, Adjustable {
     public static ObjectTagProcessor<MegBoneTag> tagProcessor = new ObjectTagProcessor<>();
 
     public static void registerTags() {
+
+        // <--[tag]
+        // @attribute <MegBoneTag.cached_left_rotation>
+        // @returns VectorObject
+        // @plugin Megizen
+        // @description
+        // Returns the cached left rotation of the bone as a vector.
+        // -->
+        tagProcessor.registerTag(VectorObject.class, "cached_left_rotation", (attribute, object) -> {
+            return new LocationTag(Vector.fromJOML(object.getBone().getCachedLeftRotation()));
+        });
+
+        // <--[tag]
+        // @attribute <MegBoneTag.cached_right_rotation>
+        // @returns VectorObject
+        // @plugin Megizen
+        // @description
+        // Returns the cached right rotation of the bone as a vector.
+        // -->
+        tagProcessor.registerTag(VectorObject.class, "cached_right_rotation", (attribute, object) -> {
+            return new LocationTag(Vector.fromJOML(object.getBone().getCachedRightRotation()));
+        });
+
         // <--[tag]
         // @attribute <MegBoneTag.children>
         // @returns MapTag(MegBoneTag)
@@ -188,6 +213,30 @@ public class MegBoneTag implements ObjectTag, Adjustable {
         tagProcessor.registerTag(ColorTag.class, "default_tint", (attribute, object) -> {
             Color tint = object.getBone().getDefaultTint();
             return new ColorTag(tint.getRed(), tint.getGreen(), tint.getBlue());
+        });
+
+        // <--[tag]
+        // @attribute <MegBoneTag.global_left_rotation>
+        // @returns QuaternionTag
+        // @plugin Megizen
+        // @description
+        // Returns the global left rotation of the bone as a quaternion.
+        // -->
+        tagProcessor.registerTag(QuaternionTag.class, "global_left_rotation", (attribute, object) -> {
+            Quaternionf rotation = object.getBone().getGlobalLeftRotation();
+            return new QuaternionTag(rotation.x, rotation.y, rotation.z, rotation.w);
+        });
+
+        // <--[tag]
+        // @attribute <MegBoneTag.global_right_rotation>
+        // @returns QuaternionTag
+        // @plugin Megizen
+        // @description
+        // Returns the global right rotation of the bone as a quaternion.
+        // -->
+        tagProcessor.registerTag(QuaternionTag.class, "global_right_rotation", (attribute, object) -> {
+            Quaternionf rotation = object.getBone().getGlobalRightRotation();
+            return new QuaternionTag(rotation.x, rotation.y, rotation.z, rotation.w);
         });
 
         // <--[tag]
@@ -318,6 +367,17 @@ public class MegBoneTag implements ObjectTag, Adjustable {
                 list.add(name);
             }
             return new ElementTag(String.join("|", list));
+        });
+
+        // <--[tag]
+        // @attribute <MegBoneTag.yaw>
+        // @returns ElementTag(Decimal)
+        // @plugin Megizen
+        // @description
+        // Returns the yaw rotation of the bone.
+        // -->
+        tagProcessor.registerTag(ElementTag.class, "yaw", (attribute, object) -> {
+            return new ElementTag(object.getBone().getYaw());
         });
 
         // <--[mechanism]
