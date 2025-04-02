@@ -39,18 +39,11 @@ public class MegLookCommand extends AbstractCommand {
                                    @ArgName("head_yaw") @ArgDefaultNull @ArgPrefixed ElementTag headYaw,
                                    @ArgName("body_yaw") @ArgDefaultNull @ArgPrefixed ElementTag bodyYaw) {
 
-        if (entity == null) {
-            Debug.echoError("The 'entity' argument is required.");
+        if (location == null && headYaw == null && bodyYaw == null && pitch == null) {
+            Debug.echoError("Missing or invalid Location input!");
             return;
         }
 
-        if (location == null && headYaw == null && bodyYaw == null && pitch == null) {
-            Debug.echoError("Missing or invalid Location input!");;
-        }
-
-        final float pitchRaw = pitch == null ? 0 : pitch.asFloat();
-        final float headYawRaw = headYaw == null ? 0 : headYaw.asFloat();
-        final float bodyYawRaw = bodyYaw == null ? 0 : bodyYaw.asFloat();
         LookController lookController = entity.getModeledEntity().getBase().getLookController();
 
         if (location != null) {
@@ -58,12 +51,15 @@ public class MegLookCommand extends AbstractCommand {
         }
 
         if (pitch != null) {
-            lookController.setPitch(pitchRaw);
+            lookController.setPitch(pitch.asFloat());
         }
 
         if (headYaw != null) {
-            lookController.setHeadYaw(headYawRaw);
-            lookController.setBodyYaw(bodyYawRaw);
+            lookController.setHeadYaw(headYaw.asFloat());
+        }
+
+        if (bodyYaw != null) {
+            lookController.setBodyYaw(bodyYaw.asFloat());
         }
     }
 }
