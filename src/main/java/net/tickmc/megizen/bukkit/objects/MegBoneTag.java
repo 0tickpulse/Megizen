@@ -154,7 +154,7 @@ public class MegBoneTag implements ObjectTag, Adjustable {
 
         // <--[tag]
         // @attribute <MegBoneTag.cached_left_rotation>
-        // @returns VectorObject
+        // @returns LocationTag
         // @plugin Megizen
         // @description
         // Returns the cached left rotation of the bone as a vector.
@@ -165,7 +165,7 @@ public class MegBoneTag implements ObjectTag, Adjustable {
 
         // <--[tag]
         // @attribute <MegBoneTag.cached_right_rotation>
-        // @returns VectorObject
+        // @returns LocationTag
         // @plugin Megizen
         // @description
         // Returns the cached right rotation of the bone as a vector.
