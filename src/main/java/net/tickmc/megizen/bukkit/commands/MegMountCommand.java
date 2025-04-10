@@ -24,7 +24,7 @@ public class MegMountCommand extends AbstractCommand {
 
     public MegMountCommand() {
         setName("megmount");
-        setSyntax("megmount [entity:<entity>] [model:<active_model>] [bones:<bone>|...] [mode:driver/passenger/dismount] (force) (interactable) (damageable) (auto_dismount)");
+        setSyntax("megmount [entity:<entity>] [model:<active_model>] [type:driver/passenger] (bones:<bone>|...) (dismount) (force) (interactable) (damageable) (auto_dismount) (controller_type:{walking}/flying/walking_force/flying_force) (controller_script:<script>)");
         addRemappedPrefixes("bones", "bone");
         autoCompile();
     }
