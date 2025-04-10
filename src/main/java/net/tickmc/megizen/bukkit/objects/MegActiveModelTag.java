@@ -12,6 +12,7 @@ import com.denizenscript.denizencore.tags.ObjectTagProcessor;
 import com.denizenscript.denizencore.tags.TagContext;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
 import com.ticxo.modelengine.api.ModelEngineAPI;
+import com.ticxo.modelengine.api.animation.handler.AnimationHandler;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
 import com.ticxo.modelengine.api.model.bone.ModelBone;
@@ -143,6 +144,27 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
     public static ObjectTagProcessor<MegActiveModelTag> tagProcessor = new ObjectTagProcessor<>();
 
     public static void registerTags() {
+
+        // <--[tag]
+        // @attribute <MegActiveModelTag.active_states>
+        // @returns
+        // @plugin Megizen
+        // @description
+        // -->
+        tagProcessor.registerTag(ListTag.class, "active_states", (attribute, object) -> {
+            AnimationHandler handler = object.getActiveModel().getAnimationHandler();
+            if (handler == null) {
+                return null;
+            }
+            ListTag list = new ListTag();
+            handler.getAnimations().forEach((animation, property) -> {
+                if (handler.isPlayingAnimation(animation)) {
+                    list.addObject(new ElementTag(animation));
+                }
+            });
+            return list;
+        });
+
 
         // <--[tag]
         // @attribute <MegActiveModelTag.bone[<id>]>
