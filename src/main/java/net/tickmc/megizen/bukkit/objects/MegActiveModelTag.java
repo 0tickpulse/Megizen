@@ -146,27 +146,6 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
     public static void registerTags() {
 
         // <--[tag]
-        // @attribute <MegActiveModelTag.active_states>
-        // @returns
-        // @plugin Megizen
-        // @description
-        // -->
-        tagProcessor.registerTag(ListTag.class, "active_states", (attribute, object) -> {
-            AnimationHandler handler = object.getActiveModel().getAnimationHandler();
-            if (handler == null) {
-                return null;
-            }
-            ListTag list = new ListTag();
-            handler.getAnimations().forEach((animation, property) -> {
-                if (handler.isPlayingAnimation(animation)) {
-                    list.addObject(new ElementTag(animation));
-                }
-            });
-            return list;
-        });
-
-
-        // <--[tag]
         // @attribute <MegActiveModelTag.bone[<id>]>
         // @returns MegBoneTag
         // @plugin Megizen
