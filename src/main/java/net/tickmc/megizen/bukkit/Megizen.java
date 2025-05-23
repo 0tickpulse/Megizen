@@ -5,6 +5,7 @@ import com.denizenscript.denizencore.DenizenCore;
 import com.denizenscript.denizencore.events.ScriptEvent;
 import com.denizenscript.denizencore.objects.ObjectFetcher;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
+import com.ticxo.modelengine.api.ModelEngineAPI;
 import net.tickmc.megizen.bukkit.commands.MegLookCommand;
 import net.tickmc.megizen.bukkit.commands.MegModelCommand;
 import net.tickmc.megizen.bukkit.commands.MegMountCommand;
@@ -43,6 +44,8 @@ public class Megizen extends JavaPlugin {
         ScriptEvent.registerScriptEvent(ModelMountScriptEvent.class);
         ScriptEvent.registerScriptEvent(ModelRegistrationScriptEvent.class);
         ScriptEvent.registerScriptEvent(RemoveModelScriptEvent.class);
+
+        ModelEngineAPI.getAPI().getScriptReaderRegistry().registerAndDefault("task", new DenizenScriptReader());
 
         Debug.log("Megizen loaded!");
     }
