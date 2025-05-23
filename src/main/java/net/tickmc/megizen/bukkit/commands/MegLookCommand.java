@@ -17,6 +17,7 @@ public class MegLookCommand extends AbstractCommand {
     public MegLookCommand() {
         setName("meglook");
         setSyntax("meglook [entity:<entity>] [<location>/pitch:<pitch>/head_yaw:<yaw>/body_yaw:<yaw>]");
+        setRequiredArguments(2, 2);
         autoCompile();
     }
 
@@ -38,11 +39,6 @@ public class MegLookCommand extends AbstractCommand {
                                    @ArgName("pitch") @ArgDefaultNull @ArgPrefixed ElementTag pitch,
                                    @ArgName("head_yaw") @ArgDefaultNull @ArgPrefixed ElementTag headYaw,
                                    @ArgName("body_yaw") @ArgDefaultNull @ArgPrefixed ElementTag bodyYaw) {
-
-        if (location == null && headYaw == null && bodyYaw == null && pitch == null) {
-            Debug.echoError("Missing or invalid Location input!");
-            return;
-        }
 
         LookController lookController = entity.getModeledEntity().getBase().getLookController();
 
