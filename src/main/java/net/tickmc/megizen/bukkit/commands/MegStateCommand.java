@@ -25,7 +25,7 @@ public class MegStateCommand extends AbstractCommand {
 
     // <--[command]
     // @Name MegState
-    // @Syntax megstate [model:<active_model>] [state:<state>] (priority:<#>/{1}) ((speed:<#.#>/{1}) (lerp_in:<duration>/{0}) (lerp_out:<duration>/{0}) (loop:once/loop/hold) (override:true/false) (force)/remove (ignore_lerp))
+    // @Syntax megstate [model:<active_model>] [state:<state>] (priority:<#>/{1}) ((speed:<#.#>/{1}) (lerp_in:<duration>/{0}) (lerp_out:<duration>/{0}) (loop:{once}/loop/hold) (override:true/false) (force)/remove (ignore_lerp))
     // @Required 3
     // @Short Plays a state on a modeled entity.
     // @Group Megizen
@@ -44,7 +44,7 @@ public class MegStateCommand extends AbstractCommand {
                                    @ArgName("speed") @ArgPrefixed @ArgDefaultText("1") float speed,
                                    @ArgName("lerp_in") @ArgPrefixed @ArgDefaultText("0") DurationTag lerpIn,
                                    @ArgName("lerp_out") @ArgPrefixed @ArgDefaultText("0") DurationTag lerpOut,
-                                   @ArgName("loop") @ArgPrefixed @ArgDefaultText("once") BlueprintAnimation.LoopMode loop,
+                                   @ArgName("loop") @ArgPrefixed @ArgDefaultNull BlueprintAnimation.LoopMode loop,
                                    @ArgName("override") @ArgPrefixed @ArgDefaultNull ElementTag override,
                                    @ArgName("force") @ArgDefaultText("true") boolean force,
                                    @ArgName("remove") @ArgDefaultText("false") boolean remove,
@@ -81,7 +81,9 @@ public class MegStateCommand extends AbstractCommand {
             ? smh.playAnimation(priority, state, lerpIn.getTicks(), lerpOut.getTicks(), speed, force)
             : handler.playAnimation(state, lerpIn.getTicks(), lerpOut.getTicks(), speed, force);
         if (property != null) {
-            property.setForceLoopMode(loop);
+            if (loop != null) {
+                property.setForceLoopMode(loop);
+            }
             if (override != null && override.isBoolean()) {
                 property.setForceOverride(override.asBoolean());
             }
