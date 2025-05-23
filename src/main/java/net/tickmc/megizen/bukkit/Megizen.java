@@ -5,6 +5,7 @@ import com.denizenscript.denizencore.DenizenCore;
 import com.denizenscript.denizencore.events.ScriptEvent;
 import com.denizenscript.denizencore.objects.ObjectFetcher;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
+import net.tickmc.megizen.bukkit.commands.MegLookCommand;
 import net.tickmc.megizen.bukkit.commands.MegModelCommand;
 import net.tickmc.megizen.bukkit.commands.MegMountCommand;
 import net.tickmc.megizen.bukkit.commands.MegStateCommand;
@@ -30,6 +31,7 @@ public class Megizen extends JavaPlugin {
         DenizenCore.commandRegistry.registerCommand(MegModelCommand.class);
         DenizenCore.commandRegistry.registerCommand(MegMountCommand.class);
         DenizenCore.commandRegistry.registerCommand(MegStateCommand.class);
+        DenizenCore.commandRegistry.registerCommand(MegLookCommand.class);
         MegizenEntityTagExtensions.register();
         MegizenPlayerTagExtensions.register();
         ObjectFetcher.registerWithObjectFetcher(MegModeledEntityTag.class, MegModeledEntityTag.tagProcessor);
