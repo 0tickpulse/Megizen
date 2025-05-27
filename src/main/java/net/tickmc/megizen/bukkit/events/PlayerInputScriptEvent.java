@@ -4,11 +4,14 @@ import com.denizenscript.denizen.events.BukkitScriptEvent;
 import com.denizenscript.denizen.utilities.implementation.BukkitScriptEntryData;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
+import com.denizenscript.denizencore.objects.core.ListTag;
 import com.denizenscript.denizencore.scripts.ScriptEntryData;
 import org.bukkit.Input;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInputEvent;
+
+import javax.swing.text.Element;
 
 public class PlayerInputScriptEvent extends BukkitScriptEvent implements Listener {
 
@@ -64,6 +67,27 @@ public class PlayerInputScriptEvent extends BukkitScriptEvent implements Listene
             case "sneak": return new ElementTag(input.isSneak());
             case "left": return new ElementTag(input.isLeft());
             case "right": return new ElementTag(input.isRight());
+            case "input": {
+                String inputStr = String.valueOf(input);
+                int start = inputStr.indexOf('[');
+                int end = inputStr.indexOf(']');
+                ListTag trueKeys = new ListTag();
+
+                if (start != -1 && end != -1 && end > start) {
+                    String inside = inputStr.substring(start + 1, end);
+                    String[] parts = inside.split(",\\s*");
+
+                    for (String part : parts) {
+                        String[] keyValue = part.split("=");
+                        if (keyValue.length == 2 && keyValue[1].equals("true")) {
+                            trueKeys.addObject(new ElementTag(keyValue[0]));
+                        }
+                    }
+                }
+
+                return trueKeys;
+            }
+
         };
         return super.getContext(name);
     }
