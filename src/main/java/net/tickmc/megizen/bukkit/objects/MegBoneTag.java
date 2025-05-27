@@ -1,5 +1,6 @@
 package net.tickmc.megizen.bukkit.objects;
 
+import com.denizenscript.denizen.Denizen;
 import com.denizenscript.denizen.objects.ItemTag;
 import com.denizenscript.denizen.objects.LocationTag;
 import com.denizenscript.denizencore.objects.Adjustable;
@@ -22,6 +23,8 @@ import org.bukkit.Color;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.util.Vector;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -148,6 +151,29 @@ public class MegBoneTag implements ObjectTag, Adjustable {
     public static ObjectTagProcessor<MegBoneTag> tagProcessor = new ObjectTagProcessor<>();
 
     public static void registerTags() {
+
+        // <--[tag]
+        // @attribute <MegBoneTag.cached_left_rotation>
+        // @returns LocationTag
+        // @plugin Megizen
+        // @description
+        // Returns the cached left rotation of the bone as a vector.
+        // -->
+        tagProcessor.registerTag(VectorObject.class, "cached_left_rotation", (attribute, object) -> {
+            return new LocationTag(Vector.fromJOML(object.getBone().getCachedLeftRotation()));
+        });
+
+        // <--[tag]
+        // @attribute <MegBoneTag.cached_right_rotation>
+        // @returns LocationTag
+        // @plugin Megizen
+        // @description
+        // Returns the cached right rotation of the bone as a vector.
+        // -->
+        tagProcessor.registerTag(VectorObject.class, "cached_right_rotation", (attribute, object) -> {
+            return new LocationTag(Vector.fromJOML(object.getBone().getCachedRightRotation()));
+        });
+
         // <--[tag]
         // @attribute <MegBoneTag.children>
         // @returns MapTag(MegBoneTag)
@@ -187,6 +213,42 @@ public class MegBoneTag implements ObjectTag, Adjustable {
         tagProcessor.registerTag(ColorTag.class, "default_tint", (attribute, object) -> {
             Color tint = object.getBone().getDefaultTint();
             return new ColorTag(tint.getRed(), tint.getGreen(), tint.getBlue());
+        });
+
+        // <--[tag]
+        // @attribute <MegBoneTag.global_left_rotation>
+        // @returns QuaternionTag
+        // @plugin Megizen
+        // @description
+        // Returns the global left rotation of the bone as a quaternion.
+        // -->
+        tagProcessor.registerTag(QuaternionTag.class, "global_left_rotation", (attribute, object) -> {
+            Quaternionf rotation = object.getBone().getGlobalLeftRotation();
+            return new QuaternionTag(rotation.x, rotation.y, rotation.z, rotation.w);
+        });
+
+        // <--[tag]
+        // @attribute <MegBoneTag.global_right_rotation>
+        // @returns QuaternionTag
+        // @plugin Megizen
+        // @description
+        // Returns the global right rotation of the bone as a quaternion.
+        // -->
+        tagProcessor.registerTag(QuaternionTag.class, "global_right_rotation", (attribute, object) -> {
+            Quaternionf rotation = object.getBone().getGlobalRightRotation();
+            return new QuaternionTag(rotation.x, rotation.y, rotation.z, rotation.w);
+        });
+
+        // <--[tag]
+        // @attribute <MegBoneTag.global_position>
+        // @returns LocationTag
+        // @plugin Megizen
+        // @mechanism MegBoneTag.global_position
+        // @description
+        // Returns the position of the bone as a vector.
+        // -->
+        tagProcessor.registerTag(VectorObject.class, "global_position", (attribute, object) -> {
+            return new LocationTag(Vector.fromJOML(object.getBone().getGlobalPosition()));
         });
 
         // <--[tag]
@@ -249,15 +311,14 @@ public class MegBoneTag implements ObjectTag, Adjustable {
         });
 
         // <--[tag]
-        // @attribute <MegBoneTag.global_position>
-        // @returns LocationTag
+        // @attribute <MegBoneTag.model>
+        // @returns MegActiveModelTag
         // @plugin Megizen
-        // @mechanism MegBoneTag.global_position
         // @description
-        // Returns the position of the bone as a vector.
+        // Returns the active model that the bone is a part of.
         // -->
-        tagProcessor.registerTag(VectorObject.class, "global_position", (attribute, object) -> {
-            return new LocationTag(Vector.fromJOML(object.getBone().getGlobalPosition()));
+        tagProcessor.registerTag(MegActiveModelTag.class, "model", (attribute, object) -> {
+            return new MegActiveModelTag(object.getBone().getActiveModel());
         });
 
         // <--[tag]
@@ -306,6 +367,17 @@ public class MegBoneTag implements ObjectTag, Adjustable {
                 list.add(name);
             }
             return new ElementTag(String.join("|", list));
+        });
+
+        // <--[tag]
+        // @attribute <MegBoneTag.yaw>
+        // @returns ElementTag(Decimal)
+        // @plugin Megizen
+        // @description
+        // Returns the yaw rotation of the bone.
+        // -->
+        tagProcessor.registerTag(ElementTag.class, "yaw", (attribute, object) -> {
+            return new ElementTag(object.getBone().getYaw());
         });
 
         // <--[mechanism]
@@ -397,68 +469,72 @@ public class MegBoneTag implements ObjectTag, Adjustable {
             object.getBone().setModelScale(value.asInt());
         });
 
-        // <--[mechanism]
-        // @object MegBoneTag
-        // @name skin_texture
-        // @input ElementTag
-        // @plugin Megizen
-        // @description
-        // Sets the skin texture of the bone.
-        // This should only be used on bones that have the PLAYER_LIMB behavior.
-        // This uses the format UUID|Texture|Name.
-        // @tags
-        // <MegBoneTag.skin_texture>
-        // -->
-        tagProcessor.registerMechanism("skin_texture", false, ElementTag.class, (object, mechanism, value) -> {
-            ModelBone bone = object.getBone();
-            ListTag list = mechanism.valueAsType(ListTag.class);
-            String idString = list.get(0);
-            String texture = null;
-            if (list.size() == 1 && idString.length() > 64) {
-                texture = idString;
-                idString = null;
-            }
-            if (list.size() > 1) {
-                texture = list.get(1);
-            }
-            PlayerProfile profile;
-            if (idString == null) {
-                profile = Megizen.instance.getServer().createProfile(new UUID(0, 0), "null");
-            } else if (idString.length() < 3 && list.size() == 2) {
-//                profile = new PlayerProfile(idString, new UUID(0, 0));
-                profile = Megizen.instance.getServer().createProfile(new UUID(0, 0), idString);
-            } else {
-                if (CoreUtilities.contains(idString, '-')) {
-                    UUID uuid = UUID.fromString(idString);
-                    String name = null;
-                    if (list.size() > 2) {
-                        name = list.get(2);
-                    }
-//                    profile = new PlayerProfile(name, uuid, texture);
-                    profile = Megizen.instance.getServer().createProfile(uuid, name);
-                } else {
-//                    profile = new PlayerProfile(idString, Settings.nullifySkullSkinIds ? new UUID(0, 0) : null, texture);
-                    profile = Megizen.instance.getServer().createProfile(new UUID(0, 0), idString);
+        if (Denizen.supportsPaper) {
+
+            // <--[mechanism]
+            // @object MegBoneTag
+            // @name skin_texture
+            // @input ElementTag
+            // @plugin Megizen
+            // @description
+            // Sets the skin texture of the bone.
+            // This should only be used on bones that have the PLAYER_LIMB behavior.
+            // This uses the format UUID|Texture|Name.
+            // Note: This mechanism is only available on Paper servers.
+            // @tags
+            // <MegBoneTag.skin_texture>
+            // -->
+            tagProcessor.registerMechanism("skin_texture", false, ElementTag.class, (object, mechanism, value) -> {
+                ModelBone bone = object.getBone();
+                ListTag list = mechanism.valueAsType(ListTag.class);
+                String idString = list.get(0);
+                String texture = null;
+                if (list.size() == 1 && idString.length() > 64) {
+                    texture = idString;
+                    idString = null;
                 }
-            }
-            if (texture == null || profile.getId() == null) { // Load if needed
-                profile.complete(); // TODO: perhaps async this?
-            }
-            if (texture != null) {
-                // Format is texture;signature
-                List<String> split = CoreUtilities.split(texture, ';');
-                String textureString = split.get(0);
-                String signatureString = split.size() > 1 ? split.get(1) : null;
-                profile.setProperty(new ProfileProperty("textures", textureString, signatureString));
-            }
-            if (profile.getTextures().isEmpty()) {
-                return; // Can't set a skull skin to nothing.
-            }
-            PlayerProfile finalProfile = profile;
-            bone.getBoneBehavior(BoneBehaviorTypes.PLAYER_LIMB).ifPresent(behavior -> {
-                behavior.setTexture(finalProfile);
+                if (list.size() > 1) {
+                    texture = list.get(1);
+                }
+                PlayerProfile profile;
+                if (idString == null) {
+                    profile = Megizen.instance.getServer().createProfile(new UUID(0, 0), "null");
+                } else if (idString.length() < 3 && list.size() == 2) {
+//                profile = new PlayerProfile(idString, new UUID(0, 0));
+                    profile = Megizen.instance.getServer().createProfile(new UUID(0, 0), idString);
+                } else {
+                    if (CoreUtilities.contains(idString, '-')) {
+                        UUID uuid = UUID.fromString(idString);
+                        String name = null;
+                        if (list.size() > 2) {
+                            name = list.get(2);
+                        }
+//                    profile = new PlayerProfile(name, uuid, texture);
+                        profile = Megizen.instance.getServer().createProfile(uuid, name);
+                    } else {
+//                    profile = new PlayerProfile(idString, Settings.nullifySkullSkinIds ? new UUID(0, 0) : null, texture);
+                        profile = Megizen.instance.getServer().createProfile(new UUID(0, 0), idString);
+                    }
+                }
+                if (texture == null || profile.getId() == null) { // Load if needed
+                    profile.complete(); // TODO: perhaps async this?
+                }
+                if (texture != null) {
+                    // Format is texture;signature
+                    List<String> split = CoreUtilities.split(texture, ';');
+                    String textureString = split.get(0);
+                    String signatureString = split.size() > 1 ? split.get(1) : null;
+                    profile.setProperty(new ProfileProperty("textures", textureString, signatureString));
+                }
+                if (profile.getTextures().isEmpty()) {
+                    return; // Can't set a skull skin to nothing.
+                }
+                PlayerProfile finalProfile = profile;
+                bone.getBoneBehavior(BoneBehaviorTypes.PLAYER_LIMB).ifPresent(behavior -> {
+                    behavior.setTexture(finalProfile);
+                });
             });
-        });
+        }
     }
 
     @Override

@@ -2,8 +2,10 @@ package net.tickmc.megizen.bukkit.events;
 
 import com.denizenscript.denizen.events.BukkitScriptEvent;
 import com.denizenscript.denizen.objects.EntityTag;
+import com.denizenscript.denizen.utilities.implementation.BukkitScriptEntryData;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
+import com.denizenscript.denizencore.scripts.ScriptEntryData;
 import com.ticxo.modelengine.api.events.ModelDismountEvent;
 import net.tickmc.megizen.bukkit.objects.MegActiveModelTag;
 import org.bukkit.event.EventHandler;
@@ -45,6 +47,11 @@ public class ModelDismountScriptEvent extends BukkitScriptEvent implements Liste
             return false;
         }
         return super.matches(path);
+    }
+
+    @Override
+    public ScriptEntryData getScriptEntryData() {
+        return new BukkitScriptEntryData(entity);
     }
 
     @Override

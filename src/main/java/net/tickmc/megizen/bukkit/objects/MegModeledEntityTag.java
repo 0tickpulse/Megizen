@@ -2,12 +2,15 @@ package net.tickmc.megizen.bukkit.objects;
 
 import com.denizenscript.denizen.objects.EntityFormObject;
 import com.denizenscript.denizen.objects.EntityTag;
+import com.denizenscript.denizen.objects.LocationTag;
+import com.denizenscript.denizen.objects.PlayerTag;
 import com.denizenscript.denizencore.objects.Adjustable;
 import com.denizenscript.denizencore.objects.Fetchable;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.DurationTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
+import com.denizenscript.denizencore.objects.core.ListTag;
 import com.denizenscript.denizencore.objects.core.MapTag;
 import com.denizenscript.denizencore.tags.Attribute;
 import com.denizenscript.denizencore.tags.ObjectTagProcessor;
@@ -15,8 +18,11 @@ import com.denizenscript.denizencore.tags.TagContext;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
 import com.ticxo.modelengine.api.ModelEngineAPI;
+import com.ticxo.modelengine.api.entity.data.BukkitEntityData;
+import com.ticxo.modelengine.api.entity.data.IEntityData;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
+import com.ticxo.modelengine.api.nms.entity.wrapper.TrackedEntity;
 import org.bukkit.entity.Entity;
 
 import java.util.Iterator;
@@ -345,6 +351,49 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
             return new ElementTag(object.getModeledEntity().getBase().getBodyRotationController().getStableAngle());
         });
 
+        // <--[tag]
+        // @attribute <MegModeledEntityTag.velocity>
+        // @returns LocationTag
+        // @plugin Megizen
+        // @description
+        // Returns the velocity of the modeled entity.
+        // @mechanism MegModeledEntityTag.velocity
+        // -->
+        tagProcessor.registerTag(LocationTag.class, "velocity", (attribute, object) -> {
+            return new LocationTag(object.modeledEntity.getBase().getMoveController().getVelocity());
+        });
+
+        // <--[tag]
+        // @attribute <MegModeledEntityTag.visible_to>
+        // @returns ListTag(PlayerTag)
+        // @plugin Megizen
+        // @description
+        // Returns a list of players that can see the modeled entity.
+        // See also: <@link mechanism MegModeledEntityTag.hide_from>
+        // See also: <@link mechanism MegModeledEntityTag.show_to>
+        // -->
+        tagProcessor.registerTag(ListTag.class, "visible_to", (attribute, object) -> {
+            IEntityData entityData = object.modeledEntity.getBase().getData();
+            if (entityData instanceof BukkitEntityData bukkitData) {
+                return new ListTag(bukkitData.getTracked().getTrackedPlayer());
+            }
+            return null;
+        });
+
+        // <--[mechanism]
+        // @object MegModeledEntityTag
+        // @name add_velocity
+        // @input LocationTag
+        // @plugin Megizen
+        // @description
+        // Add velocity to the modeled entity.
+        // @tags
+        // <MegModeledEntityTag.velocity>
+        // -->
+        tagProcessor.registerMechanism("add_velocity", false, LocationTag.class, (object, mechanism, value) -> {
+            object.modeledEntity.getBase().getMoveController().addVelocity(value.getX(), value.getY(), value.getZ());
+        });
+
         // <--[mechanism]
         // @object MegModeledEntityTag
         // @name body_clamp_uneven
@@ -378,6 +427,18 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
 
         // <--[mechanism]
         // @object MegModeledEntityTag
+        // @name global_move
+        // @input LocationTag
+        // @plugin Megizen
+        // @description
+        // Moves the modeled entity to the specified location, disregarding driver yaw and pitch.
+        // -->
+        tagProcessor.registerMechanism("global_move", false, LocationTag.class, (object, mechanism, value) -> {
+            object.modeledEntity.getBase().getMoveController().globalMove((float) value.getX(), (float) value.getY(), (float) value.getZ(), 1);
+        });
+
+        // <--[mechanism]
+        // @object MegModeledEntityTag
         // @name head_clamp_uneven
         // @input ElementTag(Boolean)
         // @plugin Megizen
@@ -390,6 +451,29 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         tagProcessor.registerMechanism("head_clamp_uneven", false, ElementTag.class, (object, mechanism, value) -> {
             boolean uneven = value.asBoolean();
             object.modeledEntity.getBase().getBodyRotationController().setHeadClampUneven(uneven);
+        });
+
+        // <--[mechanism]
+        // @object MegModeledEntityTag
+        // @name hide_from
+        // @input ListTag(PlayerTag)
+        // @plugin Megizen
+        // @description
+        // Forces the modeled entity to be hidden from the input list of players.
+        // See also: <MegModeledEntityTag.show_to>
+        // @tags
+        // <MegModeledEntityTag.visible_to>
+        // -->
+        tagProcessor.registerMechanism("hide_from", false, ListTag.class, (object, mechanism, value) -> {
+            IEntityData entityData = object.modeledEntity.getBase().getData();
+            if (entityData instanceof BukkitEntityData bukkitData) {
+                TrackedEntity entity = bukkitData.getTracked();
+                for (PlayerTag player : value.filter(PlayerTag.class, mechanism.context)) {
+                    if (entity.getTrackedPlayer().contains(player.getUUID())) {
+                        entity.addForcedHidden(player.getUUID());
+                    }
+                }
+            }
         });
 
         // <--[mechanism]
@@ -458,6 +542,18 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
 
         // <--[mechanism]
         // @object MegModeledEntityTag
+        // @name move
+        // @input LocationTag
+        // @plugin Megizen
+        // @description
+        // Moves the modeled entity based on the input vector, relative to the driver's yaw and pitch.
+        // -->
+        tagProcessor.registerMechanism("move", false, LocationTag.class, (object, mechanism, value) -> {
+            object.modeledEntity.getBase().getMoveController().move((float) value.getX(), (float) value.getY(), (float) value.getZ(), 1);
+        });
+
+        // <--[mechanism]
+        // @object MegModeledEntityTag
         // @name rotation_delay
         // @input DurationTag
         // @plugin Megizen
@@ -520,6 +616,27 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
 
         // <--[mechanism]
         // @object MegModeledEntityTag
+        // @name show_to
+        // @input PlayerTag
+        // @plugin Megizen
+        // @description
+        // Forces the modeled entity to be unhidden from the input player.
+        // See also: <MegModeledEntityTag.hide_from>
+        // @tags
+        // <MegModeledEntityTag.visible_to>
+        // -->
+        tagProcessor.registerMechanism("show_to", false, PlayerTag.class, (object, mechanism, value) -> {
+            IEntityData entityData = object.modeledEntity.getBase().getData();
+            if (entityData instanceof BukkitEntityData bukkitData) {
+                TrackedEntity entity = bukkitData.getTracked();
+                if (entity.getTrackedPlayer().contains(value.getUUID())) {
+                    entity.removeForcedHidden(value.getUUID());
+                }
+            }
+        });
+
+        // <--[mechanism]
+        // @object MegModeledEntityTag
         // @name stable_angle
         // @input ElementTag(Number)
         // @plugin Megizen
@@ -533,6 +650,20 @@ public class MegModeledEntityTag implements ObjectTag, Adjustable {
         tagProcessor.registerMechanism("stable_angle", false, ElementTag.class, (object, mechanism, value) -> {
             float angle = value.asFloat();
             object.modeledEntity.getBase().getBodyRotationController().setStableAngle(angle);
+        });
+
+        // <--[mechanism]
+        // @object MegModeledEntityTag
+        // @name velocity
+        // @input LocationTag
+        // @plugin Megizen
+        // @description
+        // Sets the velocity of the modeled entity.
+        // @tags
+        // <MegModeledEntityTag.velocity>
+        // -->
+        tagProcessor.registerMechanism("velocity", false, LocationTag.class, (object, mechanism, value) -> {
+            object.modeledEntity.getBase().getMoveController().setVelocity(value.getX(), value.getY(), value.getZ());
         });
     }
 
