@@ -32,8 +32,9 @@ public class PlayerInputScriptEvent extends BukkitScriptEvent implements Listene
     // <context.sneak> returns an ElementTag(Boolean) of whether the player sneaks.
     // <context.left> returns an ElementTag(Boolean) of whether the player moves left.
     // <context.right> returns an ElementTag(Boolean) of whether the player moves right.
-    // <context.input> returns a ListTag(MapTag) of booleans containing only the input inputs.
-    // <context.inputs> returns a ListTag(MapTag) of booleans containing all inputs.
+    // <context.inputs> returns a ListTag of inputs that the player input.
+    // <context.input_full_map> returns ListTag(MapTag) of inputs that the player input, with all inputs included.
+    // <context.input_map> returns ListTag(MapTag) of inputs that the player input, with only inputs that are true included.
     //
     // -->
 
@@ -68,7 +69,31 @@ public class PlayerInputScriptEvent extends BukkitScriptEvent implements Listene
             case "sneak": return new ElementTag(input.isSneak());
             case "left": return new ElementTag(input.isLeft());
             case "right": return new ElementTag(input.isRight());
-            case "input": {
+            case "inputs": {
+                ListTag inputs = new ListTag();
+                if (input.isJump()) inputs.addObject(new ElementTag("jump"));
+                if (input.isForward()) inputs.addObject(new ElementTag("forward"));
+                if (input.isBackward()) inputs.addObject(new ElementTag("backward"));
+                if (input.isSprint()) inputs.addObject(new ElementTag("sprint"));
+                if (input.isSneak()) inputs.addObject(new ElementTag("sneak"));
+                if (input.isLeft()) inputs.addObject(new ElementTag("left"));
+                if (input.isRight()) inputs.addObject(new ElementTag("right"));
+                return inputs;
+            }
+            case "input_full_map": {
+                ListTag inputs = new ListTag();
+                MapTag map = new MapTag();
+                map.putObject("jump", new ElementTag(input.isJump()));
+                map.putObject("forward", new ElementTag(input.isForward()));
+                map.putObject("backward", new ElementTag(input.isBackward()));
+                map.putObject("sprint", new ElementTag(input.isSprint()));
+                map.putObject("sneak", new ElementTag(input.isSneak()));
+                map.putObject("left", new ElementTag(input.isLeft()));
+                map.putObject("right", new ElementTag(input.isRight()));
+                inputs.addObject(map);
+                return inputs;
+            }
+            case "input_map": {
                 ListTag inputs = new ListTag();
                 MapTag map = new MapTag();
                 if (input.isJump()) map.putObject("jump", new ElementTag(true));
@@ -81,19 +106,6 @@ public class PlayerInputScriptEvent extends BukkitScriptEvent implements Listene
                 if (!map.isEmpty()) {
                     inputs.addObject(map);
                 }
-                return inputs;
-            }
-            case "inputs": {
-                ListTag inputs = new ListTag();
-                MapTag map = new MapTag();
-                map.putObject("jump", new ElementTag(input.isJump()));
-                map.putObject("forward", new ElementTag(input.isForward()));
-                map.putObject("backward", new ElementTag(input.isBackward()));
-                map.putObject("sprint", new ElementTag(input.isSprint()));
-                map.putObject("sneak", new ElementTag(input.isSneak()));
-                map.putObject("left", new ElementTag(input.isLeft()));
-                map.putObject("right", new ElementTag(input.isRight()));
-                inputs.addObject(map);
                 return inputs;
             }
         }
