@@ -4,6 +4,8 @@ import com.denizenscript.denizen.events.BukkitScriptEvent;
 import com.denizenscript.denizen.utilities.implementation.BukkitScriptEntryData;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
+import com.denizenscript.denizencore.objects.core.ListTag;
+import com.denizenscript.denizencore.objects.core.MapTag;
 import com.denizenscript.denizencore.scripts.ScriptEntryData;
 import org.bukkit.Input;
 import org.bukkit.event.EventHandler;
@@ -30,6 +32,8 @@ public class PlayerInputScriptEvent extends BukkitScriptEvent implements Listene
     // <context.sneak> returns an ElementTag(Boolean) of whether the player sneaks.
     // <context.left> returns an ElementTag(Boolean) of whether the player moves left.
     // <context.right> returns an ElementTag(Boolean) of whether the player moves right.
+    // <context.input> returns a ListTag(MapTag) of booleans containing only the input inputs.
+    // <context.inputs> returns a ListTag(MapTag) of booleans containing all inputs.
     //
     // -->
 
@@ -64,7 +68,35 @@ public class PlayerInputScriptEvent extends BukkitScriptEvent implements Listene
             case "sneak": return new ElementTag(input.isSneak());
             case "left": return new ElementTag(input.isLeft());
             case "right": return new ElementTag(input.isRight());
-        };
+            case "input": {
+                ListTag inputs = new ListTag();
+                MapTag map = new MapTag();
+                if (input.isJump()) map.putObject("jump", new ElementTag(true));
+                if (input.isForward()) map.putObject("forward", new ElementTag(true));
+                if (input.isBackward()) map.putObject("backward", new ElementTag(true));
+                if (input.isSprint()) map.putObject("sprint", new ElementTag(true));
+                if (input.isSneak()) map.putObject("sneak", new ElementTag(true));
+                if (input.isLeft()) map.putObject("left", new ElementTag(true));
+                if (input.isRight()) map.putObject("right", new ElementTag(true));
+                if (!map.isEmpty()) {
+                    inputs.addObject(map);
+                }
+                return inputs;
+            }
+            case "inputs": {
+                ListTag inputs = new ListTag();
+                MapTag map = new MapTag();
+                map.putObject("jump", new ElementTag(input.isJump()));
+                map.putObject("forward", new ElementTag(input.isForward()));
+                map.putObject("backward", new ElementTag(input.isBackward()));
+                map.putObject("sprint", new ElementTag(input.isSprint()));
+                map.putObject("sneak", new ElementTag(input.isSneak()));
+                map.putObject("left", new ElementTag(input.isLeft()));
+                map.putObject("right", new ElementTag(input.isRight()));
+                inputs.addObject(map);
+                return inputs;
+            }
+        }
         return super.getContext(name);
     }
 
