@@ -160,7 +160,7 @@ public class MegBoneTag implements ObjectTag, Adjustable {
         // Returns the cached left rotation of the bone as a vector.
         // -->
         tagProcessor.registerTag(VectorObject.class, "cached_left_rotation", (attribute, object) -> {
-            return new LocationTag(Vector.fromJOML(object.getBone().getCachedLeftRotation()));
+            return new LocationTag(Vector.fromJOML(object.getBone().getGlobalTransform().getLastLeftEuler()));
         });
 
         // <--[tag]
@@ -171,7 +171,7 @@ public class MegBoneTag implements ObjectTag, Adjustable {
         // Returns the cached right rotation of the bone as a vector.
         // -->
         tagProcessor.registerTag(VectorObject.class, "cached_right_rotation", (attribute, object) -> {
-            return new LocationTag(Vector.fromJOML(object.getBone().getCachedRightRotation()));
+            return new LocationTag(Vector.fromJOML(object.getBone().getGlobalTransform().getLastRightEuler()));
         });
 
         // <--[tag]
@@ -223,7 +223,7 @@ public class MegBoneTag implements ObjectTag, Adjustable {
         // Returns the global left rotation of the bone as a quaternion.
         // -->
         tagProcessor.registerTag(QuaternionTag.class, "global_left_rotation", (attribute, object) -> {
-            Quaternionf rotation = object.getBone().getGlobalLeftRotation();
+            Quaternionf rotation = object.getBone().getGlobalTransform().getLeftQuaternion();
             return new QuaternionTag(rotation.x, rotation.y, rotation.z, rotation.w);
         });
 
@@ -235,7 +235,7 @@ public class MegBoneTag implements ObjectTag, Adjustable {
         // Returns the global right rotation of the bone as a quaternion.
         // -->
         tagProcessor.registerTag(QuaternionTag.class, "global_right_rotation", (attribute, object) -> {
-            Quaternionf rotation = object.getBone().getGlobalRightRotation();
+            Quaternionf rotation = object.getBone().getGlobalTransform().getRightQuaternion();
             return new QuaternionTag(rotation.x, rotation.y, rotation.z, rotation.w);
         });
 
@@ -248,7 +248,7 @@ public class MegBoneTag implements ObjectTag, Adjustable {
         // Returns the position of the bone as a vector.
         // -->
         tagProcessor.registerTag(VectorObject.class, "global_position", (attribute, object) -> {
-            return new LocationTag(Vector.fromJOML(object.getBone().getGlobalPosition()));
+            return new LocationTag(Vector.fromJOML(object.getBone().getGlobalTransform().getPosition()));
         });
 
         // <--[tag]
@@ -330,7 +330,7 @@ public class MegBoneTag implements ObjectTag, Adjustable {
         // Returns the scale of the bone as a vector.
         // -->
         tagProcessor.registerTag(VectorObject.class, "scale", (attribute, object) -> {
-            return new LocationTag(Vector.fromJOML(object.getBone().getGlobalScale()));
+            return new LocationTag(Vector.fromJOML(object.getBone().getGlobalTransform().getScale()));
         });
 
         // <--[tag]
