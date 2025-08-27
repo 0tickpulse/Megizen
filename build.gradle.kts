@@ -34,9 +34,9 @@ dependencies {
 }
 
 group = "net.tickmc"
-version = "0.28.0-b" + buildNumber() + "-DEV"
+version = "0.29.0-b" + buildNumber() + "-DEV"
 description = "Megizen"
-java.sourceCompatibility = JavaVersion.VERSION_17
+java.sourceCompatibility = JavaVersion.VERSION_21
 
 fun buildNumber(): String = System.getenv("BUILD_NUMBER") ?: "UNKNOWN"
 

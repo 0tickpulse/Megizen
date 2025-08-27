@@ -472,6 +472,33 @@ public class MegActiveModelTag implements ObjectTag, Adjustable {
         tagProcessor.registerMechanism("damage_tint", false, ColorTag.class, (object, mechanism, value) -> {
             object.getActiveModel().setDamageTint(Color.fromRGB(value.red, value.green, value.blue));
         });
+
+        // <--[mechanism]
+        // @object MegActiveModelTag
+        // @name dismount_passenger
+        // @input EntityTag
+        // @plugin Megizen
+        // @description
+        // Dismounts the passenger mounted on the active model.
+        // -->
+        tagProcessor.registerMechanism("dismount_passenger", false, EntityTag.class, (object, mechanism, value) -> {
+            if (object.getActiveModel().getMountManager().isEmpty()) return;
+            object.getActiveModel().getMountManager().get().dismountPassenger(value.getBukkitEntity());
+        });
+
+        // <--[mechanism]
+        // @object MegActiveModelTag
+        // @name dismount_rider
+        // @input EntityTag
+        // @plugin Megizen
+        // @description
+        // Dismounts the rider mounted on the active model.
+        // -->
+        tagProcessor.registerMechanism("dismount_rider", false, EntityTag.class, (object, mechanism, value) -> {
+            if (object.getActiveModel().getMountManager().isEmpty()) return;
+            object.getActiveModel().getMountManager().get().dismountRider(value.getBukkitEntity());
+        });
+
         // <--[mechanism]
         // @object MegActiveModelTag
         // @name dismount_all
