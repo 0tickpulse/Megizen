@@ -44,7 +44,6 @@ public class Megizen extends JavaPlugin {
         ScriptEvent.registerScriptEvent(ModelMountScriptEvent.class);
         ScriptEvent.registerScriptEvent(ModelRegistrationScriptEvent.class);
         ScriptEvent.registerScriptEvent(RemoveModelScriptEvent.class);
-        ScriptEvent.registerScriptEvent(PlayerInputScriptEvent.class); // TODO: remove when denizen adds this event
 
         ModelEngineAPI.getAPI().getScriptReaderRegistry().registerAndDefault("task", new DenizenScriptReader());
 
