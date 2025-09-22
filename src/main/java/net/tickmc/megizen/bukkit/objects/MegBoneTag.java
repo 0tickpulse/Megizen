@@ -18,6 +18,7 @@ import com.destroystokyo.paper.profile.ProfileProperty;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.bone.BoneBehaviorTypes;
 import com.ticxo.modelengine.api.model.bone.ModelBone;
+import com.ticxo.modelengine.api.model.bone.type.NameTag;
 import net.tickmc.megizen.bukkit.Megizen;
 import org.bukkit.Color;
 import org.bukkit.inventory.ItemStack;
@@ -380,6 +381,21 @@ public class MegBoneTag implements ObjectTag, Adjustable {
             return new ElementTag(object.getBone().getYaw());
         });
 
+        // <--[tag]
+        // @attribute <MegBoneTag.nametag_visible>
+        // @returns ElementTag(Boolean)
+        // @plugin Megizen
+        // @description
+        // Returns whether the bone's nametag is visible.
+        // -->
+        tagProcessor.registerTag(ElementTag.class, "nametag_visible", (attribute, object) ->
+                object.getBone()
+                        .getBoneBehavior(BoneBehaviorTypes.NAMETAG)
+                        .map(behavior -> new ElementTag(((NameTag) behavior).isVisible()))
+                        .orElse(null)
+        );
+
+
         // <--[mechanism]
         // @object MegBoneTag
         // @name damage_tint
@@ -468,6 +484,39 @@ public class MegBoneTag implements ObjectTag, Adjustable {
         tagProcessor.registerMechanism("scale", false, ElementTag.class, (object, mechanism, value) -> {
             object.getBone().setModelScale(value.asInt());
         });
+
+        // <--[mechanism]
+        // @object MegBoneTag
+        // @name nametag_text
+        // @input ElementTag
+        // @plugin Megizen
+        // @description
+        // Sets the text of the bone's nametag (NAMETAG behavior).
+        // @tags
+        // <MegBoneTag.nametag_text>
+        // -->
+        tagProcessor.registerMechanism("nametag_text", false, ElementTag.class, (object, mechanism, value) -> {
+            object.getBone().getBoneBehavior(BoneBehaviorTypes.NAMETAG).ifPresent(behavior -> {
+                ((NameTag) behavior).setJsonString(value.asString());
+            });
+        });
+
+        // <--[mechanism]
+        // @object MegBoneTag
+        // @name nametag_visible
+        // @input ElementTag(Boolean)
+        // @plugin Megizen
+        // @description
+        // Sets whether the bone's nametag is visible (NAMETAG behavior).
+        // @tags
+        // <MegBoneTag.nametag_visible>
+        // -->
+        tagProcessor.registerMechanism("nametag_visible", false, ElementTag.class, (object, mechanism, value) -> {
+            object.getBone().getBoneBehavior(BoneBehaviorTypes.NAMETAG).ifPresent(behavior -> {
+                behavior.setVisible(value.asBoolean());
+            });
+        });
+
 
         if (Denizen.supportsPaper) {
 
