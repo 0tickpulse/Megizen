@@ -1,6 +1,7 @@
 package net.tickmc.megizen.bukkit.commands;
 
 import com.denizenscript.denizencore.objects.core.DurationTag;
+import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.scripts.ScriptEntry;
 import com.denizenscript.denizencore.scripts.commands.AbstractCommand;
 import com.denizenscript.denizencore.scripts.commands.generator.ArgDefaultNull;
@@ -44,7 +45,7 @@ public class MegStateCommand extends AbstractCommand {
                                    @ArgName("lerp_in") @ArgPrefixed @ArgDefaultText("0") DurationTag lerpIn,
                                    @ArgName("lerp_out") @ArgPrefixed @ArgDefaultText("0") DurationTag lerpOut,
                                    @ArgName("loop") @ArgPrefixed @ArgDefaultNull BlueprintAnimation.LoopMode loop,
-                                   @ArgName("override") @ArgPrefixed @ArgDefaultNull boolean override,
+                                   @ArgName("override") @ArgPrefixed @ArgDefaultNull ElementTag override,
                                    @ArgName("force") @ArgDefaultText("true") boolean force,
                                    @ArgName("remove") @ArgDefaultText("false") boolean remove,
                                    @ArgName("ignore_lerp") @ArgDefaultText("false") boolean ignoreLerp,
@@ -83,8 +84,8 @@ public class MegStateCommand extends AbstractCommand {
             if (loop != null) {
                 property.setForceLoopMode(loop);
             }
-            if (override) {
-                property.setForceOverride(BlueprintAnimation.OverrideMode.OVERRIDE);
+            if (override != null && override.isBoolean()) {
+                property.setForceOverride(override.asBoolean() ? BlueprintAnimation.OverrideMode.OVERRIDE : BlueprintAnimation.OverrideMode.NONE);
             }
         }
     }
