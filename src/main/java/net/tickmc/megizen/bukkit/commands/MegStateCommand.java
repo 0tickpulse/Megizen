@@ -1,7 +1,6 @@
 package net.tickmc.megizen.bukkit.commands;
 
 import com.denizenscript.denizencore.objects.core.DurationTag;
-import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.scripts.ScriptEntry;
 import com.denizenscript.denizencore.scripts.commands.AbstractCommand;
 import com.denizenscript.denizencore.scripts.commands.generator.ArgDefaultNull;
@@ -26,7 +25,7 @@ public class MegStateCommand extends AbstractCommand {
     // <--[command]
     // @Name MegState
     // @Syntax megstate [model:<active_model>] [state:<state>] (priority:<#>/{1}) ((speed:<#.#>/{1}) (lerp_in:<duration>/{0}) (lerp_out:<duration>/{0}) (loop:{once}/loop/hold) (override:true/false) (force)/remove (ignore_lerp))
-    // @Required 3
+    // @Required 2
     // @Short Plays a state on a modeled entity.
     // @Group Megizen
     //
@@ -45,7 +44,7 @@ public class MegStateCommand extends AbstractCommand {
                                    @ArgName("lerp_in") @ArgPrefixed @ArgDefaultText("0") DurationTag lerpIn,
                                    @ArgName("lerp_out") @ArgPrefixed @ArgDefaultText("0") DurationTag lerpOut,
                                    @ArgName("loop") @ArgPrefixed @ArgDefaultNull BlueprintAnimation.LoopMode loop,
-                                   @ArgName("override") @ArgPrefixed @ArgDefaultNull ElementTag override,
+                                   @ArgName("override") @ArgPrefixed @ArgDefaultNull boolean override,
                                    @ArgName("force") @ArgDefaultText("true") boolean force,
                                    @ArgName("remove") @ArgDefaultText("false") boolean remove,
                                    @ArgName("ignore_lerp") @ArgDefaultText("false") boolean ignoreLerp,
@@ -84,8 +83,8 @@ public class MegStateCommand extends AbstractCommand {
             if (loop != null) {
                 property.setForceLoopMode(loop);
             }
-            if (override != null && override.isBoolean()) {
-                property.setForceOverride(override.asBoolean());
+            if (override) {
+                property.setForceOverride(BlueprintAnimation.OverrideMode.OVERRIDE);
             }
         }
     }
