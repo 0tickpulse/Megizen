@@ -26,7 +26,7 @@ public class MegStateCommand extends AbstractCommand {
     // <--[command]
     // @Name MegState
     // @Syntax megstate [model:<active_model>] [state:<state>] (priority:<#>/{1}) ((speed:<#.#>/{1}) (lerp_in:<duration>/{0}) (lerp_out:<duration>/{0}) (loop:{once}/loop/hold) (override:true/false) (force)/remove (ignore_lerp))
-    // @Required 3
+    // @Required 2
     // @Short Plays a state on a modeled entity.
     // @Group Megizen
     //
@@ -85,7 +85,7 @@ public class MegStateCommand extends AbstractCommand {
                 property.setForceLoopMode(loop);
             }
             if (override != null && override.isBoolean()) {
-                property.setForceOverride(override.asBoolean());
+                property.setForceOverride(override.asBoolean() ? BlueprintAnimation.OverrideMode.OVERRIDE : BlueprintAnimation.OverrideMode.NONE);
             }
         }
     }
